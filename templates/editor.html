@@ -1,0 +1,31 @@
+<tempalte name="bootstrap-magic">
+  <div id="bootstrap-magic">
+    {{#each groups}}
+      {{> bootstrap-magic-group}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="bootstrap-magic-group">
+  <section ng-repeat="group in variables" class="{{ group.name }}">
+    <div class="row protected" >
+      <div class="col-md-12">
+        <h2 class="groupNameTitle" id="{{ group.name }}">{{ group.name }}</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <div ng-repeat="variable in group.data" class="protected form-group">
+          <label class="labelTitle">{{variable.key}}</label></td>
+          <div class="input {' ap-color-picker: variable.value': colorpicker(variable.type)}" data-color="{{ color(variable.type, variable.value) }}" data-color-format="hex" ng-class="{'input-group color colorpicker' : colorpicker(variable.type)}">
+            <input id="" type="text" data-ng-model="variable.value" class="lessVariable form-control" ng-change="autoApplyLess()" >
+            <span class="input-group-addon" ng-class="{ 'hidden' : !colorpicker(variable.type)}"><i></i></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div data-ng-include src="getGroupUrl()"></div>
+      </div>
+    </div>
+  </section>
+</template>
