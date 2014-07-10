@@ -43,5 +43,13 @@ Template._bootstrap_magic.rendered = ->
     $input = $('input',@)
     @endVal = $input.val()
     if @startVal isnt @endVal
-      BootstrapMagic.setOverride $input.attr('name'), @endVal
       $input.trigger 'change'
+
+Template._bootstrap_magic.events
+  'change input.bootstrap-magic-input' : (e) ->
+    console.log 'changed!'
+    $input = $(e.currentTarget)
+    BootstrapMagic.setOverride $input.attr('name'), $input.val()
+
+
+
