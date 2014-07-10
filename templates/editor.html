@@ -1,31 +1,50 @@
-<tempalte name="bootstrap-magic">
+<template name="BootstrapMagic">
+  {{> _bootstrap_magic}}
+</template>
+
+<template name="_bootstrap_magic">
   <div id="bootstrap-magic">
+    <p>BSM</p>
     {{#each groups}}
-      {{> bootstrap-magic-group}}
+      <section class="bootstrap-magic-group-{{formattedName}}">
+        <div class="row protected" >
+          <div class="col-md-12">
+            <h2 class="groupNameTitle">{{name}}</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            {{#each data}}
+              <div class="protected form-group">
+                <label class="labelTitle">{{key}}</label>
+                {{> inputTmpl}}
+              </div>
+            {{/each}}
+          </div>
+          <div class="col-md-8">
+            {{> previewTmpl}}
+          </div>
+        </div>
+      </section>
     {{/each}}
   </div>
 </template>
 
-<template name="bootstrap-magic-group">
-  <section ng-repeat="group in variables" class="{{ group.name }}">
-    <div class="row protected" >
-      <div class="col-md-12">
-        <h2 class="groupNameTitle" id="{{ group.name }}">{{ group.name }}</h2>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4">
-        <div ng-repeat="variable in group.data" class="protected form-group">
-          <label class="labelTitle">{{variable.key}}</label></td>
-          <div class="input {' ap-color-picker: variable.value': colorpicker(variable.type)}" data-color="{{ color(variable.type, variable.value) }}" data-color-format="hex" ng-class="{'input-group color colorpicker' : colorpicker(variable.type)}">
-            <input id="" type="text" data-ng-model="variable.value" class="lessVariable form-control" ng-change="autoApplyLess()" >
-            <span class="input-group-addon" ng-class="{ 'hidden' : !colorpicker(variable.type)}"><i></i></span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-8">
-        <div data-ng-include src="getGroupUrl()"></div>
-      </div>
-    </div>
-  </section>
+<template name="bootstrap_magic_input_text">
+  <div class="input">
+    <input type="text" class="form-control bootstrap-magic-input" name="{{key}}" value="{{BootstrapMagicOverride}}">
+  </div>
+</template>
+
+<template name="bootstrap_magic_input_color">
+  <div class="input-group color-picker-group">
+    <input type="text" class="form-control bootstrap-magic-input" name="{{key}}" value="{{BootstrapMagicOverride}}">
+    <span class="input-group-addon"><i></i></span>
+  </div>
+</template>
+
+<template name="bootstrap_magic_input_font">
+  <div class="input">
+    <input type="text" class="form-control bootstrap-magic-input" name="{{key}}" value="{{BootstrapMagicOverride}}">
+  </div>
 </template>
