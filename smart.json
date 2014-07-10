@@ -1,0 +1,9 @@
+{
+    "name": "bootstrap-magic",
+    "description": "A Bootstrap Theme Editor ported to Meteor",
+    "homepage": "https://github.com/hitchcott/meteor-bootstrap-magic",
+    "author": "Chris Hitchcott <hitchcott@gmail.com>, originally Autre planete and Pikock Team, <http://www.autreplanete.com>, <http://www.pikock.com>",
+    "version": "0.0.1",
+    "git": "https://github.com/hitchcott/meteor-bootstrap-magic",
+    "packages": {}
+}
