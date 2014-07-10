@@ -3,30 +3,31 @@
 </template>
 
 <template name="_bootstrap_magic">
-  <div id="bootstrap-magic">
-    <p>BSM</p>
-    {{#each groups}}
-      <section class="bootstrap-magic-group-{{formattedName}}">
-        <div class="row protected" >
-          <div class="col-md-12">
-            <h2 class="groupNameTitle">{{name}}</h2>
+  <div id="bootstrap-magic" class='row-fluid'>
+    <div class="col-md-12">
+      {{#each groups}}
+        <section class="bootstrap-magic-group-{{formattedName}}">
+          <div class="row getConfig" >
+            <div class="col-md-12">
+              <h2 class="groupNameTitle">{{name}}</h2>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4">
-            {{#each data}}
-              <div class="protected form-group">
-                <label class="labelTitle">{{key}}</label>
-                {{> inputTmpl}}
-              </div>
-            {{/each}}
+          <div class="row">
+            <div class="col-md-4">
+              {{#each data}}
+                <div class="form-group">
+                  <label class="labelTitle">{{key}}</label>
+                  {{> inputTmpl}}
+                </div>
+              {{/each}}
+            </div>
+            <div class="col-md-8">
+              {{> previewTmpl}}
+            </div>
           </div>
-          <div class="col-md-8">
-            {{> previewTmpl}}
-          </div>
-        </div>
-      </section>
-    {{/each}}
+        </section>
+      {{/each}}
+    </div>
   </div>
 </template>
 
