@@ -1,4 +1,6 @@
-BootstrapMagicOverrides = new ReactiveDict
+reactive =
+  overrides : new ReactiveDict
+  defaults : new ReactiveDict
 
 @BootstrapMagic =
   on : (eventName, callback) ->
@@ -7,38 +9,56 @@ BootstrapMagicOverrides = new ReactiveDict
   off : (eventName) ->
     delete @[eventName]
 
-  overrides: ->
-    return BootstrapMagicOverrides.keys
-
-  setOverride : (key,val,noFire) ->
-    BootstrapMagicOverrides.set key, val
+  setOne: (dictionary, key, val) ->
+    reactive[dictionary].set key, val
     obj = {}
     obj[key] = val
-    unless noFire
-      @change obj if @change
+    @change obj if @change
 
-  setOverrides: (obj) ->
+  setMany: (dictionary, obj) ->
     for key,val of obj
-      BootstrapMagicOverrides.set key, val
+      reactive[dictionary].set key, val
+
+  dictionary: reactive
+
+  setOverride : (key, val) -> @setOne 'overrides', key, val
+  setOverrides : (obj) -> @setMany 'overrides', obj
+  setDefault : (key, val) -> @setOne 'defaults', key, val
+  setDefaults : (obj) -> @setMany 'defaults', obj
 
 
-UI.registerHelper 'BootstrapMagicOverride', -> BootstrapMagicOverrides.get(@key) || @value
+
+UI.registerHelper 'BootstrapMagicOverride', ->
+  reactive.overrides.get(@key) || reactive.defaults.get(@key)
+
 
 format = (str, del) -> str.replace(/\s+/g, del || '-').toLowerCase()
 
 Template._bootstrap_magic.helpers
-  "groups" : -> bootstrap_magic_variables
+  "groups" : ->
+    for group in bootstrap_magic_variables
+      for lessVar in group.data
+        lessVar.value = reactive.defaults.keys[lessVar.key] || lessVar.value
+    return bootstrap_magic_variables
+
+
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{format @name, '_'}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "formattedName" : -> format @name
   "typeIs" : (type) -> @type is type
 
+Template._bootstrap_magic.created = ->
+  # trigger start event
+  BootstrapMagic.start() if BootstrapMagic.start
+
 Template._bootstrap_magic.rendered = ->
   # colorpicker's changeColor fires too often!
-  $cpg = $('.color-picker-group')
-  $cpg.colorpicker()
+  $('.color-picker-group').colorpicker
+    horizontal: true
+
   .on 'showPicker', ->
     @startVal = $('input',@).val()
+
   .on 'hidePicker', ->
     $input = $('input',@)
     @endVal = $input.val()
