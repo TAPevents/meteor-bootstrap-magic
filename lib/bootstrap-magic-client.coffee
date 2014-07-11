@@ -62,12 +62,12 @@ Template._bootstrap_magic.rendered = ->
   .on 'hidePicker', ->
     $input = $('input',@)
     @endVal = $input.val()
-    if @startVal isnt @endVal
+    if @startVal and @startVal isnt @endVal
+      @startVal = @endVal
       $input.trigger 'change'
 
 Template._bootstrap_magic.events
   'change input.bootstrap-magic-input' : (e) ->
-    console.log 'changed!'
     $input = $(e.currentTarget)
     BootstrapMagic.setOverride $input.attr('name'), $input.val()
 
