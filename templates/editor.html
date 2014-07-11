@@ -3,31 +3,25 @@
 </template>
 
 <template name="_bootstrap_magic">
-  <div id="bootstrap-magic" class='row-fluid'>
-    <div class="col-md-12">
+  <div id="bootstrap-magic" class='container-fluid'>
       {{#each groups}}
         <section class="bootstrap-magic-group-{{formattedName}}">
-          <div class="row getConfig" >
-            <div class="col-md-12">
-              <h2 class="groupNameTitle">{{name}}</h2>
+          <h3 class="groupNameTitle">{{name}}</h3>
+            <div class="row">
+              <div class="col-sm-4">
+                {{#each data}}
+                  <div class="form-group">
+                    <label class="labelTitle">{{key}}</label>
+                    {{> inputTmpl}}
+                  </div>
+                {{/each}}
+              </div>
+              <div class="col-sm-8">
+                {{> previewTmpl}}
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4">
-              {{#each data}}
-                <div class="form-group">
-                  <label class="labelTitle">{{key}}</label>
-                  {{> inputTmpl}}
-                </div>
-              {{/each}}
-            </div>
-            <div class="col-md-8">
-              {{> previewTmpl}}
-            </div>
-          </div>
         </section>
       {{/each}}
-    </div>
   </div>
 </template>
 
@@ -38,8 +32,10 @@
 </template>
 
 <template name="bootstrap_magic_input_color">
+  <p>{{#if BootstrapMagicIsOverride}}OVERRIDE{{/if}}</p>
+  <p>Conso</p>
   <div class="input-group color-picker-group">
-    <input type="text" class="form-control bootstrap-magic-input" name="{{key}}" value="{{BootstrapMagicOverride}}">
+    <input type="text" class="form-control bootstrap-magic-input" name="{{key}}" placeholder="{{value}}" value="{{BootstrapMagicOverride}}">
     <span class="input-group-addon"><i></i></span>
   </div>
 </template>
