@@ -1,7 +1,8 @@
 Package.describe({
   name: "hitchcott:bootstrap-magic",
   summary: "A Bootstrap Theme Editor ported to Meteor",
-  version: '0.1.0'
+  version: '0.1.0',
+  git: 'https://github.com/hitchcott/meteor-bootstrap-magic'
 });
 
 Package.on_use(function(api) {
