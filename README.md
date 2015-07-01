@@ -1,6 +1,6 @@
 # Meteor Bootstrap Magic
 
-### A Bootstrap Theme Editor for Meteor -- Ported from [Bootstrap Magic](https://github.com/pikock/bootstrap-magic)
+### A Bootstrap Theme Editor *ported from [Bootstrap Magic](https://github.com/pikock/bootstrap-magic)*
 
 This package is just for client-side UI. It allows you to edit and generate a list of less variables for use with bootstrap. It simply creates a reactive dictionary with key/val pairs for less variable defaults and overrides.
 
@@ -42,8 +42,7 @@ Tracker.autorun ->
 
 - i18n
 - better UI / examples
-- security
-
+- reactive variable inheretance: changing `@brand-primary` should change `@link-color` unless `@link-color` is override
 
 # Lisence
 
