@@ -27,7 +27,7 @@ reactive =
   setDefaults : (obj) -> @setMany 'defaults', obj
 
 
-
+# why not make this scoped to the tempalte?
 UI.registerHelper 'BootstrapMagicOverride', ->
   reactive.overrides.get(@key) || reactive.defaults.get(@key)
 
@@ -40,7 +40,6 @@ Template._bootstrap_magic.helpers
       for lessVar in group.data
         lessVar.value = reactive.defaults.keys[lessVar.key] || lessVar.value
     return bootstrap_magic_variables
-
 
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{format @name, '_'}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null

@@ -1,23 +1,47 @@
 Package.describe({
-  summary: "A Bootstrap Theme Editor ported to Meteor"
+  name: "hitchcott:bootstrap-magic",
+  summary: "A Bootstrap Theme Editor ported to Meteor",
+  version: '0.1.0'
 });
 
-// Get package assets recursively
-var getPackageAssets=function(a,b){function f(a){var b=[],g=d.readdirSync(a);return c.each(g,function(c){var g=a+e.sep+c,h=d.statSync(g);h.isDirectory()?b=b.concat(f(g)):b.push(g)}),b}var c=Npm.require("underscore"),d=Npm.require("fs"),e=Npm.require("path"),g=process.cwd();process.chdir("packages"+e.sep+a);var h=f(b);return process.chdir(g),h};
-
 Package.on_use(function(api) {
+  api.versionsFrom('1.1.0.2');
+
   api.use([
     'coffeescript',
     'reactive-dict',
     'templating'
   ], ['client']);
 
-  api.add_files(getPackageAssets('bootstrap-magic','templates'), ['client']);
-  api.add_files(getPackageAssets('bootstrap-magic','lib/colorpicker'), ['client']);
-
   api.add_files([
+    'lib/templates/preview/dropdowns.html',
+    'lib/templates/preview/form-states.html',
+    'lib/templates/preview/forms.html',
+    'lib/templates/preview/grays.html',
+    'lib/templates/preview/jumbotron.html',
+    'lib/templates/preview/links.html',
+    'lib/templates/preview/list-group.html',
+    'lib/templates/preview/my-variables.html',
+    'lib/templates/preview/navbar.html',
+    'lib/templates/preview/navs-tabs.html',
+    'lib/templates/preview/pagination.html',
+    'lib/templates/preview/popover.html',
+    'lib/templates/preview/scaffolding.html',
+    'lib/templates/preview/sprites.html',
+    'lib/templates/preview/table.html',
+    'lib/templates/preview/tooltip.html',
+    'lib/templates/preview/typography.html',
+    'lib/colorpicker/css/bootstrap-colorpicker.css',
+    'lib/colorpicker/img/bootstrap-colorpicker/alpha-horizontal.png',
+    'lib/colorpicker/img/bootstrap-colorpicker/alpha.png',
+    'lib/colorpicker/img/bootstrap-colorpicker/hue-horizontal.png',
+    'lib/colorpicker/img/bootstrap-colorpicker/hue.png',
+    'lib/colorpicker/img/bootstrap-colorpicker/saturation.png',
+    'lib/colorpicker/js/bootstrap-colorpicker.js',
     'lib/bootstrap-magic-variables.js',
-    'lib/bootstrap-magic-client.coffee'
+    // and now for the actual package code
+    'bootstrap-magic-editor.html',
+    'bootstrap-magic.coffee'
   ], ['client']);
 
 });
