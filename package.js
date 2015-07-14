@@ -31,7 +31,7 @@ Package.on_use(function(api) {
     'lib/templates/preview/popover.html',
     'lib/templates/preview/scaffolding.html',
     'lib/templates/preview/sprites.html',
-    'lib/templates/preview/table.html',
+    'lib/templates/preview/tables.html',
     'lib/templates/preview/tooltip.html',
     'lib/templates/preview/typography.html',
     'lib/colorpicker/css/bootstrap-colorpicker.css',
