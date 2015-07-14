@@ -15,6 +15,7 @@ Package.on_use(function(api) {
   ], ['client']);
 
   api.add_files([
+    'lib/templates/preview/buttons.html',
     'lib/templates/preview/dropdowns.html',
     'lib/templates/preview/form-states.html',
     'lib/templates/preview/forms.html',
