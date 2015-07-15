@@ -44,6 +44,7 @@ Package.on_use(function(api) {
     'lib/bootstrap-magic-variables.js',
     // and now for the actual package code
     'bootstrap-magic-editor.html',
+    'bootstrap-magic-editor.css',
     'bootstrap-magic.coffee'
   ], ['client']);
 

@@ -27,10 +27,9 @@ reactive =
   setDefaults : (obj) -> @setMany 'defaults', obj
 
 
-# why not make this scoped to the tempalte?
+# why not make this scoped to the template?
 UI.registerHelper 'BootstrapMagicOverride', ->
   reactive.overrides.get(@key) || reactive.defaults.get(@key)
-
 
 format = (str, del) -> str.replace(/\s+/g, del || '-').toLowerCase()
 
@@ -43,7 +42,9 @@ Template._bootstrap_magic.helpers
 
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{format @name, '_'}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
-  "formattedName" : -> format @name
+  "formattedName" : -> 
+    format @name
+    console.log "the name: #{name}"
   "typeIs" : (type) -> @type is type
 
 Template._bootstrap_magic.created = ->
@@ -69,6 +70,3 @@ Template._bootstrap_magic.events
   'change input.bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
     BootstrapMagic.setOverride $input.attr('name'), $input.val()
-
-
-
