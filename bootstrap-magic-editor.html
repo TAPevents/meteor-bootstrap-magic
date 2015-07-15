@@ -4,6 +4,15 @@
 
 <template name="_bootstrap_magic">
   <div id="bootstrap-magic" class='container-fluid'>
+
+  <div class="submenu compact-menu">
+    <ul class="nav nav-pills submenu-list">
+      {{#each groups}}
+        <li class="groupNameTitle" role="presentation"><a href="#"><p>{{name}}</p></a></li>
+      {{/each}}
+    </ul>
+  </div><!--/submenu-->
+
     {{#each groups}}
       <section class="bootstrap-magic-group-{{formattedName}}">
         ** START OF THE SECTION "DATA" HERE
