@@ -31,6 +31,7 @@ Package.on_use(function(api) {
     'lib/templates/preview/padding.html',
     'lib/templates/preview/pagination.html',
     'lib/templates/preview/popover.html',
+    'lib/templates/preview/screen-sizes.html',
     'lib/templates/preview/sprites.html',
     'lib/templates/preview/tables.html',
     'lib/templates/preview/text-colors.html',
