@@ -10,6 +10,15 @@
   font-family: 'MonospaceFont', 'Menlo', 'Osaka', monospace;
 }
 
+/*.sub-item {
+  display: none; 
+
+}*/
+
+.show-item {
+  display: block;
+}
+
 /* SUBMENU WHEN THERE ARE LINE ICONS
 // @media (max-width: 1200px) {
 //   .compact-menu p {

@@ -26,8 +26,7 @@ reactive =
   setDefault : (key, val) -> @setOne 'defaults', key, val
   setDefaults : (obj) -> @setMany 'defaults', obj
 
-
-# why not make this scoped to the template?
+ # why not make this scoped to the template?
 UI.registerHelper 'BootstrapMagicOverride', ->
   reactive.overrides.get(@key) || reactive.defaults.get(@key)
 
@@ -38,7 +37,7 @@ Template._bootstrap_magic.helpers
     for group in bootstrap_magic_variables
       for lessVar in group.data
         lessVar.value = reactive.defaults.keys[lessVar.key] || lessVar.value
-    return bootstrap_magic_variables
+    bootstrap_magic_variables
 
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{format @name, '_'}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
@@ -52,6 +51,7 @@ Template._bootstrap_magic.created = ->
   BootstrapMagic.start() if BootstrapMagic.start
 
 Template._bootstrap_magic.rendered = ->
+
   # colorpicker's changeColor fires too often!
   $('.color-picker-group').colorpicker
     horizontal: true
@@ -70,3 +70,6 @@ Template._bootstrap_magic.events
   'change input.bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
     BootstrapMagic.setOverride $input.attr('name'), $input.val()
+
+  'click .submenu-list' : ->
+    $('.sub-item').toggleClass('show-item')

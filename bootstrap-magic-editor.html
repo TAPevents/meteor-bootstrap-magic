@@ -6,43 +6,43 @@
   <div id="bootstrap-magic" class='container-fluid'>
 
     <div class="submenu compact-menu">
-      <ul class="nav nav-pills submenu-list">
+      <ul class="nav nav-pills">
         {{#each groups}}
           <li role="presentation">
-            <a class="showName" href="#"><p>{{name}}</p></a>
+            <a class="submenu-list" href="#"><p>{{name}}</p></a>
           </li>
         {{/each}}
       </ul>
     </div><!--/submenu-->
-
+    
+    <div class="sub-item">
       {{#each groups}}
-    <!-- {{if name==name}} -->
-        <section class="bootstrap-magic-group-{{formattedName}}">
-          ** START OF THE SECTION "DATA" HERE
-          <h3>{{name}}</h3>
-          <div class="row">
-            <div class="col-sm-4">
-              {{#each data}}
-                <div class="form-group">
-                  <label class="labelTitle monospace">{{key}}</label>
-                  {{> inputTmpl}}
-                </div>
-              {{/each}}
-            </div>
-            <div class="col-sm-8">
-              {{> previewTmpl}}
-            </div>
-          </div>
-          END OF SECTION "DATA" HERE **
-        </section>
-
-    <!-- {{/if}} -->
-      {{/each}}
+        {{> UI.dynamic template="subItem"}}
+      {{/each}}    
+    </div><!--/subitem-->
 
   </div>
 </template>
 
-<template name ="{{formattedName}}">
+<template name ="subItem">
+    <section class="bootstrap-magic-group-{{formattedName}}">
+      ** START OF THE SECTION "DATA" HERE
+      <h3>{{name}}</h3>
+      <div class="row">
+        <div class="col-sm-4">
+          {{#each data}}
+            <div class="form-group">
+              <label class="labelTitle monospace">{{key}}</label>
+              {{> inputTmpl}}
+            </div>
+          {{/each}}
+        </div>
+        <div class="col-sm-8">
+          {{> previewTmpl}}
+        </div>
+      </div>
+      END OF SECTION "DATA" HERE **
+    </section>
 </template>
 
 <template name="bootstrap_magic_input_text">
