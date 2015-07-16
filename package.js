@@ -15,6 +15,7 @@ Package.on_use(function(api) {
   ], ['client']);
 
   api.add_files([
+    'lib/templates/preview/border-radius.html',
     'lib/templates/preview/buttons.html',
     'lib/templates/preview/dropdowns.html',
     'lib/templates/preview/form-states.html',
@@ -27,9 +28,9 @@ Package.on_use(function(api) {
     'lib/templates/preview/my-variables.html',
     'lib/templates/preview/navbar.html',
     'lib/templates/preview/navs-tabs.html',
+    'lib/templates/preview/padding.html',
     'lib/templates/preview/pagination.html',
     'lib/templates/preview/popover.html',
-    'lib/templates/preview/scaffolding.html',
     'lib/templates/preview/sprites.html',
     'lib/templates/preview/tables.html',
     'lib/templates/preview/text-colors.html',
