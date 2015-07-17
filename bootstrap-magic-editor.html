@@ -18,12 +18,11 @@
     <div class="content">
       {{#with group}}
         <section class="sub-item">
-          ** START OF THE SECTION "DATA" HERE
           <h3>{{name}}</h3>
           <div class="row">
             <div class="col-sm-4">
               {{#each data}}
-                <div class="form-group cp-area">
+                <div class="form-group color-picker-area">
                   <label class="labelTitle monospace">{{key}}</label>
                   {{> inputTmpl}}
                 </div>
@@ -33,7 +32,6 @@
               {{> previewTmpl}}
             </div>
           </div>
-          END OF SECTION "DATA" HERE **
         </section><!--/subitem-->
       {{/with}}
     </div><!--/content-->

@@ -32,12 +32,12 @@ UI.registerHelper 'BootstrapMagicOverride', ->
 
 #Something for Everyone
 format = (str, del) -> str.replace(/\s+/g, del || '-').toLowerCase()
+
 @currentPage = new ReactiveVar()
 
 getCurrentPage = ->
-  thisPageKey = currentPage.get()
   for group in bootstrap_magic_variables
-    if group.keyName is thisPageKey
+    if group.keyName is currentPage.get()
       return group
 
 initColorPicker = (node) ->
@@ -56,6 +56,19 @@ initColorPicker = (node) ->
       @startVal = @endVal
       $input.trigger 'change'
 
+
+#Time for Templates
+
+Template._bootstrap_magic.created = ->
+  # trigger start event
+  BootstrapMagic.start() if BootstrapMagic.start
+
+Template._bootstrap_magic.rendered = ->
+  currentPage.set bootstrap_magic_variables[0].keyName
+  @.autorun -> 
+    currentPage.get()
+    Meteor.defer -> initColorPicker($('.color-picker-area'))
+
 Template._bootstrap_magic.helpers
   "groups" : ->
     for group in bootstrap_magic_variables
@@ -69,16 +82,6 @@ Template._bootstrap_magic.helpers
   "typeIs" : (type) -> @type is type
   "group" : getCurrentPage
   "isActive" :-> @keyName is currentPage.get()
-
-Template._bootstrap_magic.created = ->
-  # trigger start event
-  BootstrapMagic.start() if BootstrapMagic.start
-
-Template._bootstrap_magic.rendered = ->
-  currentPage.set bootstrap_magic_variables[0].keyName
-  @.autorun -> 
-    currentPage.get()
-    Meteor.defer -> initColorPicker($('.cp-area'))
 
 Template._bootstrap_magic.events
   'change input.bootstrap-magic-input' : (e) ->
