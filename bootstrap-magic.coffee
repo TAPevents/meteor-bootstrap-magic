@@ -30,34 +30,24 @@ reactive =
 UI.registerHelper 'BootstrapMagicOverride', ->
   reactive.overrides.get(@key) || reactive.defaults.get(@key)
 
+#Something for Everyone
 format = (str, del) -> str.replace(/\s+/g, del || '-').toLowerCase()
+@currentPage = new ReactiveVar()
 
-Template._bootstrap_magic.helpers
-  "groups" : ->
-    for group in bootstrap_magic_variables
-      for lessVar in group.data
-        lessVar.value = reactive.defaults.keys[lessVar.key] || lessVar.value
-    bootstrap_magic_variables
+getCurrentPage = ->
+  thisPageKey = currentPage.get()
+  for group in bootstrap_magic_variables
+    if group.keyName is thisPageKey
+      return group
 
-  "previewTmpl" : -> Template["bootstrap_magic_preview_#{format @name, '_'}"] || null
-  "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
-  "formattedName" : -> 
-    format @name
-    console.log "the name: #{name}"
-  "typeIs" : (type) -> @type is type
-
-Template._bootstrap_magic.created = ->
-  # trigger start event
-  BootstrapMagic.start() if BootstrapMagic.start
-
-Template._bootstrap_magic.rendered = ->
+initColorPicker = (node) ->
 
   # colorpicker's changeColor fires too often!
-  $('.color-picker-group').colorpicker
+  $('.color-picker-group', node).colorpicker
     horizontal: true
 
   .on 'showPicker', ->
-    @startVal = $('input',@).val()
+    @startVal = $('input', @).val()
 
   .on 'hidePicker', ->
     $input = $('input',@)
@@ -66,10 +56,34 @@ Template._bootstrap_magic.rendered = ->
       @startVal = @endVal
       $input.trigger 'change'
 
+Template._bootstrap_magic.helpers
+  "groups" : ->
+    for group in bootstrap_magic_variables
+      for lessVar in group.data
+        lessVar.value = reactive.defaults.keys[lessVar.key] || lessVar.value
+    return bootstrap_magic_variables
+
+  "previewTmpl" : -> Template["bootstrap_magic_preview_#{format @name, '_'}"] || null
+  "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
+  "formattedName" : -> format @name
+  "typeIs" : (type) -> @type is type
+  "group" : getCurrentPage
+  "isActive" :-> @keyName is currentPage.get()
+
+Template._bootstrap_magic.created = ->
+  # trigger start event
+  BootstrapMagic.start() if BootstrapMagic.start
+
+Template._bootstrap_magic.rendered = ->
+  currentPage.set bootstrap_magic_variables[0].keyName
+  @.autorun -> 
+    currentPage.get()
+    Meteor.defer -> initColorPicker($('.cp-area'))
+
 Template._bootstrap_magic.events
   'change input.bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
     BootstrapMagic.setOverride $input.attr('name'), $input.val()
 
-  'click .submenu-list' : ->
-    $('.sub-item').toggleClass('show-item')
+  'click .submenu-list' : -> 
+    currentPage.set(@keyName)

@@ -10,6 +10,7 @@ Package.on_use(function(api) {
 
   api.use([
     'coffeescript',
+    'reactive-var',
     'reactive-dict',
     'templating'
   ], ['client']);
