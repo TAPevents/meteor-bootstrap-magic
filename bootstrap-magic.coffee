@@ -26,13 +26,35 @@ reactive =
   setDefault : (key, val) -> @setOne 'defaults', key, val
   setDefaults : (obj) -> @setMany 'defaults', obj
 
-
-# why not make this scoped to the tempalte?
+ # why not make this scoped to the template?
 UI.registerHelper 'BootstrapMagicOverride', ->
   reactive.overrides.get(@key) || reactive.defaults.get(@key)
 
-
+#Something for Everyone
 format = (str, del) -> str.replace(/\s+/g, del || '-').toLowerCase()
+@currentPage = new ReactiveVar()
+
+getCurrentPage = ->
+  thisPageKey = currentPage.get()
+  for group in bootstrap_magic_variables
+    if group.keyName is thisPageKey
+      return group
+
+initColorPicker = (node) ->
+
+  # colorpicker's changeColor fires too often!
+  $('.color-picker-group', node).colorpicker
+    horizontal: true
+
+  .on 'showPicker', ->
+    @startVal = $('input', @).val()
+
+  .on 'hidePicker', ->
+    $input = $('input',@)
+    @endVal = $input.val()
+    if @startVal and @startVal isnt @endVal
+      @startVal = @endVal
+      $input.trigger 'change'
 
 Template._bootstrap_magic.helpers
   "groups" : ->
@@ -45,30 +67,23 @@ Template._bootstrap_magic.helpers
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "formattedName" : -> format @name
   "typeIs" : (type) -> @type is type
+  "group" : getCurrentPage
+  "isActive" :-> @keyName is currentPage.get()
 
 Template._bootstrap_magic.created = ->
   # trigger start event
   BootstrapMagic.start() if BootstrapMagic.start
 
 Template._bootstrap_magic.rendered = ->
-  # colorpicker's changeColor fires too often!
-  $('.color-picker-group').colorpicker
-    horizontal: true
-
-  .on 'showPicker', ->
-    @startVal = $('input',@).val()
-
-  .on 'hidePicker', ->
-    $input = $('input',@)
-    @endVal = $input.val()
-    if @startVal and @startVal isnt @endVal
-      @startVal = @endVal
-      $input.trigger 'change'
+  currentPage.set bootstrap_magic_variables[0].keyName
+  @.autorun -> 
+    currentPage.get()
+    Meteor.defer -> initColorPicker($('.cp-area'))
 
 Template._bootstrap_magic.events
   'change input.bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
     BootstrapMagic.setOverride $input.attr('name'), $input.val()
 
-
-
+  'click .submenu-list' : -> 
+    currentPage.set(@keyName)
