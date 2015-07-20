@@ -32,10 +32,11 @@ UI.registerHelper 'BootstrapMagicOverride', ->
 
 #Something for Everyone
 format = (str, del) -> str.replace(/\s+/g, del || '-').toLowerCase()
+formatCamel = (str) -> str.replace(/([^A-Za-z0-9\.\$])|([A-Z])(?=[A-Z][a-z])|([^\-\$\.0-9])(?=\$?[0-9]+(?:\.[0-9]+)?)|([0-9])(?=[^\.0-9])|([a-z])(?=[A-Z])/g, '$2$3$4$5 ')
 
 @currentPage = new ReactiveVar()
 
-getCurrentPage = ->
+getCurrentGroup = ->
   for group in bootstrap_magic_variables
     if group.keyName is currentPage.get()
       return group
@@ -80,7 +81,7 @@ Template._bootstrap_magic.helpers
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "formattedName" : -> format @name
   "typeIs" : (type) -> @type is type
-  "group" : getCurrentPage
+  "currentGroup" : getCurrentGroup
   "isActive" :-> @keyName is currentPage.get()
 
 Template._bootstrap_magic.events
