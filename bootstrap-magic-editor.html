@@ -5,7 +5,7 @@
 <template name="_bootstrap_magic">
   <div id="bootstrap-magic" class='container-fluid'>
 
-    <div id="menu">
+    <div class="second-menu">
       <ul class="nav nav-pills">
         {{#each menuItems}}
           <li role="presentation" class="{{#if isActive}}active{{/if}}">
@@ -15,11 +15,11 @@
       </ul>
     </div><!--/menu-->
 
-    <div class="submenu compact-menu">
+    <div class="third-menu compact-menu">
       <ul class="nav nav-pills">
         {{#each groups}}
           <li role="presentation" class="{{#if isActive}}active{{/if}}">
-            <a class="submenu-list" href="#"><p>{{name}}</p></a>
+            <a class="third-menu-list" href="#"><p>{{name}}</p></a>
           </li>
         {{/each}}
       </ul>

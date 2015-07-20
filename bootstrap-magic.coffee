@@ -102,5 +102,5 @@ Template._bootstrap_magic.events
     $input = $(e.currentTarget)
     BootstrapMagic.setOverride $input.attr('name'), $input.val()
 
-  'click .submenu-list' : -> 
+  'click .third-menu-list' : -> 
     currentPage.set(@keyName)
