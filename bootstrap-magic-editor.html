@@ -5,6 +5,28 @@
 <template name="_bootstrap_magic">
   <div id="bootstrap-magic" class='container-fluid'>
 
+    <h2>THE REAL MENU</h2>
+    <div class="menu_2">
+      <ul class="nav nav-pills">
+        {{#each menuItems}}
+          <li role="presentation" class="{{#if isActive}}active{{/if}}">
+            <a class="menu-list" href="#"><p>{{menuItems}}</p></a>
+          </li>
+        {{/each}}
+      </ul>
+    </div><!--/menu 2-->
+
+    <h2>THE JSON MENU</h2>
+    <div class="menu">
+      <ul class="nav nav-pills">
+        {{#each groups}}
+          <li role="presentation" class="{{#if isActive}}active{{/if}}">
+            <a class="menu-list" href="#"><p>{{formattedMenu}}</p></a>
+          </li>
+        {{/each}}
+      </ul>
+    </div><!--/menu -->
+
     <div class="submenu compact-menu">
       <ul class="nav nav-pills">
         {{#each groups}}
@@ -16,7 +38,7 @@
     </div><!--/submenu-->
     
     <div class="content">
-      {{#with group}}
+      {{#with currentGroup}}
         <section class="sub-item">
           <h3>{{name}}</h3>
           <div class="row">

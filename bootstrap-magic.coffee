@@ -42,7 +42,19 @@ getCurrentGroup = ->
   for group in bootstrap_magic_variables
     if group.keyName is currentPage.get()
       return group
-    console.log "category: "+ formatCamel group.category
+
+# getCurrentCat = ->
+
+#   menuItems =[]
+#   uniqueItems = []
+#   for group in bootstrap_magic_variables
+#     menuItems.push group.category
+#   for item, i in menuItems
+#     if item isnt menuItems[i+1]
+#       uniqueItems.push item
+#   return uniqueItems
+
+# getCurrentCat()
 
 initColorPicker = (node) ->
 
@@ -80,9 +92,40 @@ Template._bootstrap_magic.helpers
         lessVar.value = reactive.defaults.keys[lessVar.key] || lessVar.value
     return bootstrap_magic_variables
 
+  "menuItems" : ->
+    cats =[]
+    uniqueItems = []
+    for group in bootstrap_magic_variables
+      cats.push formatCamel(group.category)
+    for item, i in cats
+      if item isnt cats[i+1] 
+        uniqueItems.push item
+    console.log uniqueItems
+    return uniqueItems
+
+    # menuItems =[]
+    # for group in bootstrap_magic_variables
+    #   for item in menuItems
+    #     console.log "item: #{item}"
+    #     console.log "gc: #{group.category}"
+    #     if group.category isnt item
+    #       menuItems.push(formatCamel(group.category))
+    # return menuItems
+
+    # menuItem = _.groupBy(bootstrap_magic_variables, "categories")
+    # console.log "categories: #{menuItem}"
+    # #make menuItem is global variable
+
+    # for group, i in bootstrap_magic_variables
+    #   if group[i].category isnt group[i+1].category
+    #     @menuItem.push(formatCamel group.category)
+    #     @menuItem
+
+
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{format @name, '_'}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "formattedName" : -> format @name
+  "formattedMenu" : -> formatCamel @category
   "typeIs" : (type) -> @type is type
   "currentGroup" : getCurrentGroup
   "isActive" :-> @keyName is currentPage.get()
