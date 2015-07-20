@@ -32,7 +32,9 @@ UI.registerHelper 'BootstrapMagicOverride', ->
 
 #Something for Everyone
 format = (str, del) -> str.replace(/\s+/g, del || '-').toLowerCase()
-formatCamel = (str) -> str.replace(/([^A-Za-z0-9\.\$])|([A-Z])(?=[A-Z][a-z])|([^\-\$\.0-9])(?=\$?[0-9]+(?:\.[0-9]+)?)|([0-9])(?=[^\.0-9])|([a-z])(?=[A-Z])/g, '$2$3$4$5 ')
+formatCamel = (str) -> 
+  str = str.replace(/([^A-Za-z0-9\.\$])|([A-Z])(?=[A-Z][a-z])|([^\-\$\.0-9])(?=\$?[0-9]+(?:\.[0-9]+)?)|([0-9])(?=[^\.0-9])|([a-z])(?=[A-Z])/g, '$2$3$4$5 ')
+  str.charAt(0).toUpperCase() + str.slice(1)
 
 @currentPage = new ReactiveVar()
 
@@ -40,6 +42,7 @@ getCurrentGroup = ->
   for group in bootstrap_magic_variables
     if group.keyName is currentPage.get()
       return group
+    console.log "category: "+ formatCamel group.category
 
 initColorPicker = (node) ->
 
