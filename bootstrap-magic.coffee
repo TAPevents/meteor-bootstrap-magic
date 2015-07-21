@@ -87,11 +87,15 @@ Template._bootstrap_magic.helpers
         lessVar.value = reactive.defaults.keys[lessVar.key] || lessVar.value
     return bootstrap_magic_variables
 
-
   "menuItems" : ->
-    _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) -> obj[0]
+    _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->   
+    @sortedMenu = obj[0]
+    console.log @sortedMenu.category
+    return @sortedMenu
 
-
+  # "currentMenu" : ->
+  #   if @sortedMenu.category is 
+  
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{format @name, '_'}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "formattedName" : -> format @name
@@ -113,6 +117,6 @@ Template._bootstrap_magic.events
 
   'click .second-menu-list' : ->
     $('.compact-menu').slideDown("slow")
-    currentMenuItem.set(@category)
+    currentMenuItems.set(@category)
     console.log "Now current Menu is: ", currentMenuItem.get()
     console.log "this :" , @
