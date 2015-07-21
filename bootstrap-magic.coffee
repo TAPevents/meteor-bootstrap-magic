@@ -42,17 +42,14 @@ formatCamel = (str) ->
 getCurrentGroup = ->
   for group in bootstrap_magic_variables
     if group.keyName is currentPage.get()
-      console.log "Current page: " + currentPage.get()
       return group
 
 getCurrentMenu = ->
   for group in bootstrap_magic_variables
-    console.log "the cats are: #{group.category}"
     if group.category is currentMenuItem.get()
       console.log "Current group: " + currentMenuItem.get()
       return group
-
-    
+  
 initColorPicker = (node) ->
 
   # colorpicker's changeColor fires too often!
@@ -78,9 +75,6 @@ Template._bootstrap_magic.created = ->
 
 Template._bootstrap_magic.rendered = ->
   currentPage.set bootstrap_magic_variables[0].keyName
-  currentMenuItem.set bootstrap_magic_variables[0].category
-  getCurrentMenu()
-  console.log "Start menu: "+ getCurrentMenu()
   @.autorun -> 
     currentPage.get()
     currentMenuItem.get()
@@ -93,22 +87,19 @@ Template._bootstrap_magic.helpers
         lessVar.value = reactive.defaults.keys[lessVar.key] || lessVar.value
     return bootstrap_magic_variables
 
+
   "menuItems" : ->
-    cats =[]
-    uniqueItems = []
-    for group in bootstrap_magic_variables
-      cats.push formatCamel(group.category)
-    for item, i in cats
-      if item isnt cats[i+1] 
-        uniqueItems.push item
-    return uniqueItems
+    _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) -> obj[0]
+
 
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{format @name, '_'}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "formattedName" : -> format @name
+  "formattedCat" : -> formatCamel @category
   "typeIs" : (type) -> @type is type
   "currentGroup" : getCurrentGroup
-  "isActive" :-> 
+  "currentMenu" : getCurrentMenu
+  "isActive" : -> 
     @keyName is currentPage.get()
     @category is currentMenuItem.get()
 
@@ -123,4 +114,5 @@ Template._bootstrap_magic.events
   'click .second-menu-list' : ->
     $('.compact-menu').slideDown("slow")
     currentMenuItem.set(@category)
-    console.log "Now current Menu is: "+ currentMenuItem.get()
+    console.log "Now current Menu is: ", currentMenuItem.get()
+    console.log "this :" , @
