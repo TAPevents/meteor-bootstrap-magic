@@ -9,16 +9,3 @@
 .bootstrap-magic-input {
   font-family: 'MonospaceFont', 'Menlo', 'Osaka', monospace;
 }
-
-/* SUBMENU WHEN THERE ARE LINE ICONS 
-
- @media (max-width: 1200px) {
-  .compact-menu p {
-    display: none;
-  }
-}*/
-
-.glyph {
-  width: 30px;
-  height: 30px;
-}

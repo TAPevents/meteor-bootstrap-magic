@@ -10,7 +10,7 @@
         <ul class="nav nav-pills">
           {{#each menuItems}}
             <li role="presentation" class="{{#if isActive}}active{{/if}}">
-              <a class="second-menu-list" href="#"><span class="glyph" data-icon="&#xe05d;"></span><p>{{this}}</p></a>
+              <a class="second-menu-list" href="#"><p>{{this}}</p></a>
             </li>
           {{/each}}
         </ul>
@@ -20,7 +20,7 @@
         <ul class="nav nav-pills">
           {{#each groups}}
             <li role="presentation" class="{{#if isActive}}active{{/if}}">
-              <a class="third-menu-list" href="#"><p>{{name}}</p></a>
+              <a class="third-menu-list" href="#"><i class="icon {{icon}}"></i><p>{{name}}</p></a>
             </li>
           {{/each}}
         </ul>

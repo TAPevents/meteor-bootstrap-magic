@@ -12,7 +12,7 @@ Package.on_use(function(api) {
     'coffeescript',
     'reactive-var',
     'reactive-dict',
-    'nahue:simple-line-icons',
+    'semantic:ui-icon',
     'templating',
     'underscore'
   ], ['client']);
