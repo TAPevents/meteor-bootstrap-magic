@@ -43,6 +43,10 @@ getCurrentGroup = ->
     if group.keyName is currentPage.get()
       return group
 
+submenuGroup = ->
+  subgroups = _.groupBy(bootstrap_magic_variables, 'categories')
+  console.log "Subgroups #{subgroups}"
+
 initColorPicker = (node) ->
 
   # colorpicker's changeColor fires too often!
