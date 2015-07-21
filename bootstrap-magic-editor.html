@@ -3,31 +3,31 @@
 </template>
 
 <template name="_bootstrap_magic">
-  <div id="bootstrap-magic" class='container-fluid'>
+  <div id="bootstrap-magic">
 
-    <div class="second-menu">
-      <ul class="nav nav-pills">
-        {{#each menuItems}}
-          <li role="presentation" class="{{#if isActive}}active{{/if}}">
-            <a class="menu-list" href="#"><p>{{this}}</p></a>
-          </li>
-        {{/each}}
-      </ul>
-    </div><!--/menu-->
+    <div class="menu">
+      <div class="second-menu">
+        <ul class="nav nav-pills">
+          {{#each menuItems}}
+            <li role="presentation" class="{{#if isActive}}active{{/if}}">
+              <a class="second-menu-list" href="#"><p>{{this}}</p></a>
+            </li>
+          {{/each}}
+        </ul>
+      </div><!--/menu-->
 
-    <hr />
-
-    <div class="third-menu compact-menu">
-      <ul class="nav nav-pills">
-        {{#each groups}}
-          <li role="presentation" class="{{#if isActive}}active{{/if}}">
-            <a class="third-menu-list" href="#"><p>{{name}}</p></a>
-          </li>
-        {{/each}}
-      </ul>
-    </div><!--/submenu-->
+      <div class="third-menu compact-menu">
+        <ul class="nav nav-pills">
+          {{#each groups}}
+            <li role="presentation" class="{{#if isActive}}active{{/if}}">
+              <a class="third-menu-list" href="#"><p>{{name}}</p></a>
+            </li>
+          {{/each}}
+        </ul>
+      </div><!--/submenu-->
+    </div>
     
-    <div class="content">
+    <div class="content container-fluid">
       {{#with currentGroup}}
         <section class="sub-item">
           <h3>{{name}}</h3>

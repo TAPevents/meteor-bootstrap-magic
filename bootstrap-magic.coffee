@@ -37,16 +37,22 @@ formatCamel = (str) ->
   str.charAt(0).toUpperCase() + str.slice(1)
 
 @currentPage = new ReactiveVar()
+@currentMenuItem = new ReactiveVar()
 
 getCurrentGroup = ->
   for group in bootstrap_magic_variables
     if group.keyName is currentPage.get()
+      console.log "Current page: " + currentPage.get()
       return group
 
-submenuGroup = ->
-  subgroups = _.groupBy(bootstrap_magic_variables, 'categories')
-  console.log "Subgroups #{subgroups}"
+getCurrentMenu = ->
+  for group in bootstrap_magic_variables
+    console.log "the cats are: #{group.category}"
+    if group.category is currentMenuItem.get()
+      console.log "Current group: " + currentMenuItem.get()
+      return group
 
+    
 initColorPicker = (node) ->
 
   # colorpicker's changeColor fires too often!
@@ -72,8 +78,12 @@ Template._bootstrap_magic.created = ->
 
 Template._bootstrap_magic.rendered = ->
   currentPage.set bootstrap_magic_variables[0].keyName
+  currentMenuItem.set bootstrap_magic_variables[0].category
+  getCurrentMenu()
+  console.log "Start menu: "+ getCurrentMenu()
   @.autorun -> 
     currentPage.get()
+    currentMenuItem.get()
     Meteor.defer -> initColorPicker($('.color-picker-area'))
 
 Template._bootstrap_magic.helpers
@@ -91,7 +101,6 @@ Template._bootstrap_magic.helpers
     for item, i in cats
       if item isnt cats[i+1] 
         uniqueItems.push item
-    console.log uniqueItems
     return uniqueItems
 
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{format @name, '_'}"] || null
@@ -99,7 +108,9 @@ Template._bootstrap_magic.helpers
   "formattedName" : -> format @name
   "typeIs" : (type) -> @type is type
   "currentGroup" : getCurrentGroup
-  "isActive" :-> @keyName is currentPage.get()
+  "isActive" :-> 
+    @keyName is currentPage.get()
+    @category is currentMenuItem.get()
 
 Template._bootstrap_magic.events
   'change input.bootstrap-magic-input' : (e) ->
@@ -108,3 +119,8 @@ Template._bootstrap_magic.events
 
   'click .third-menu-list' : -> 
     currentPage.set(@keyName)
+
+  'click .second-menu-list' : ->
+    $('.compact-menu').slideDown("slow")
+    currentMenuItem.set(@category)
+    console.log "Now current Menu is: "+ currentMenuItem.get()
