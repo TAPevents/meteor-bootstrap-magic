@@ -88,10 +88,7 @@ Template._bootstrap_magic.helpers
     return bootstrap_magic_variables
 
   "menuItems" : ->
-    _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->   
-    @sortedMenu = obj[0]
-    console.log @sortedMenu.category
-    return @sortedMenu
+    _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
 
   # "currentMenu" : ->
   #   if @sortedMenu.category is 
