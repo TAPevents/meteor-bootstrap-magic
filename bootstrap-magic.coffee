@@ -112,8 +112,8 @@ Template._bootstrap_magic.events
   'click .third-menu-list' : -> 
     currentPage.set(@keyName)
 
-  'click .second-menu-list' : ->
-    $('.compact-menu').slideDown("slow")
+  'click .menu-expandable' : ->
+    $('.menu-compact').slideDown("slow")
     currentMenuItems.set(@category)
     console.log "Now current Menu is: ", currentMenuItem.get()
     console.log "this :" , @
