@@ -6,27 +6,27 @@
   <div id="bootstrap-magic">
 
     <div class="menu">
-      <div class="menu-secondary stretch">
+      <div class="menu-secondary menu-expandable stretch ">
         <ul class="nav nav-pills color-link under-hover center">
           {{#each menuItems}}
             <li role="presentation" class="{{#if isActive}}active{{/if}}">
-              <a class="second-menu-list" href="#"><p>{{formattedCat}}</p></a>
+              <a class="menu-secondary-list" href="#"><p>{{formattedCat}}</p></a>
             </li>
           {{/each}}
         </ul>
-      </div><!--/menu-second-->
+      </div><!--/menu-secondary-->
 
       <div class="menu-tertiary menu-compact shadow-top stretch">
         <ul class="nav nav-pills color-link under-hover center">
-          <!--{{#with currentMenu}}-->
+          {{#with menuItems}}
             {{#each groups}}
               <li role="presentation" class="{{#if isActive}}active{{/if}}">
-                <a class="third-menu-list" href="#"><i class="{{icon}} icon"></i><p>{{name}}</p></a>
+                <a class="menu-tertiary-list" href="#"><i class="{{icon}} icon"></i><p>{{name}}</p></a>
               </li>
             {{/each}}
-          <!--{{/with}}-->
+          {{/with}}
         </ul>
-      </div><!--/submenu-->
+      </div><!--/menu-tertiary-->
     </div>
 
     <div class="content container-fluid">
