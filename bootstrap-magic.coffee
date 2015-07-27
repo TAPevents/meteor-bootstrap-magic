@@ -86,10 +86,7 @@ Template._bootstrap_magic.helpers
     return bootstrap_magic_variables
 
   "menuItems" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
-  "pageItems" : ->
-    item = currentMenuItem.get()
-    _.map _.where(bootstrap_magic_variables, { category: item }), (obj) -> obj
-  
+  "pageItems" : ->  _.map _.where(bootstrap_magic_variables, { category: currentMenuItem.get() }), (obj) -> obj
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{format @name, '_'}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "formattedName" : -> format @name
@@ -105,14 +102,6 @@ Template._bootstrap_magic.events
     $input = $(e.currentTarget)
     BootstrapMagic.setOverride $input.attr('name'), $input.val()
 
-  'click .menu-secondary-list' : -> 
-    currentMenuItem.set(@category)
-    console.log "Now current Menu is: ", currentMenuItem.get()
-    item = currentMenuItem.get()
-    _.map _.where(bootstrap_magic_variables, { category: item }), (obj) -> obj
-    console.log "my pages by click: ", _.map _.where(bootstrap_magic_variables, { category: item }), (obj) -> obj
-
+  'click .menu-secondary-list' : -> currentMenuItem.set(@category)
   'click .menu-tertiary-list' : -> currentPage.set(@keyName)
-
-  'click .menu-expandable' : ->
-    $('.menu-compact').slideDown("slow")
+  'click .menu-expandable' : ->  $('.menu-compact').slideDown("slow")
