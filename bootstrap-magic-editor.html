@@ -20,7 +20,7 @@
         <ul class="nav nav-pills color-link under-hover center">
           {{#each pageItems}}
             <li role="presentation" class="{{#if isActive}}color-active{{/if}}">
-              <a class="menu-tertiary-list" href="#"><i class="{{pageItems.icon}} icon"></i><p>{{pageItems.name}}</p></a>
+              <a class="menu-tertiary-list" href="#"><i class="{{this.icon}} icon"></i><p>{{this.name}}</p></a>
             </li>
           {{/each}}
         </ul>
