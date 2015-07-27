@@ -100,7 +100,11 @@ Template._bootstrap_magic.events
     $input = $(e.currentTarget)
     BootstrapMagic.setOverride $input.attr('name'), $input.val()
 
-  'click .menu-secondary-list' : -> currentMenuItem.set(@category)
+  'click .menu-secondary-list' : -> 
+    currentMenuItem.set(@category)
+    if (_.map _.where(bootstrap_magic_variables, { category: currentMenuItem.get() }), (obj) -> obj).length is 1
+      currentPage.set(_.where(bootstrap_magic_variables, { category: currentMenuItem.get() })[0].keyName)
+ 
   'click .menu-tertiary-list' : -> currentPage.set(@keyName)
   'click .menu-expandable' : ->  $('.menu-compact').slideDown("slow")
 
