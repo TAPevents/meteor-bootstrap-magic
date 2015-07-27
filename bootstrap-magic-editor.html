@@ -9,7 +9,7 @@
       <div class="menu-secondary menu-expandable stretch ">
         <ul class="nav nav-pills color-link under-hover center">
           {{#each menuItems}}
-            <li role="presentation" class="{{#if isActive}}active{{/if}}">
+            <li role="presentation" class="{{#if isActive}}color-active{{/if}}">
               <a class="menu-secondary-list" href="#"><p>{{formattedCat}}</p></a>
             </li>
           {{/each}}
@@ -18,13 +18,11 @@
 
       <div class="menu-tertiary menu-compact shadow-top stretch">
         <ul class="nav nav-pills color-link under-hover center">
-          {{#with menuItems}}
-            {{#each groups}}
-              <li role="presentation" class="{{#if isActive}}active{{/if}}">
-                <a class="menu-tertiary-list" href="#"><i class="{{icon}} icon"></i><p>{{name}}</p></a>
-              </li>
-            {{/each}}
-          {{/with}}
+          {{#each pageItems}}
+            <li role="presentation" class="{{#if isActive}}color-active{{/if}}">
+              <a class="menu-tertiary-list" href="#"><i class="{{pageItems.icon}} icon"></i><p>{{pageItems.name}}</p></a>
+            </li>
+          {{/each}}
         </ul>
       </div><!--/menu-tertiary-->
     </div>

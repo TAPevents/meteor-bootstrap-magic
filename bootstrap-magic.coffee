@@ -44,11 +44,8 @@ getCurrentGroup = ->
     if group.keyName is currentPage.get()
       return group
 
-getCurrentMenu = ->
-  for group in bootstrap_magic_variables
-    if group.category is currentMenuItem.get()
-      console.log "Current group: " + currentMenuItem.get()
-      return group
+@sorted = _.groupBy(bootstrap_magic_variables, 'category')
+console.log "the sort: ",  @sorted
   
 initColorPicker = (node) ->
 
@@ -74,6 +71,7 @@ Template._bootstrap_magic.created = ->
   BootstrapMagic.start() if BootstrapMagic.start
 
 Template._bootstrap_magic.rendered = ->
+  currentMenuItem.set bootstrap_magic_variables[0].category
   currentPage.set bootstrap_magic_variables[0].keyName
   @.autorun -> 
     currentPage.get()
@@ -87,11 +85,10 @@ Template._bootstrap_magic.helpers
         lessVar.value = reactive.defaults.keys[lessVar.key] || lessVar.value
     return bootstrap_magic_variables
 
-  "menuItems" : ->
-    _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
-
-  # "currentMenu" : ->
-  #   if @sortedMenu.category is 
+  "menuItems" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
+  "pageItems" : ->
+    item = currentMenuItem.get()
+    _.map _.where(bootstrap_magic_variables, { category: item }), (obj) -> obj
   
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{format @name, '_'}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
@@ -99,7 +96,6 @@ Template._bootstrap_magic.helpers
   "formattedCat" : -> formatCamel @category
   "typeIs" : (type) -> @type is type
   "currentGroup" : getCurrentGroup
-  "currentMenu" : getCurrentMenu
   "isActive" : -> 
     @keyName is currentPage.get()
     @category is currentMenuItem.get()
@@ -109,11 +105,14 @@ Template._bootstrap_magic.events
     $input = $(e.currentTarget)
     BootstrapMagic.setOverride $input.attr('name'), $input.val()
 
-  'click .menu-tertiary-list' : -> 
-    currentPage.set(@keyName)
+  'click .menu-secondary-list' : -> 
+    currentMenuItem.set(@category)
+    console.log "Now current Menu is: ", currentMenuItem.get()
+    item = currentMenuItem.get()
+    _.map _.where(bootstrap_magic_variables, { category: item }), (obj) -> obj
+    console.log "my pages by click: ", _.map _.where(bootstrap_magic_variables, { category: item }), (obj) -> obj
+
+  'click .menu-tertiary-list' : -> currentPage.set(@keyName)
 
   'click .menu-expandable' : ->
     $('.menu-compact').slideDown("slow")
-    currentMenuItems.set(@category)
-    console.log "Now current Menu is: ", currentMenuItem.get()
-    console.log "this :" , @
