@@ -96,7 +96,7 @@ Template._bootstrap_magic.helpers
   "formattedCat" : -> formatCamel @category
   "typeIs" : (type) -> @type is type
   "currentGroup" : getCurrentGroup
-  "isActive" : -> 
+  "isSelected" : -> 
     @keyName is currentPage.get()
     @category is currentMenuItem.get()
 
