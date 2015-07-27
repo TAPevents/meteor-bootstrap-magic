@@ -44,9 +44,6 @@ getCurrentGroup = ->
     if group.keyName is currentPage.get()
       return group
 
-@sorted = _.groupBy(bootstrap_magic_variables, 'category')
-console.log "the sort: ",  @sorted
-  
 initColorPicker = (node) ->
 
   # colorpicker's changeColor fires too often!
@@ -79,11 +76,12 @@ Template._bootstrap_magic.rendered = ->
     Meteor.defer -> initColorPicker($('.color-picker-area'))
 
 Template._bootstrap_magic.helpers
-  "groups" : ->
-    for group in bootstrap_magic_variables
-      for lessVar in group.data
-        lessVar.value = reactive.defaults.keys[lessVar.key] || lessVar.value
-    return bootstrap_magic_variables
+  
+  # "groups" : ->
+  #   for group in bootstrap_magic_variables
+  #     for lessVar in group.data
+  #       lessVar.value = reactive.defaults.keys[lessVar.key] || lessVar.value
+  #   return bootstrap_magic_variables
 
   "menuItems" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
   "pageItems" : ->  _.map _.where(bootstrap_magic_variables, { category: currentMenuItem.get() }), (obj) -> obj
@@ -94,8 +92,8 @@ Template._bootstrap_magic.helpers
   "typeIs" : (type) -> @type is type
   "currentGroup" : getCurrentGroup
   "isSelected" : -> 
-    @keyName is currentPage.get()
     @category is currentMenuItem.get()
+    @keyName is currentPage.get()
 
 Template._bootstrap_magic.events
   'change input.bootstrap-magic-input' : (e) ->
