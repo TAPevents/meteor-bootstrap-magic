@@ -103,3 +103,5 @@ Template._bootstrap_magic.events
   'click .menu-secondary-list' : -> currentMenuItem.set(@category)
   'click .menu-tertiary-list' : -> currentPage.set(@keyName)
   'click .menu-expandable' : ->  $('.menu-compact').slideDown("slow")
+
+  # 'click #reset' :-> do something
