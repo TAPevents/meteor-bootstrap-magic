@@ -12,7 +12,6 @@ Package.on_use(function(api) {
     'coffeescript',
     'reactive-var',
     'reactive-dict',
-    'semantic:ui-icon',
     'templating',
     'underscore'
   ], ['client']);
