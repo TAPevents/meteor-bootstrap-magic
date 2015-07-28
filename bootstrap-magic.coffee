@@ -89,7 +89,7 @@ Template._bootstrap_magic.helpers
   #   return bootstrap_magic_variables
 
   "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
-  "pageItems" : ->  _.map _.where(bootstrap_magic_variables, { category: currentMenuItem.get() }), (obj) -> obj
+  "subCategories" : ->  _.map _.where(bootstrap_magic_variables, { category: currentMenuItem.get() }), (obj) -> obj
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @keyName}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "formattedCat" : -> formatCamel @category
