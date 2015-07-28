@@ -41,12 +41,12 @@ formatCamel = (str) ->
   str.charAt(0).toUpperCase() + str.slice(1)
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
-@currentPage = new ReactiveVar()
-@currentMenuItem = new ReactiveVar()
+@currentSubCat = new ReactiveVar()
+@currentCat = new ReactiveVar()
 
 getCurrentSubCat = ->
   for group in bootstrap_magic_variables
-    if group.keyName is currentPage.get()
+    if group.keyName is currentSubCat.get()
       return group
 
 initColorPicker = (node) ->
@@ -73,11 +73,11 @@ Template._bootstrap_magic.created = ->
   BootstrapMagic.start() if BootstrapMagic.start
 
 Template._bootstrap_magic.rendered = ->
-  currentMenuItem.set bootstrap_magic_variables[0].category
-  currentPage.set bootstrap_magic_variables[0].keyName
+  currentCat.set bootstrap_magic_variables[0].category
+  currentSubCat.set bootstrap_magic_variables[0].keyName
   @.autorun -> 
-    currentPage.get()
-    currentMenuItem.get()
+    currentSubCat.get()
+    currentCat.get()
     Meteor.defer -> initColorPicker($('.color-picker-area'))
 
 Template._bootstrap_magic.helpers
@@ -89,14 +89,14 @@ Template._bootstrap_magic.helpers
   #   return bootstrap_magic_variables
 
   "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
-  "subCategories" : ->  _.map _.where(bootstrap_magic_variables, { category: currentMenuItem.get() }), (obj) -> obj
+  "subCategories" : ->  _.map _.where(bootstrap_magic_variables, { category: currentCat.get() }), (obj) -> obj
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @keyName}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "formattedCat" : -> formatCamel @category
   "typeIs" : (type) -> @type is type
   "currentSubCat" : getCurrentSubCat
-  "isSelectedCat" : -> @category is currentMenuItem.get()
-  "isSelectedSubCat" : ->  @keyName is currentPage.get()
+  "isSelectedCat" : -> @category is currentCat.get()
+  "isSelectedSubCat" : ->  @keyName is currentSubCat.get()
 
 Template._bootstrap_magic.events
   'change input.bootstrap-magic-input' : (e) ->
@@ -104,10 +104,10 @@ Template._bootstrap_magic.events
     BootstrapMagic.setOverride $input.attr('name'), $input.val()
 
   'click .menu-secondary-list' : -> 
-    currentMenuItem.set(@category)
-    if (_.map _.where(bootstrap_magic_variables, { category: currentMenuItem.get() }), (obj) -> obj).length is 1
-      currentPage.set(_.where(bootstrap_magic_variables, { category: currentMenuItem.get() })[0].keyName)
+    currentCat.set(@category)
+    if (_.map _.where(bootstrap_magic_variables, { category: currentCat.get() }), (obj) -> obj).length is 1
+      currentSubCat.set(_.where(bootstrap_magic_variables, { category: currentCat.get() })[0].keyName)
  
-  'click .menu-tertiary-list' : -> currentPage.set(@keyName)
+  'click .menu-tertiary-list' : -> currentSubCat.set(@keyName)
 
   # 'click #reset' :-> do something
