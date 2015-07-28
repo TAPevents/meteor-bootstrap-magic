@@ -10,3 +10,5 @@ DONE 7. 'click .menu-expandable' : ->  $('.menu-compact').slideDown("slow")
   in Orbit Admin Theme
 DONE 8. Glyphicons
 9. delete all overrides val
+DONE 10. else show a suggestion to user to select a sub tab.
+11. Very much need to DRY

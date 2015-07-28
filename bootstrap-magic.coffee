@@ -81,7 +81,6 @@ Template._bootstrap_magic.rendered = ->
     currentCat.get()
     Meteor.defer -> initColorPicker($('.color-picker-area'))
 
-objByCat = _.where(bootstrap_magic_variables, { category: currentCat.get() })
 
 Template._bootstrap_magic.helpers
   
