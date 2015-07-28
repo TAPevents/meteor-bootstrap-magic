@@ -12,7 +12,9 @@ Package.on_use(function(api) {
     'coffeescript',
     'reactive-var',
     'reactive-dict',
-    'templating'
+    'semantic:ui-icon',
+    'templating',
+    'underscore'
   ], ['client']);
 
   api.add_files([
@@ -32,6 +34,7 @@ Package.on_use(function(api) {
     'lib/templates/preview/padding.html',
     'lib/templates/preview/pagination.html',
     'lib/templates/preview/popover.html',
+    'lib/templates/preview/reset.html',
     'lib/templates/preview/screen-sizes.html',
     'lib/templates/preview/sprites.html',
     'lib/templates/preview/tables.html',

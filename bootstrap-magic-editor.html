@@ -3,22 +3,34 @@
 </template>
 
 <template name="_bootstrap_magic">
-  <div id="bootstrap-magic" class='container-fluid'>
+  <div id="bootstrap-magic">
 
-    <div class="submenu compact-menu">
-      <ul class="nav nav-pills">
-        {{#each groups}}
-          <li role="presentation" class="{{#if isActive}}active{{/if}}">
-            <a class="submenu-list" href="#"><p>{{name}}</p></a>
-          </li>
-        {{/each}}
-      </ul>
-    </div><!--/submenu-->
-    
-    <div class="content">
-      {{#with group}}
+    <div class="menu">
+      <div class="menu-secondary menu-expandable stretch ">
+        <ul class="nav nav-pills color-link under-hover center">
+          {{#each categories}}
+            <li role="presentation" class="{{#if isSelected}}active{{/if}}">
+              <a class="menu-secondary-list" href="#"><span>{{__ category}}</span></a>
+            </li>
+          {{/each}}
+        </ul>
+      </div><!--/menu-secondary-->
+
+      <div class="menu-tertiary menu-compact shadow-top stretch">
+        <ul class="nav nav-pills color-link under-hover center">
+          {{#each pageItems}}
+            <li role="presentation" class="{{#if thisSub}}active{{/if}}">
+              <a class="menu-tertiary-list" href="#"><i class="{{icon}} icon"></i><span>{{__ keyName}}</span></a>
+            </li>
+          {{/each}}
+        </ul>
+      </div><!--/menu-tertiary-->
+    </div>
+
+    <div class="content container-fluid">
+      {{#with currentGroup}}
         <section class="sub-item">
-          <h3>{{name}}</h3>
+          <h3>{{__ keyName}}</h3>
           <div class="row">
             <div class="col-sm-4">
               {{#each data}}
