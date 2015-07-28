@@ -1,3 +1,7 @@
+#i18n snub
+UI.registerHelper "__", (keyName) -> 
+  return keyName
+
 reactive =
   overrides : new ReactiveDict
   defaults : new ReactiveDict
@@ -35,6 +39,7 @@ format = (str, del) -> str.replace(/\s+/g, del || '-').toLowerCase()
 formatCamel = (str) -> 
   str = str.replace(/([^A-Za-z0-9\.\$])|([A-Z])(?=[A-Z][a-z])|([^\-\$\.0-9])(?=\$?[0-9]+(?:\.[0-9]+)?)|([0-9])(?=[^\.0-9])|([a-z])(?=[A-Z])/g, '$2$3$4$5 ')
   str.charAt(0).toUpperCase() + str.slice(1)
+camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
 @currentPage = new ReactiveVar()
 @currentMenuItem = new ReactiveVar()
@@ -83,17 +88,15 @@ Template._bootstrap_magic.helpers
   #       lessVar.value = reactive.defaults.keys[lessVar.key] || lessVar.value
   #   return bootstrap_magic_variables
 
-  "menuItems" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
+  "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
   "pageItems" : ->  _.map _.where(bootstrap_magic_variables, { category: currentMenuItem.get() }), (obj) -> obj
-  "previewTmpl" : -> Template["bootstrap_magic_preview_#{format @name, '_'}"] || null
+  "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @keyName}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
-  "formattedName" : -> format @name
   "formattedCat" : -> formatCamel @category
   "typeIs" : (type) -> @type is type
   "currentGroup" : getCurrentGroup
-  "isSelected" : -> 
-    @category is currentMenuItem.get()
-    @keyName is currentPage.get()
+  "isSelected" : -> @category is currentMenuItem.get()
+  "thisSub" : ->  @keyName is currentPage.get()
 
 Template._bootstrap_magic.events
   'change input.bootstrap-magic-input' : (e) ->
@@ -106,6 +109,5 @@ Template._bootstrap_magic.events
       currentPage.set(_.where(bootstrap_magic_variables, { category: currentMenuItem.get() })[0].keyName)
  
   'click .menu-tertiary-list' : -> currentPage.set(@keyName)
-  'click .menu-expandable' : ->  $('.menu-compact').slideDown("slow")
 
   # 'click #reset' :-> do something

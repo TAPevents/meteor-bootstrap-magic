@@ -10,15 +10,8 @@
   font-family: 'MonospaceFont', 'Menlo', 'Osaka', monospace;
 }
 
-.menu-compact {
-  display: none;
-}
-.menu-expandable p, .menu-compact p {
-  display: inline;
-}
-
 @media (max-width: 1200px) {
-  .menu-compact p {
+  .menu-compact span {
     display: none;
   }
 }

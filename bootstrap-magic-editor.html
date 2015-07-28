@@ -8,9 +8,9 @@
     <div class="menu">
       <div class="menu-secondary menu-expandable stretch ">
         <ul class="nav nav-pills color-link under-hover center">
-          {{#each menuItems}}
-            <li role="presentation" class="{{#if isSelected}}selected{{/if}}">
-              <a class="menu-secondary-list" href="#"><p>{{formattedCat}}</p></a>
+          {{#each categories}}
+            <li role="presentation" class="{{#if isSelected}}active{{/if}}">
+              <a class="menu-secondary-list" href="#"><span>{{__ category}}</span></a>
             </li>
           {{/each}}
         </ul>
@@ -19,8 +19,8 @@
       <div class="menu-tertiary menu-compact shadow-top stretch">
         <ul class="nav nav-pills color-link under-hover center">
           {{#each pageItems}}
-            <li role="presentation" class="{{#if isSelected}}selected{{/if}}">
-              <a class="menu-tertiary-list" href="#"><i class="{{this.icon}} icon"></i><p>{{this.name}}</p></a>
+            <li role="presentation" class="{{#if thisSub}}active{{/if}}">
+              <a class="menu-tertiary-list" href="#"><i class="{{icon}} icon"></i><span>{{__ keyName}}</span></a>
             </li>
           {{/each}}
         </ul>
@@ -30,7 +30,7 @@
     <div class="content container-fluid">
       {{#with currentGroup}}
         <section class="sub-item">
-          <h3>{{name}}</h3>
+          <h3>{{__ keyName}}</h3>
           <div class="row">
             <div class="col-sm-4">
               {{#each data}}
