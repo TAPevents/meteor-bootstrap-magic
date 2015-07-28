@@ -44,7 +44,7 @@ camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$
 @currentPage = new ReactiveVar()
 @currentMenuItem = new ReactiveVar()
 
-getCurrentGroup = ->
+getCurrentSubCat = ->
   for group in bootstrap_magic_variables
     if group.keyName is currentPage.get()
       return group
@@ -94,7 +94,7 @@ Template._bootstrap_magic.helpers
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "formattedCat" : -> formatCamel @category
   "typeIs" : (type) -> @type is type
-  "currentSubCat" : getCurrentGroup
+  "currentSubCat" : getCurrentSubCat
   "isSelectedCat" : -> @category is currentMenuItem.get()
   "isSelectedSubCat" : ->  @keyName is currentPage.get()
 
