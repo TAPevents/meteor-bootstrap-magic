@@ -94,7 +94,7 @@ Template._bootstrap_magic.helpers
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "formattedCat" : -> formatCamel @category
   "typeIs" : (type) -> @type is type
-  "currentGroup" : getCurrentGroup
+  "currentSubCat" : getCurrentGroup
   "isSelectedCat" : -> @category is currentMenuItem.get()
   "isSelectedSubCat" : ->  @keyName is currentPage.get()
 
