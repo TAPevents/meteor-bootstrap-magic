@@ -45,8 +45,9 @@ camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$
 @currentCat = new ReactiveVar()
 
 getCurrentSubCat = ->
+  isSubCat = currentSubCat.get()
   for group in bootstrap_magic_variables
-    if group.keyName is currentSubCat.get()
+    if group.keyName is isSubCat
       return group
 
 initColorPicker = (node) ->
