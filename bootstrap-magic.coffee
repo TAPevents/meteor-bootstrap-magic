@@ -95,8 +95,8 @@ Template._bootstrap_magic.helpers
   "formattedCat" : -> formatCamel @category
   "typeIs" : (type) -> @type is type
   "currentGroup" : getCurrentGroup
-  "isSelected" : -> @category is currentMenuItem.get()
-  "thisSub" : ->  @keyName is currentPage.get()
+  "isSelectedCat" : -> @category is currentMenuItem.get()
+  "isSelectedSubCat" : ->  @keyName is currentPage.get()
 
 Template._bootstrap_magic.events
   'change input.bootstrap-magic-input' : (e) ->
