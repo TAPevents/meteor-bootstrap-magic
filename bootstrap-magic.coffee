@@ -109,11 +109,10 @@ Template._bootstrap_magic.events
     currentCat.set(@category)
     myCat = currentCat.get()
     objByCat = _.where(bootstrap_magic_variables, { category: myCat })
-    n = 0
     if (_.map objByCat, (obj) -> obj).length is 1
       currentSubCat.set(objByCat[0].keyName)
-      $('.sub-cat-item').show()
       $('.sub-cat-message h4').remove()
+      $('.sub-cat-item').show()
     else
       $('.sub-cat-message').html("<h4>Please select a submenu tab</h4>")
       $('.sub-cat-item').hide()
