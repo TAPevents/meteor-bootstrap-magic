@@ -81,6 +81,7 @@ Template._bootstrap_magic.rendered = ->
     currentCat.get()
     Meteor.defer -> initColorPicker($('.color-picker-area'))
 
+objByCat = _.where(bootstrap_magic_variables, { category: currentCat.get() })
 
 Template._bootstrap_magic.helpers
   
@@ -108,10 +109,16 @@ Template._bootstrap_magic.events
   'click .menu-secondary-list' : -> 
     currentCat.set(@category)
     myCat = currentCat.get()
-    objByCat = _.where(bootstrap_magic_variables, { category: myCat }
+    objByCat = _.where(bootstrap_magic_variables, { category: myCat })
+    n = 0
     if (_.map objByCat, (obj) -> obj).length is 1
-      currentSubCat.set(objByCat)[0].keyName)
+      currentSubCat.set(objByCat[0].keyName)
+    else
+      $('.sub-cat-message').html("<h4>Please select a submenu tab</h4>")
+      $('.sub-cat-item').hide()
  
-  'click .menu-tertiary-list' : -> currentSubCat.set(@keyName)
+  'click .menu-tertiary-list' : -> 
+    currentSubCat.set(@keyName)
+    $('.sub-cat-message h4').remove() && $('.sub-cat-item').show()
 
   # 'click #reset' :-> do something
