@@ -81,6 +81,7 @@ Template._bootstrap_magic.rendered = ->
     currentCat.get()
     Meteor.defer -> initColorPicker($('.color-picker-area'))
 
+
 Template._bootstrap_magic.helpers
   
   # "groups" : ->
@@ -106,8 +107,10 @@ Template._bootstrap_magic.events
 
   'click .menu-secondary-list' : -> 
     currentCat.set(@category)
-    if (_.map _.where(bootstrap_magic_variables, { category: currentCat.get() }), (obj) -> obj).length is 1
-      currentSubCat.set(_.where(bootstrap_magic_variables, { category: currentCat.get() })[0].keyName)
+    myCat = currentCat.get()
+    objByCat = _.where(bootstrap_magic_variables, { category: myCat }
+    if (_.map objByCat, (obj) -> obj).length is 1
+      currentSubCat.set(objByCat)[0].keyName)
  
   'click .menu-tertiary-list' : -> currentSubCat.set(@keyName)
 
