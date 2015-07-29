@@ -66,6 +66,9 @@ initColorPicker = (node) ->
       @startVal = @endVal
       $input.trigger 'change'
 
+objByCat = ->
+  myCat = currentCat.get()
+  _.where(bootstrap_magic_variables, { category: myCat })
 
 #Time for Templates
 
@@ -91,7 +94,7 @@ Template._bootstrap_magic.helpers
   #   return bootstrap_magic_variables
 
   "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
-  "subCategories" : ->  _.map _.where(bootstrap_magic_variables, { category: currentCat.get() }), (obj) -> obj
+  "subCategories" : ->  _.map objByCat(), (obj) -> obj
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @keyName}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "formattedCat" : -> formatCamel @category
@@ -107,10 +110,8 @@ Template._bootstrap_magic.events
 
   'click .menu-secondary-list' : -> 
     currentCat.set(@category)
-    myCat = currentCat.get()
-    objByCat = _.where(bootstrap_magic_variables, { category: myCat })
-    if (_.map objByCat, (obj) -> obj).length is 1
-      currentSubCat.set(objByCat[0].keyName)
+    if (_.map objByCat(), (obj) -> obj).length is 1
+      currentSubCat.set(objByCat()[0].keyName)
       $('.sub-cat-message h4').remove()
       $('.sub-cat-item').show()
     else
