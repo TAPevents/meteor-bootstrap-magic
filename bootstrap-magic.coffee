@@ -62,10 +62,6 @@ objByCat = ->
   myCat = currentCat.get()
   _.where(bootstrap_magic_variables, { category: myCat })
 
-showAndRm = ->
-  $('.sub-cat-message h4').remove()
-  $('.sub-cat-item').show()
-
 #Time for Templates
 
 Template._bootstrap_magic.created = ->
@@ -105,15 +101,8 @@ Template._bootstrap_magic.events
 
   'click .menu-secondary-list' : -> 
     currentCat.set(@category)
-    if (_.map objByCat(), (obj) -> obj).length is 1
-      currentSubCat.set(objByCat()[0].keyName)
-      showAndRm()
-    else
-      $('.sub-cat-message').html("<h4>Please select a submenu tab</h4>")
-      $('.sub-cat-item').hide()
+    currentSubCat.set(objByCat()[0].keyName)      
  
-  'click .menu-tertiary-list' : -> 
-    currentSubCat.set(@keyName)
-    showAndRm()
+  'click .menu-tertiary-list' : -> currentSubCat.set(@keyName)
 
   # 'click #reset' :-> setDefaults(obj)
