@@ -125,4 +125,4 @@ Template._bootstrap_magic.events
     currentSubCat.set(@keyName)
     showAndRm()
 
-  # 'click #reset' :-> do something
+  # 'click #reset' :-> setDefaults(obj)
