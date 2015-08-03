@@ -1,0 +1,72 @@
+<template name="BootstrapMagic">
+  {{> _bootstrap_magic}}
+</template>
+
+<template name="_bootstrap_magic">
+  <div id="bootstrap-magic">
+
+    <div class="menu">
+      <div class="menu-secondary menu-expandable stretch ">
+        <ul class="nav nav-pills color-link under-hover center">
+          {{#each categories}}
+            <li role="presentation" class="{{#if isSelectedCat}}active{{/if}}">
+              <a class="menu-secondary-list" href="#"><span>{{_ category}}</span></a>
+            </li>
+          {{/each}}
+        </ul>
+      </div><!--/menu-secondary-->
+
+      <div class="menu-tertiary menu-compact shadow-top stretch">
+        <ul class="nav nav-pills color-link under-hover center">
+          {{#each subCategories}}
+            <li role="presentation" class="{{#if isSelectedSubCat}}active{{/if}}">
+              <a class="menu-tertiary-list" href="#"><i class="glyphicon glyphicon-{{icon}} space-right"></i><span>{{_ keyName}}</span></a>
+            </li>
+          {{/each}}
+        </ul>
+      </div><!--/menu-tertiary-->
+    </div><!--/menu-->
+
+    <div class="content container-fluid">
+      <div class="sub-cat-message"></div>
+      {{#with currentSubCat}}
+        <section class="sub-cat-item">
+          <h3>{{_ keyName}}</h3>
+          <div class="row">
+            <div class="col-sm-4">
+              {{#each data}}
+                <div class="form-group color-picker-area">
+                  <label class="labelTitle monospace">{{key}}</label>
+                  {{> inputTmpl}}
+                </div>
+              {{/each}}
+            </div>
+            <div class="col-sm-8">
+              {{> previewTmpl}}
+            </div>
+          </div>
+        </section><!--/subitem-->
+      {{/with}}
+    </div><!--/content-->
+
+  </div>
+</template>
+
+<template name="bootstrap_magic_input_text">
+  <div class="input">
+    <input type="text" class="form-control bootstrap-magic-input" name="{{key}}" value="{{BootstrapMagicOverride}}">
+  </div>
+</template>
+
+<template name="bootstrap_magic_input_color">
+  <div class="input-group color-picker-group">
+    <input type="text" class="form-control bootstrap-magic-input" name="{{key}}" placeholder="{{value}}" value="{{BootstrapMagicOverride}}">
+    <span class="input-group-addon"><i></i></span>
+  </div>
+</template>
+
+<template name="bootstrap_magic_input_font">
+  <div class="input">
+    <input type="text" class="form-control bootstrap-magic-input" name="{{key}}" value="{{BootstrapMagicOverride}}">
+  </div>
+</template>
