@@ -1,7 +1,3 @@
-#i18n stub
-UI.registerHelper "__", (keyName) -> 
-  return keyName
-
 reactive =
   overrides : new ReactiveDict
   defaults : new ReactiveDict
