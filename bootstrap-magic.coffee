@@ -63,7 +63,6 @@ objByCat = ->
   _.where(bootstrap_magic_variables, { category: myCat })
 
 #Time for Templates
-
 Template._bootstrap_magic.created = ->
   # trigger start event
   BootstrapMagic.start() if BootstrapMagic.start
@@ -75,7 +74,6 @@ Template._bootstrap_magic.rendered = ->
     currentSubCat.get()
     currentCat.get()
     Meteor.defer -> initColorPicker($('.color-picker-area'))
-
 
 Template._bootstrap_magic.helpers
   
