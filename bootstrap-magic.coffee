@@ -97,7 +97,7 @@ Template._bootstrap_magic.helpers
   "subCategories" : ->  _.map objByCat(), (obj) -> obj
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @keyName}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
-  "formattedCat" : -> formatCamel @category
+  "format" : (str) -> formatCamel(str)
   "typeIs" : (type) -> @type is type
   "currentSubCat" : getCurrentSubCat
   "isSelectedCat" : -> @category is currentCat.get()

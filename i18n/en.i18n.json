@@ -1,3 +1,25 @@
 {
-  
+  "howTo" : "How To",
+  "brandColors" : "Brand Colors",
+  "textColors" : "Text Colors",
+  "navBar" : "Nav Bar",
+  "navTabs" : "Nav Tabs",
+  "buttons" : "Buttons",
+  "formStates" : "Form States",
+  "grays" : "Grays",
+  "typography" : "Typography",
+  "scaffolding" : "Padding",
+  "borderRadius" : "Border Radius",
+  "forms" : "Forms",
+  "tables" : "Tables",
+  "jumbrotron" : "Jumbotron",
+  "advanced" : "Advanced",
+  "pagination" : "Pagination",
+  "tooltip" : "Tooltip",
+  "popover" : "Popover",
+  "listGroup" : "List Group",
+  "sprites" : "Sprites",
+  "screenSizes" : "Screen Sizes",
+  "superAdvanced" : "Super Advanced",
+  "reset" : "Reset"
 }
