@@ -20,7 +20,7 @@
         <ul class="nav nav-pills color-link under-hover center">
           {{#each subCategories}}
             <li role="presentation" class="{{#if isSelectedSubCat}}active{{/if}}">
-              <a class="menu-tertiary-list" href="#"><i class="glyphicon glyphicon-{{icon}} space-right"></i><span>{{_ keyName}}</span></a>
+              <a class="menu-tertiary-list" href="#"><i class="glyphicon glyphicon-{{icon}} space-right"></i><span>{{_ _id}}</span></a>
             </li>
           {{/each}}
         </ul>
@@ -31,7 +31,7 @@
       <div class="sub-cat-message"></div>
       {{#with currentSubCat}}
         <section class="sub-cat-item">
-          <h3>{{_ keyName}}</h3>
+          <h3>{{_ _id}}</h3>
           <div class="row">
             <div class="col-sm-4">
               {{#each data}}
