@@ -5,30 +5,28 @@
 <template name="_bootstrap_magic">
   <div id="bootstrap-magic">
 
-    <div class="menu">
-      <div class="menu-secondary menu-expandable stretch ">
-        <ul class="nav nav-pills color-link under-hover center">
+    <div class="menus">
+      <div class="main-menu">
+        <ul class="nav nav-pills">
           {{#each categories}}
-            <li role="presentation" class="{{#if isSelectedCat}}active{{/if}}">
-              <a class="menu-secondary-list" href="#"><span>{{_ category}}</span></a>
+            <li class="{{#if isSelectedCat}}active{{/if}}">
+              <a href="#"><span>{{_ category}}</span></a>
             </li>
           {{/each}}
         </ul>
-      </div><!--/menu-secondary-->
-
-      <div class="menu-tertiary menu-compact shadow-top stretch">
-        <ul class="nav nav-pills color-link under-hover center">
+      </div>
+      <div class="sub-menu menu-compact">
+        <ul class="nav nav-pills">
           {{#each subCategories}}
-            <li role="presentation" class="{{#if isSelectedSubCat}}active{{/if}}">
-              <a class="menu-tertiary-list" href="#"><i class="glyphicon glyphicon-{{icon}} space-right"></i><span>{{_ _id}}</span></a>
+            <li class="{{#if isSelectedSubCat}}active{{/if}}">
+              <a href="#"><i class="glyphicon glyphicon-{{icon}}"></i> <span>{{_ _id}}</span></a>
             </li>
           {{/each}}
         </ul>
-      </div><!--/menu-tertiary-->
-    </div><!--/menu-->
+      </div>
+    </div>
 
     <div class="content container-fluid">
-      <div class="sub-cat-message"></div>
       {{#with currentSubCat}}
         <section class="sub-cat-item">
           <h3>{{_ _id}}</h3>
@@ -36,7 +34,7 @@
             <div class="col-sm-4">
               {{#each data}}
                 <div class="form-group color-picker-area">
-                  <label class="labelTitle monospace">{{key}}</label>
+                  <label class="labelTitle">{{_id}}</label>
                   {{> inputTmpl}}
                 </div>
               {{/each}}
@@ -45,10 +43,9 @@
               {{> previewTmpl}}
             </div>
           </div>
-        </section><!--/subitem-->
+        </section>
       {{/with}}
-    </div><!--/content-->
-
+    </div>
   </div>
 </template>
 

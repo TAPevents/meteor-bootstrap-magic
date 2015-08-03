@@ -1,20 +1,9 @@
-@font-face {
-  font-family: 'MonospaceFont';
-  src: local('Monaco'),
-    local('Monaco');
-  font-weight: normal;
-  font-style: normal;  
+#bootstrap-magic input {
+  font-family: 'Source Code Pro', 'Monaco', 'Menlo', 'Osaka', monospace;
 }
 
-.bootstrap-magic-input {
-  font-family: 'MonospaceFont', 'Menlo', 'Osaka', monospace;
-}
-.space-right {
-  margin-right: 5px;
-}
-
-@media (max-width: 900px) {
-  .menu-compact span {
+@media (max-width: 480px) {
+  #bootstrap-magic .menu-compact span {
     display: none;
   }
 }

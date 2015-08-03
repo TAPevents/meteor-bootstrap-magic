@@ -76,13 +76,14 @@ Template._bootstrap_magic.events
     $input = $(e.currentTarget)
     BootstrapMagic.setOverride $input.attr('name'), $input.val()
 
-  'click .menu-secondary-list' : ->
+  'click .main-menu a' : ->
     BootstrapMagic.dictionary.currentCategory.set @category
     BootstrapMagic.dictionary.currentSubCategory.set getCurrentCategory()[0]._id # set subcategory to the first child
  
-  'click .menu-tertiary-list' : ->
+  'click .sub-menu a' : ->
     BootstrapMagic.dictionary.currentSubCategory.set @_id
 
+# TODO replace this with a block template helper
 # attach override to type child type templates
 getOverride = ->
   BootstrapMagic.dictionary.overrides.get(@_id) || BootstrapMagic.dictionary.defaults.get(@_id)
