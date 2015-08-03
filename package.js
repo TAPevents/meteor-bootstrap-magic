@@ -12,9 +12,12 @@ Package.on_use(function(api) {
     'coffeescript',
     'reactive-var',
     'reactive-dict',
+    'tap:i18n@1.5.0',
     'templating',
     'underscore'
-  ], ['client']);
+  ], ['client', 'server']);
+
+  api.add_files("package-tap.i18n", ["client", "server"]);
 
   api.add_files([
     'lib/templates/preview/border-radius.html',
@@ -53,5 +56,7 @@ Package.on_use(function(api) {
     'bootstrap-magic-editor.css',
     'bootstrap-magic.coffee'
   ], ['client']);
+
+  api.add_files(["i18n/en.i18n.json"], ["client", "server"]);
 
 });

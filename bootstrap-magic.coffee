@@ -1,4 +1,4 @@
-#i18n snub
+#i18n stub
 UI.registerHelper "__", (keyName) -> 
   return keyName
 
