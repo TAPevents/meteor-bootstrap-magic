@@ -35,6 +35,13 @@ camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$
 
 @currentSubCat = new ReactiveVar()
 @currentCat = new ReactiveVar()
+# default starting script: load hard-coded defaults
+BootstrapMagic.on 'start', ->
+  defaultDefaults = {}
+  for category in bootstrap_magic_variables
+    for variable in category.data
+      defaultDefaults[variable.key] = variable.value
+  @setDefaults defaultDefaults
 
 getCurrentSubCat = ->
   isSubCat = currentSubCat.get()
