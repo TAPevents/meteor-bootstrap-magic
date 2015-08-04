@@ -115,3 +115,7 @@ Template.bootstrap_magic_input_color.destroyed = ->
   @picker.remove()
   $(@firstNode).colorpicker('destroy')
 
+
+###
+# EZ-Modal
+###
