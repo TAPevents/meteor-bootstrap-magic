@@ -50,6 +50,7 @@ Template._bootstrap_magic.rendered = ->
   BootstrapMagic.dictionary.currentCategory.set bootstrap_magic_variables[0].category
   BootstrapMagic.dictionary.currentSubCategory.set bootstrap_magic_variables[0]._id
 
+
 # default starting script: load hard-coded defaults
 # this function can be overriden by other packages for integrations
 BootstrapMagic.on 'start', ->
@@ -119,3 +120,6 @@ Template.bootstrap_magic_input_color.destroyed = ->
 ###
 # EZ-Modal
 ###
+
+Template.bootstrap_magic_preview_popovers.rendered = ->
+  $('[data-toggle="popover"]').popover()
