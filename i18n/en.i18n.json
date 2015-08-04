@@ -5,6 +5,7 @@
   "brandColors" : "Brand Colors",
   "buttons" : "Buttons",
   "colors" : "Colors",
+  "dropdowns" : "Dropdowns",
   "forms" : "Forms",
   "formStates" : "Form States",
   "grays" : "Grays",
@@ -12,10 +13,10 @@
   "howTo" : "How To",
   "jumbotron" : "Jumbotron",
   "listGroup" : "List Group",
-  "navBar" : "Nav Bar",
-  "navTabs" : "Nav Tabs",
+  "navBar" : "Navigation Bar",
+  "navTabs" : "Navigation Tabs",
   "pagination" : "Pagination",
-  "popover" : "Popover",
+  "popover" : "Popovers",
   "reset" : "Reset",
   "scaffolding" : "Padding",
   "screenSizes" : "Screen Sizes",
@@ -24,5 +25,5 @@
   "tables" : "Tables",
   "textColors" : "Text Colors",
   "typography" : "Typography",
-  "tooltip" : "Tooltip"
+  "tooltip" : "Tooltipn"
 }
