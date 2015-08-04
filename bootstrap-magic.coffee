@@ -147,7 +147,7 @@ Template.bootstrap_magic_preview_ez_modal.events
           emptyBasket()
           @EZModal.modal('hide')
       ]
-      
+
   'click .ez-modal-buttons' : ->
     EZModal
       title: 'Please confirm'

@@ -10,7 +10,7 @@ Package.on_use(function(api) {
 
   api.use([
     'coffeescript',
-    'hitchcott:ez-modal',
+    'hitchcott:ez-modal@0.3.1',
     'reactive-var',
     'reactive-dict',
     'tap:i18n@1.5.0',
