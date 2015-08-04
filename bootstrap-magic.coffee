@@ -123,3 +123,6 @@ Template.bootstrap_magic_input_color.destroyed = ->
 
 Template.bootstrap_magic_preview_popovers.rendered = ->
   $('[data-toggle="popover"]').popover()
+
+Template.bootstrap_magic_preview_tooltips.rendered = ->
+  this.$('[data-toggle="tooltip"]').tooltip()
