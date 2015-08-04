@@ -1,9 +1,9 @@
-input {
+.bootstrap-magic-input {
   font-family: 'Source Code Pro', 'Monaco', 'Menlo', 'Osaka', monospace;
 }
 
 @media (max-width: 480px) {
-  .menu-compact span {
+  #bootstrap-magic .menu-compact span {
     display: none;
   }
 }
