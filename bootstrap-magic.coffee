@@ -43,10 +43,10 @@ getCurrentSubCategory = ->
   subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
   return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
 
-Template._bootstrap_magic.created = ->
+Template._bootstrap_magic.onCreated ->
   BootstrapMagic.start() if BootstrapMagic.start
 
-Template._bootstrap_magic.rendered = ->
+Template._bootstrap_magic.onRendered ->
   BootstrapMagic.dictionary.currentCategory.set bootstrap_magic_variables[0].category
   BootstrapMagic.dictionary.currentSubCategory.set bootstrap_magic_variables[0]._id
 
@@ -97,7 +97,7 @@ for type in ['text','color','font']
 # Colorpicker Create/Destroy
 ###
 
-Template.bootstrap_magic_input_color.rendered = ->
+Template.bootstrap_magic_input_color.onRendered ->
   thisColorPicker = $(@firstNode)
   .colorpicker horizontal: true
   .on 'showPicker', ->
@@ -111,11 +111,65 @@ Template.bootstrap_magic_input_color.rendered = ->
 
   @picker = thisColorPicker.data('colorpicker').picker
 
-Template.bootstrap_magic_input_color.destroyed = ->
+Template.bootstrap_magic_input_color.onDestroyed ->
   @picker.remove()
   $(@firstNode).colorpicker('destroy')
 
 
 ###
-# EZ-Modal
+# Bootstrap Popovers, Tooltips & EZ-Modal
 ###
+
+Template.bootstrap_magic_preview_popovers.onRendered ->
+  this.$('[data-toggle="popover"]').popover()
+
+Template.bootstrap_magic_preview_ez_modal.events
+  'click .ez-modal-simple': -> EZModal 'Thank you for your enquiry'
+  'click .ez-modal-small': -> 
+    EZModal
+      classes: 'text-center'
+      body: 'Loading - Please Wait'
+      size: 'sm' # or use 'lg' for large
+      hideFooter: true
+  
+  'click .ez-modal-checkout': -> 
+    EZModal
+      title: 'Please Confirm'
+      body: 'Are you sure you wish to empty the cart?'
+      leftButtons: [
+        color: 'danger'
+        html: 'Cancel'
+      ]
+      rightButtons: [
+        color: 'primary'
+        html: 'Yes'
+        fn: -> @EZModal.modal('hide')
+      ]
+
+  'click .ez-modal-buttons' : ->
+    EZModal
+      title: 'Please confirm'
+      body: 'Are you sure you want to do that?'
+      leftButtons: [
+        html: 'Cancel'
+        color: 'danger'
+      ]
+      rightButtons: [
+        html: 'Confirm'
+        color: 'success'
+        fn: ->
+          # do something
+          @EZModal.modal 'hide' # hide parent
+          EZModal 'Confirmation Received' # open new modal
+      ]
+  'click ez-modal-html' : ->
+    EZModal
+      bodyHtml: """
+      <h3>Arbitrary HTML or Template Keys</h3>
+      <img style='max-width:100%;' src='meteor-logo.png'>
+      """
+      footerTemplate: 'myFooter'
+
+
+Template.bootstrap_magic_preview_tooltips.onRendered ->
+  this.$('[data-toggle="tooltip"]').tooltip()
