@@ -40,9 +40,11 @@ Tracker.autorun ->
 
 # TODO
 
-- i18n
-- better UI / examples
-- reactive variable inheretance: changing `@brand-primary` should change `@link-color` unless `@link-color` is override
+- Better UI / examples
+- Smart variable inheretance: changing `@brand-primary` should change `@link-color` unless `@link-color` is override
+- Extendable default fonts
+- Search/Filter Feature
+- Custom preview templates (maybe)
 
 # Lisence
 
