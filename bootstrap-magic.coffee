@@ -43,13 +43,12 @@ getCurrentSubCategory = ->
   subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
   return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
 
-Template._bootstrap_magic.created = ->
+Template._bootstrap_magic.onCreated ->
   BootstrapMagic.start() if BootstrapMagic.start
 
-Template._bootstrap_magic.rendered = ->
+Template._bootstrap_magic.onRendered ->
   BootstrapMagic.dictionary.currentCategory.set bootstrap_magic_variables[0].category
   BootstrapMagic.dictionary.currentSubCategory.set bootstrap_magic_variables[0]._id
-
 
 # default starting script: load hard-coded defaults
 # this function can be overriden by other packages for integrations
@@ -98,7 +97,7 @@ for type in ['text','color','font']
 # Colorpicker Create/Destroy
 ###
 
-Template.bootstrap_magic_input_color.rendered = ->
+Template.bootstrap_magic_input_color.onRendered ->
   thisColorPicker = $(@firstNode)
   .colorpicker horizontal: true
   .on 'showPicker', ->
@@ -112,7 +111,7 @@ Template.bootstrap_magic_input_color.rendered = ->
 
   @picker = thisColorPicker.data('colorpicker').picker
 
-Template.bootstrap_magic_input_color.destroyed = ->
+Template.bootstrap_magic_input_color.onDestroyed ->
   @picker.remove()
   $(@firstNode).colorpicker('destroy')
 
@@ -121,8 +120,8 @@ Template.bootstrap_magic_input_color.destroyed = ->
 # EZ-Modal
 ###
 
-Template.bootstrap_magic_preview_popovers.rendered = ->
-  $('[data-toggle="popover"]').popover()
+Template.bootstrap_magic_preview_popovers.onRendered ->
+  this.$('[data-toggle="popover"]').popover()
 
-Template.bootstrap_magic_preview_tooltips.rendered = ->
+Template.bootstrap_magic_preview_tooltips.onRendered ->
   this.$('[data-toggle="tooltip"]').tooltip()
