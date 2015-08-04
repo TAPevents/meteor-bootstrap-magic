@@ -59,12 +59,36 @@ BootstrapMagic.on 'start', ->
       defaultDefaults[variable._id] = variable.value
   @setDefaults defaultDefaults
 
+mapVariableOverrides = (obj) ->
+  obj.isOverride = false
+  obj.isReference = false
+
+  myVal = BootstrapMagic.dictionary.overrides.get(obj._id)
+  if myVal
+    obj.isOverride = true
+  else
+    myVal = BootstrapMagic.dictionary.defaults.get(obj._id)
+
+  if myVal
+    obj.value = myVal
+
+  # get the refernece recursively
+  if obj.value?.indexOf('@') > -1
+    obj.isReference = true
+    obj.reference = mapVariableOverrides {_id: obj.value}
+    obj.reference.value?= '?'
+    if obj.reference.reference
+      obj.reference = obj.reference.reference
+
+  return obj
+
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
 Template._bootstrap_magic.helpers
   "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
   "subCategories" : getCurrentCategory
   "currentSubCat" : getCurrentSubCategory
+  "mappedVariables" : -> _.map @data, mapVariableOverrides
   "isSelectedCat" : -> @category is BootstrapMagic.dictionary.currentCategory.get()
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
@@ -72,9 +96,9 @@ Template._bootstrap_magic.helpers
   "typeIs" : (type) -> @type is type
 
 Template._bootstrap_magic.events
-  'change input.bootstrap-magic-input' : (e) ->
+  'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
-    BootstrapMagic.setOverride $input.attr('name'), $input.val()
+    BootstrapMagic.setOverride @_id, $input.val() || undefined
 
   'click .main-menu a' : ->
     BootstrapMagic.dictionary.currentCategory.set @category
@@ -83,39 +107,47 @@ Template._bootstrap_magic.events
   'click .sub-menu a' : ->
     BootstrapMagic.dictionary.currentSubCategory.set @_id
 
-# TODO replace this with a block template helper
-# attach override to type child type templates
-getOverride = ->
-  BootstrapMagic.dictionary.overrides.get(@_id) || BootstrapMagic.dictionary.defaults.get(@_id)
+# for type in ['text','color','font']
+#   Template["bootstrap_magic_input_#{type}"].helpers
+#     "override" : getOverride
 
-for type in ['text','color','font']
-  Template["bootstrap_magic_input_#{type}"].helpers
-    "override" : getOverride
-
+Template.bootstrap_magic_input.helpers
+  'JSONify' : (obj) -> JSON.stringify obj
 
 ###
 # Colorpicker Create/Destroy
 ###
 
 Template.bootstrap_magic_input_color.rendered = ->
-  thisColorPicker = $(@firstNode)
-  .colorpicker horizontal: true
+  self = @
+  $thisColorPicker = $(@firstNode)
+  colorPickerStartColor = self.data.reference?.value || self.data.value
+
+  # THIS IS A HACK colorpicker library fail: `color` parameter doesn't work
+  $thisInput = $('input', $thisColorPicker)
+  originalInputValue = $thisInput.val()
+  $thisInput.val colorPickerStartColor
+
+  # init colorpicker
+  $thisColorPicker.colorpicker
+    horizontal: true
   .on 'showPicker', ->
+    console.log 'showing', @
     @startVal = $('input', @).val()
   .on 'hidePicker', ->
     $input = $('input',@)
     @endVal = $input.val()
-    if @startVal and @startVal isnt @endVal
+    console.log 'hiding!', @startVal, @endVal
+    if @startVal isnt @endVal
+      console.log 'triggering'
       @startVal = @endVal
       $input.trigger 'change'
 
-  @picker = thisColorPicker.data('colorpicker').picker
+  # THIS IS A HACK colorpicker library fail: `color` parameter doesn't work
+  $('input', $thisColorPicker).val originalInputValue
+
+  @picker = $thisColorPicker.data('colorpicker').picker
 
 Template.bootstrap_magic_input_color.destroyed = ->
   @picker.remove()
   $(@firstNode).colorpicker('destroy')
-
-
-###
-# EZ-Modal
-###

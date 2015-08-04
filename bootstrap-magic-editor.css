@@ -1,9 +1,17 @@
-#bootstrap-magic .bootstrap-magic-input {
+.bootstrap-magic-container .bootstrap-magic-input {
   font-family: 'Source Code Pro', 'Monaco', 'Menlo', 'Osaka', monospace;
 }
 
+.bootstrap-magic-container .labelTitle{
+  font-weight:normal;
+}
+
+.bootstrap-magic-container .overridden .labelTitle{
+  font-weight:bold;
+}
+
 @media (max-width: 480px) {
-  #bootstrap-magic .menu-compact span {
+  .bootstrap-magic-container .menu-compact span {
     display: none;
   }
 }
