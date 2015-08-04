@@ -7,5 +7,5 @@
 meteor-platform
 autopublish
 insecure
-hitchcott:bootstrap-magic
+tap:bootstrap-magic
 twbs:bootstrap
