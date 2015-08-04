@@ -120,8 +120,17 @@ Template.bootstrap_magic_input_color.onDestroyed ->
 # EZ-Modal
 ###
 
-Template.bootstrap_magic_preview_popovers.onRendered ->
-  this.$('[data-toggle="popover"]').popover()
+# Template.bootstrap_magic_preview_popovers.onRendered ->
+#   this.$('[data-toggle="popover"]').popover()
+
+Template.bootstrap_magic_preview_popovers.helpers
+  'click [data-toggle="popover"]': -> 
+    EZ-Modal
+      title: 'Sorry!'
+      body: 'You are not authorized to do that'
+      classes: 'purple'
+      fade: false
+      backdrop: false
 
 Template.bootstrap_magic_preview_tooltips.onRendered ->
   this.$('[data-toggle="tooltip"]').tooltip()

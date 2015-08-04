@@ -24,6 +24,7 @@ Package.on_use(function(api) {
     'lib/templates/preview/border-radius.html',
     'lib/templates/preview/buttons.html',
     'lib/templates/preview/dropdowns.html',
+    'lib/templates/preview/ez-modal.html',
     'lib/templates/preview/forms.html',
     'lib/templates/preview/grays.html',
     'lib/templates/preview/how-to.html',
