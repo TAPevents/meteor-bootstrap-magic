@@ -3,7 +3,7 @@
 </template>
 
 <template name="_bootstrap_magic">
-  <div id="bootstrap-magic">
+  <div class='bootstrap-magic-container'>
 
     <div class="menus container-fluid">
       <div class="main-menu">
@@ -32,11 +32,10 @@
           <h3>{{_ _id}}</h3>
           <div class="row">
             <div class="col-sm-4">
-              {{#each data}}
-                <div class="form-group color-picker-area">
-                  <label class="labelTitle">{{_id}}</label>
+              {{#each mappedVariables}}
+                {{#bootstrap_magic_input}}
                   {{> inputTmpl}}
-                </div>
+                {{/bootstrap_magic_input}}
               {{/each}}
             </div>
             <div class="col-sm-8">
@@ -49,21 +48,28 @@
   </div>
 </template>
 
+<template name="bootstrap_magic_input">
+  <div class="form-group{{#if isOverride}} overridden{{/if}}">
+    <label class="labelTitle">{{_id}}</label>
+    {{> Template.contentBlock}}
+  </div>
+</template>
+
 <template name="bootstrap_magic_input_text">
   <div class="input">
-    <input type="text" class="form-control bootstrap-magic-input" name="{{key}}" value="{{override}}">
+    <input type="text" class="form-control bootstrap-magic-input" name="{{key}}" placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{/if}}">
   </div>
 </template>
 
 <template name="bootstrap_magic_input_color">
   <div class="input-group color-picker-group">
-    <input type="text" class="form-control bootstrap-magic-input" name="{{key}}" placeholder="{{value}}" value="{{override}}">
+    <input type="text" class="form-control bootstrap-magic-input" name="{{key}}" placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{/if}}">
     <span class="input-group-addon"><i></i></span>
   </div>
 </template>
 
 <template name="bootstrap_magic_input_font">
   <div class="input">
-    <input type="text" class="form-control bootstrap-magic-input" name="{{key}}" value="{{override}}">
+    <input type="text" class="form-control bootstrap-magic-input" name="{{key}}" placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{/if}}">
   </div>
 </template>

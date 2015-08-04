@@ -59,12 +59,36 @@ BootstrapMagic.on 'start', ->
       defaultDefaults[variable._id] = variable.value
   @setDefaults defaultDefaults
 
+mapVariableOverrides = (obj) ->
+  obj.isOverride = false
+  obj.isReference = false
+
+  myVal = BootstrapMagic.dictionary.overrides.get(obj._id)
+  if myVal
+    obj.isOverride = true
+  else
+    myVal = BootstrapMagic.dictionary.defaults.get(obj._id)
+
+  if myVal
+    obj.value = myVal
+
+  # get the refernece recursively
+  if obj.value?.indexOf('@') > -1
+    obj.isReference = true
+    obj.reference = mapVariableOverrides {_id: obj.value}
+    obj.reference.value?= '?'
+    if obj.reference.reference
+      obj.reference = obj.reference.reference
+
+  return obj
+
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
 Template._bootstrap_magic.helpers
   "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
   "subCategories" : getCurrentCategory
   "currentSubCat" : getCurrentSubCategory
+  "mappedVariables" : -> _.map @data, mapVariableOverrides
   "isSelectedCat" : -> @category is BootstrapMagic.dictionary.currentCategory.get()
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
@@ -72,9 +96,9 @@ Template._bootstrap_magic.helpers
   "typeIs" : (type) -> @type is type
 
 Template._bootstrap_magic.events
-  'change input.bootstrap-magic-input' : (e) ->
+  'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
-    BootstrapMagic.setOverride $input.attr('name'), $input.val()
+    BootstrapMagic.setOverride @_id, $input.val() || undefined
 
   'click .main-menu a' : ->
     BootstrapMagic.dictionary.currentCategory.set @category
@@ -83,33 +107,44 @@ Template._bootstrap_magic.events
   'click .sub-menu a' : ->
     BootstrapMagic.dictionary.currentSubCategory.set @_id
 
-# TODO replace this with a block template helper
-# attach override to type child type templates
-getOverride = ->
-  BootstrapMagic.dictionary.overrides.get(@_id) || BootstrapMagic.dictionary.defaults.get(@_id)
+# for type in ['text','color','font']
+#   Template["bootstrap_magic_input_#{type}"].helpers
+#     "override" : getOverride
 
-for type in ['text','color','font']
-  Template["bootstrap_magic_input_#{type}"].helpers
-    "override" : getOverride
-
+Template.bootstrap_magic_input.helpers
+  'JSONify' : (obj) -> JSON.stringify obj
 
 ###
 # Colorpicker Create/Destroy
 ###
 
 Template.bootstrap_magic_input_color.onRendered ->
-  thisColorPicker = $(@firstNode)
-  .colorpicker horizontal: true
+  self = @
+  $thisColorPicker = $(@firstNode)
+  colorPickerStartColor = self.data.reference?.value || self.data.value
+
+  # THIS IS A HACK colorpicker library fail: `color` parameter doesn't work
+  $thisInput = $('input', $thisColorPicker)
+  originalInputValue = $thisInput.val()
+  $thisInput.val colorPickerStartColor
+
+  # init colorpicker
+  $thisColorPicker.colorpicker
+    horizontal: true
   .on 'showPicker', ->
     @startVal = $('input', @).val()
   .on 'hidePicker', ->
     $input = $('input',@)
     @endVal = $input.val()
-    if @startVal and @startVal isnt @endVal
+    if @startVal isnt @endVal
+      console.log 'triggering'
       @startVal = @endVal
       $input.trigger 'change'
 
-  @picker = thisColorPicker.data('colorpicker').picker
+  # THIS IS A HACK colorpicker library fail: `color` parameter doesn't work
+  $('input', $thisColorPicker).val originalInputValue
+
+  @picker = $thisColorPicker.data('colorpicker').picker
 
 Template.bootstrap_magic_input_color.onDestroyed ->
   @picker.remove()
@@ -121,18 +156,23 @@ Template.bootstrap_magic_input_color.onDestroyed ->
 ###
 
 Template.bootstrap_magic_preview_popovers.onRendered ->
-  this.$('[data-toggle="popover"]').popover()
+  @$('[data-toggle="popover"]').popover()
+
+Template.bootstrap_magic_preview_tooltips.onRendered ->
+  @$('[data-toggle="tooltip"]').tooltip()
 
 Template.bootstrap_magic_preview_ez_modal.events
-  'click .ez-modal-simple': -> EZModal 'Thank you for your enquiry'
-  'click .ez-modal-small': -> 
+  'click .ez-modal-simple': ->
+    EZModal 'Thank you for your enquiry'
+
+  'click .ez-modal-small': ->
     EZModal
       classes: 'text-center'
       body: 'Loading - Please Wait'
       size: 'sm' # or use 'lg' for large
       hideFooter: true
-  
-  'click .ez-modal-checkout': -> 
+
+  'click .ez-modal-checkout': ->
     EZModal
       title: 'Please Confirm'
       body: 'Are you sure you wish to empty the cart?'
@@ -162,14 +202,9 @@ Template.bootstrap_magic_preview_ez_modal.events
           @EZModal.modal 'hide' # hide parent
           EZModal 'Confirmation Received' # open new modal
       ]
-  'click ez-modal-html' : ->
+
+  'click .ez-modal-html' : ->
     EZModal
       bodyHtml: """
       <h3>Arbitrary HTML or Template Keys</h3>
-      <img style='max-width:100%;' src='meteor-logo.png'>
       """
-      footerTemplate: 'myFooter'
-
-
-Template.bootstrap_magic_preview_tooltips.onRendered ->
-  this.$('[data-toggle="tooltip"]').tooltip()
