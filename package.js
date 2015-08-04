@@ -10,12 +10,13 @@ Package.on_use(function(api) {
 
   api.use([
     'coffeescript',
-    'hitchcott:ez-modal@0.3.1',
     'reactive-var',
     'reactive-dict',
-    'tap:i18n@1.5.0',
     'templating',
-    'underscore'
+    'underscore',
+    'less',
+    'tap:i18n@1.5.0',
+    'hitchcott:ez-modal@0.3.1'
   ], ['client', 'server']);
 
   api.add_files("package-tap.i18n", ["client", "server"]);
@@ -55,7 +56,7 @@ Package.on_use(function(api) {
     'lib/bootstrap-magic-variables.js',
     // and now for the actual package code
     'bootstrap-magic-editor.html',
-    'bootstrap-magic-editor.css',
+    'bootstrap-magic-editor.less',
     'bootstrap-magic.coffee'
   ], ['client']);
 
