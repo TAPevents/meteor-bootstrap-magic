@@ -143,9 +143,7 @@ Template.bootstrap_magic_preview_ez_modal.events
       rightButtons: [
         color: 'primary'
         html: 'Yes'
-        fn: (e, tmpl) ->
-          emptyBasket()
-          @EZModal.modal('hide')
+        fn: -> @EZModal.modal('hide')
       ]
 
   'click .ez-modal-buttons' : ->
