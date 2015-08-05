@@ -63,7 +63,7 @@ mapVariableOverrides = (obj) ->
   obj.isOverride = false
   obj.isReference = false
 
-  myVal = BootstrapMagic.dictionary.overrides.get(obj._id)
+  myVal = BootstrapMagic.dictionary.overrides.find(_id)
   if myVal
     obj.isOverride = true
   else
@@ -82,13 +82,30 @@ mapVariableOverrides = (obj) ->
 
   return obj
 
+mapVariableResponsible = (obj) ->
+  obj.isOverride = false
+  obj.isReference = false
+
+  myVal = BootstrapMagic.dictionary.overrides.get(obj._id)
+
+  if obj.value?.indexOf('@') > -1
+    obj.isReference = true
+    obj.reference = mapVariableResponsible {_id: obj.value}
+    console.log "#{obj._id} comes from: #{obj.value}"
+    obj.reference.value?= '?'
+    if obj.reference.reference
+      obj.reference = obj.reference.reference
+
+  return obj
+
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
 Template._bootstrap_magic.helpers
   "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
   "subCategories" : getCurrentCategory
   "currentSubCat" : getCurrentSubCategory
-  "mappedVariables" : -> _.map @data, mapVariableOverrides
+  # "mappedVariables" : -> _.map @data, mapVariableOverrides
+  "mappedVariables" : -> _.map @data, mapVariableResponsible 
   "isSelectedCat" : -> @category is BootstrapMagic.dictionary.currentCategory.get()
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
