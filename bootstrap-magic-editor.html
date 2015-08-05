@@ -10,7 +10,7 @@
         <ul class="nav nav-pills">
           {{#each categories}}
             <li class="{{#if isSelectedCat}}active{{/if}}">
-              <a href="#">&nbsp;<span>{{_ category}}</span></a>
+              <a href="#"><i class="glyphicon glyphicon-{{icon}}"></i>&nbsp;<span>{{_ category}}</span></a>
             </li>
           {{/each}}
         </ul>
@@ -19,7 +19,7 @@
         <ul class="nav nav-pills">
           {{#each subCategories}}
             <li class="{{#if isSelectedSubCat}}active{{/if}}">
-              <a href="#"><i class="glyphicon glyphicon-{{icon}}"></i>&nbsp;<span class='hidden-xs'>{{_ _id}}</span></a>
+              <a href="#"><i class="glyphicon glyphicon-{{icon}}"></i>&nbsp;<span class="hidden-xs">{{_ _id}}</span></a>
             </li>
           {{/each}}
         </ul>
