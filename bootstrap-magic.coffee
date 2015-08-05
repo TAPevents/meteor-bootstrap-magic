@@ -63,7 +63,7 @@ mapVariableOverrides = (obj) ->
   obj.isOverride = false
   obj.isReference = false
 
-  myVal = BootstrapMagic.dictionary.overrides.find(_id)
+  myVal = BootstrapMagic.dictionary.overrides.get(obj._id)
   if myVal
     obj.isOverride = true
   else
@@ -74,7 +74,9 @@ mapVariableOverrides = (obj) ->
 
   # get the refernece recursively
   if obj.value?.indexOf('@') > -1
+    console.log "#{obj._id} comes from: #{obj.value}"
     obj.isReference = true
+
     obj.reference = mapVariableOverrides {_id: obj.value}
     obj.reference.value?= '?'
     if obj.reference.reference
@@ -82,38 +84,13 @@ mapVariableOverrides = (obj) ->
 
   return obj
 
-mapVariableResponsible = (obj) ->
-  obj.isOverride = false
-  obj.isReference = false
-  obj.isBaseStyle = false
-
-  myVal = BootstrapMagic.dictionary.overrides.get(obj._id)
-
-  if obj.value?.indexOf('@') > -1
-    obj.isReference = true
-    obj.reference = mapVariableResponsible {_id: obj.value}
-    
-    console.log "#{obj._id} comes from: #{obj.value}"
-    console.log "grouped: ",_.groupBy(obj, 'value')
-    isBaseStyle = true
-    
-    obj.reference.value?= '?'
-    if obj.reference.reference
-      obj.reference = obj.reference.reference
-
-
-  console.log "the object: ", obj
-  return obj
-
-
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
 Template._bootstrap_magic.helpers
   "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
   "subCategories" : getCurrentCategory
   "currentSubCat" : getCurrentSubCategory
-  # "mappedVariables" : -> _.map @data, mapVariableOverrides
-  "mappedVariables" : -> _.map @data, mapVariableResponsible 
+  "mappedVariables" : -> _.map @data, mapVariableOverrides
   "isSelectedCat" : -> @category is BootstrapMagic.dictionary.currentCategory.get()
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
@@ -233,9 +210,9 @@ Template.bootstrap_magic_preview_ez_modal.events
       bodyHtml: """
       <h3>Arbitrary HTML or Template Keys</h3>
       """
-
+    
 Template.bootstrap_magic_input.onRendered ->
   @$('[data-toggle="popover"]').popover()
 
-Template.bootstrap_magic_input_color.onDestroyed ->
-  @$('[data-toggle="popover"]').popover().remove()
+Template.bootstrap_magic_input.onDestroyed ->
+  @$('[data-toggle="tooltip"]').tooltip().remove()
