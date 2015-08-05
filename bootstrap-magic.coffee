@@ -85,18 +85,26 @@ mapVariableOverrides = (obj) ->
 mapVariableResponsible = (obj) ->
   obj.isOverride = false
   obj.isReference = false
+  obj.isBaseStyle = false
 
   myVal = BootstrapMagic.dictionary.overrides.get(obj._id)
 
   if obj.value?.indexOf('@') > -1
     obj.isReference = true
     obj.reference = mapVariableResponsible {_id: obj.value}
+    
     console.log "#{obj._id} comes from: #{obj.value}"
+    console.log "grouped: ",_.groupBy(obj, 'value')
+    isBaseStyle = true
+    
     obj.reference.value?= '?'
     if obj.reference.reference
       obj.reference = obj.reference.reference
 
+
+  console.log "the object: ", obj
   return obj
+
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
