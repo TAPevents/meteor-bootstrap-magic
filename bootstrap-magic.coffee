@@ -208,3 +208,9 @@ Template.bootstrap_magic_preview_ez_modal.events
       bodyHtml: """
       <h3>Arbitrary HTML or Template Keys</h3>
       """
+
+Template.bootstrap_magic_input.onRendered ->
+  @$('[data-toggle="popover"]').popover()
+
+Template.bootstrap_magic_input_color.onDestroyed ->
+  @$('[data-toggle="popover"]').popover().remove()

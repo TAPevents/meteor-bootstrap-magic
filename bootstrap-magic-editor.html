@@ -50,7 +50,7 @@
 
 <template name="bootstrap_magic_input">
   <div class="form-group{{#if isOverride}} overridden{{/if}}">
-    <label class="labelTitle">{{_id}}</label>
+    <label class="labelTitle">{{_id}}</label>&nbsp;&nbsp;<i class="glyphicon glyphicon-info-sign glyphicon-2x" data-toggle="popover" data-placement="top" title="Referenced Variables" data-content="All the other @s"></i>
     {{> Template.contentBlock}}
   </div>
 </template>
