@@ -74,7 +74,7 @@ mapVariableOverrides = (obj) ->
 
   # get the refernece recursively
   if obj.value?.indexOf('@') > -1
-    console.log "#{obj._id} comes from: #{obj.value}"
+    # console.log "#{obj._id} comes from: #{obj.value}"
     obj.isReference = true
 
     obj.reference = mapVariableOverrides {_id: obj.value}
@@ -83,6 +83,13 @@ mapVariableOverrides = (obj) ->
       obj.reference = obj.reference.reference
 
   return obj
+
+findMyParent = ->
+  parent = _.map _.groupBy(BootstrapMagic.dictionary.defaults, 'keys'), (keys) -> keys[0]
+  console.log parent
+findMyParent()
+
+
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
@@ -210,7 +217,7 @@ Template.bootstrap_magic_preview_ez_modal.events
       bodyHtml: """
       <h3>Arbitrary HTML or Template Keys</h3>
       """
-    
+
 Template.bootstrap_magic_input.onRendered ->
   @$('[data-toggle="popover"]').popover()
 
