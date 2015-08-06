@@ -59,7 +59,6 @@ BootstrapMagic.on 'start', ->
       defaultDefaults[variable._id] = variable.value
   @setDefaults defaultDefaults
 
-
 mapVariableOverrides = (obj) ->
   obj.isOverride = false
   obj.isReference = false
@@ -85,10 +84,26 @@ mapVariableOverrides = (obj) ->
 
   return obj
 
-flattenMagic = {}
-for group in bootstrap_magic_variables
-  for item in group.data
-    flattenMagic[item._id] = item
+# findMyChildren = ->
+#   original = bootstrap_magic_variables
+#   bootDefaults = BootstrapMagic.dictionary.defaults
+
+#   gray = _.find bootstrap_magic_variables, (p) -> p.value is "@gray-light"
+#   parent = _.filter bootstrap_magic_variables, (p)-> p.value == "@gray-light"
+#   magicGroupA = _.map BootstrapMagic.dictionary.defaults, (keys) -> keys
+#   magicGroup = _.map _.groupBy(BootstrapMagic.dictionary.defaults, 'keys'), (keys) -> keys[0]
+#   magicGroupA = magicGroupA.filter((p)-> p == "@gray-light" )
+#   magicIndex = _.indexBy bootstrap_magic_variables, 'value'
+  
+#   console.log "original: ", original
+#   console.log "bootDefaults: ", bootDefaults
+#   console.log "gray: ", gray
+#   console.log "parent: ", parent
+#   console.log "magicGroupA: ", magicGroupA
+#   console.log "magicIndex: ", magicIndex
+
+# findMyChildren()
+
 
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
@@ -113,18 +128,26 @@ Template._bootstrap_magic.events
     BootstrapMagic.dictionary.currentCategory.set @category
     BootstrapMagic.dictionary.currentSubCategory.set getCurrentCategory()[0]._id # set subcategory to the first child
  
-  'click .sub-menu a' : -
+  'click .sub-menu a' : ->
     BootstrapMagic.dictionary.currentSubCategory.set @_id
 
 # for type in ['text','color','font']
 #   Template["bootstrap_magic_input_#{type}"].helpers
 #     "override" : getOverride
 
+flattenMagic = {}
+for group in bootstrap_magic_variables
+  for item in group.data
+    flattenMagic[item._id] = item
+
 Template.bootstrap_magic_input.helpers
   'JSONify' : (obj) -> JSON.stringify obj
-  'myChildren' : -> 
+  "myChildren" : -> 
     items = _.map flattenMagic, mapVariableOverrides
-    return _.filter items, (obj) => obj.value?.indexOf(@._id) >- 1
+    filteredItems = _.filter items, (obj) => obj.value and obj.value.indexOf(@._id) >- 1
+    console.log "filter: ", filteredItems
+    return filteredItems
+
 
 ###
 # Colorpicker Create/Destroy
