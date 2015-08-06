@@ -114,11 +114,6 @@ Template._bootstrap_magic.events
   'click .sub-menu a' : ->
     BootstrapMagic.dictionary.currentSubCategory.set @_id
 
-Template.bootstrap_magic_input.helpers
-  "myChildren" : -> 
-    items = _.map flattenMagic, mapVariableOverrides
-    return _.filter items, (obj) => obj.value?.indexOf(@._id) >- 1
-
 ###
 # Colorpicker Create/Destroy
 ###
@@ -161,6 +156,17 @@ Template.bootstrap_magic_input_color.onDestroyed ->
 
 # Informed variables popover
 
+
+Template.bootstrap_magic_input.helpers
+  'myChildren' : -> 
+    items = _.map flattenMagic, mapVariableOverrides
+    return _.filter items, (obj) => obj.value?.indexOf(@._id) >- 1
+
+Template.bootstrap_magic_input.events
+  'click .popover-pin' : (e)-> 
+    $('.magic-child-list').popover 'show'
+    $('.magic-child-list').not(@).popover('hide')
+  
 Template.bootstrap_magic_input.onRendered ->
   @$('.magic-child-list').each ->
     $elem = $(@)
@@ -180,7 +186,6 @@ Template.bootstrap_magic_input.onRendered ->
 
 Template.bootstrap_magic_input.onDestroyed ->
   @$('[data-toggle="popover"]').popover('destroy')
-
 
 # Tempalte examples
 
