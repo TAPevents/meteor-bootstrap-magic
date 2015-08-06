@@ -53,11 +53,13 @@
     <label class="labelTitle">{{_id}}</label>
     {{#if myChildren.length}}
       &nbsp;
-      <span class="label pull-right label-primary" data-toggle="popover" data-placement="top" data-content="
+      <span class="magic-child-list label pull-right label-primary round-corners" data-toggle="popover" data-placement="top" data-content="
         {{#each myChildren}}
           <li class='list-group-item list-group-item-info'>{{_id}}</li>
         {{/each}}
-        "
+        <button class='btn btn-default btn-xs' href='#' role='button'>
+          <i class='glyphicon glyphicon-pushpin pull-right'></i>
+        </button>"
         data-html="true">Informs {{myChildren.length}} variables</span>
     {{/if}}
     {{> Template.contentBlock}}
