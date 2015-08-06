@@ -52,11 +52,13 @@
   <div class="form-group{{#if isOverride}} overridden{{/if}}">
     <label class="labelTitle">{{_id}}</label>&nbsp;&nbsp;
     {{#if myChildren.length}}
-      <i class="glyphicon glyphicon-info-sign glyphicon-2x" data-toggle="popover" data-placement="top" title="This Variable Overrides:" data-content="{{#each myChildren}} {{_id}} {{/each}}"></i>
+      <i class="glyphicon glyphicon-info-sign glyphicon-2x" data-toggle="popover" data-placement="top" title="This Variable Overrides:" 
+        data-content="<ul>{{#each myChildren}}<li>{{_id}}</li>{{/each}}</ul>" 
+        data-html="true"></i>
     {{/if}}
     &nbsp;
     {{#if isReference}}
-      <i class="glyphicon glyphicon-import glyphicon-2x" data-toggle="popover" data-placement="top" title="my parent is:" data-content="{{value}}"></i>
+      <i class="glyphicon glyphicon-import glyphicon-2x" data-toggle="popover" data-placement="top" title="my parent is:" data-content="{{value}}" data-html="true"></i>
     {{/if}}
     {{> Template.contentBlock}}
   </div>
