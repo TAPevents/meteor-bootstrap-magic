@@ -84,12 +84,6 @@ mapVariableOverrides = (obj) ->
 
   return obj
 
-findMyParent = ->
-  parent = _.map _.groupBy(BootstrapMagic.dictionary.defaults, 'keys'), (keys) -> keys[0]
-  console.log parent
-findMyParent()
-
-
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
@@ -120,8 +114,18 @@ Template._bootstrap_magic.events
 #   Template["bootstrap_magic_input_#{type}"].helpers
 #     "override" : getOverride
 
+flattenMagic = {}
+for group in bootstrap_magic_variables
+  for item in group.data
+    flattenMagic[item._id] = item
+console.log "flattenMagic: ", flattenMagic
+
 Template.bootstrap_magic_input.helpers
   'JSONify' : (obj) -> JSON.stringify obj
+  'myChildren' : -> 
+    items = _.map flattenMagic, mapVariableOverrides
+    return _.filter items, (obj) => obj.value?.indexOf(@._id) >- 1
+  # 'hasChildren': ->
 
 ###
 # Colorpicker Create/Destroy
