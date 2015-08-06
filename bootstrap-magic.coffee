@@ -162,27 +162,34 @@ Template.bootstrap_magic_input.helpers
     items = _.map flattenMagic, mapVariableOverrides
     return _.filter items, (obj) => obj.value?.indexOf(@._id) >- 1
 
-Template.bootstrap_magic_input.events
-  'click .popover-pin' : (e)-> 
-    $('.magic-child-list').popover 'show'
-    $('.magic-child-list').not(@).popover('hide')
+# Template.bootstrap_magic_input.events
+#   'click .popover-pin' : (e) -> 
+#     e.stopPropagation()
+#     $magicparent = $(@).closest('.magic-child-list').addClass('.pinned')
+# #     $magicparent.popover ({trigger: 'manual'})
+#     # $('.magic-child-list').popover 'show'
   
 Template.bootstrap_magic_input.onRendered ->
-  @$('.magic-child-list').each ->
-    $elem = $(@)
-    $elem.popover
-      placement: 'auto right'
-      trigger: 'hover'
-      html: true
-      container: $elem
-      animation: true
-      template: """
-      <div class="popover popover-list" role="tooltip">
-        <div class="arrow"></div>
-        <h3 class="popover-title"></h3>
-        <ul class="popover-content list-group"></ul>
-      </div>
-      """
+  $elem = @$('.magic-child-list')
+  $elem.popover
+    container: $elem
+    placement: 'auto right'
+    trigger: 'manual'
+    html: true
+    animation: true
+    template: """
+    <div class="popover popover-list" role="tooltip">
+      <div class="arrow"></div>
+      <h3 class="popover-title"></h3>
+      <ul class="popover-content list-group"></ul>
+    </div>
+    """
+  .hover ->  
+    console.log "started"
+    console.log $(@)
+    $(@).popover 'show'
+  , -> console.log "left"
+
 
 Template.bootstrap_magic_input.onDestroyed ->
   @$('[data-toggle="popover"]').popover('destroy')
