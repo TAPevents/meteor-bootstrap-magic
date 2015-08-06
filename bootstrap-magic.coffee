@@ -84,27 +84,10 @@ mapVariableOverrides = (obj) ->
 
   return obj
 
-# findMyChildren = ->
-#   original = bootstrap_magic_variables
-#   bootDefaults = BootstrapMagic.dictionary.defaults
-
-#   gray = _.find bootstrap_magic_variables, (p) -> p.value is "@gray-light"
-#   parent = _.filter bootstrap_magic_variables, (p)-> p.value == "@gray-light"
-#   magicGroupA = _.map BootstrapMagic.dictionary.defaults, (keys) -> keys
-#   magicGroup = _.map _.groupBy(BootstrapMagic.dictionary.defaults, 'keys'), (keys) -> keys[0]
-#   magicGroupA = magicGroupA.filter((p)-> p == "@gray-light" )
-#   magicIndex = _.indexBy bootstrap_magic_variables, 'value'
-  
-#   console.log "original: ", original
-#   console.log "bootDefaults: ", bootDefaults
-#   console.log "gray: ", gray
-#   console.log "parent: ", parent
-#   console.log "magicGroupA: ", magicGroupA
-#   console.log "magicIndex: ", magicIndex
-
-# findMyChildren()
-
-
+flattenMagic = {}
+for group in bootstrap_magic_variables
+  for item in group.data
+    flattenMagic[item._id] = item
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
@@ -135,19 +118,17 @@ Template._bootstrap_magic.events
 #   Template["bootstrap_magic_input_#{type}"].helpers
 #     "override" : getOverride
 
-flattenMagic = {}
-for group in bootstrap_magic_variables
-  for item in group.data
-    flattenMagic[item._id] = item
+Template.bootstrap_magic_input.onRendered ->
+  @$('[data-toggle="popover"]').popover()
+
+Template.bootstrap_magic_input.onDestroyed ->
+  @$('[data-toggle="tooltip"]').tooltip().remove()
 
 Template.bootstrap_magic_input.helpers
   'JSONify' : (obj) -> JSON.stringify obj
   "myChildren" : -> 
     items = _.map flattenMagic, mapVariableOverrides
-    filteredItems = _.filter items, (obj) => obj.value and obj.value.indexOf(@._id) >- 1
-    console.log "filter: ", filteredItems
-    return filteredItems
-
+    return _.filter items, (obj) => obj.value?.indexOf(@._id) >- 1
 
 ###
 # Colorpicker Create/Destroy
@@ -243,9 +224,3 @@ Template.bootstrap_magic_preview_ez_modal.events
       bodyHtml: """
       <h3>Arbitrary HTML or Template Keys</h3>
       """
-
-Template.bootstrap_magic_input.onRendered ->
-  @$('[data-toggle="popover"]').popover()
-
-Template.bootstrap_magic_input.onDestroyed ->
-  @$('[data-toggle="tooltip"]').tooltip().remove()

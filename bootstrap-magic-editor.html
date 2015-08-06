@@ -57,7 +57,7 @@
         data-html="true"></i>
     {{/if}}
     &nbsp;
-    {{#if isReference}}
+    {{#if isReference.length}}
       <i class="glyphicon glyphicon-import glyphicon-2x" data-toggle="popover" data-placement="top" title="my parent is:" data-content="{{value}}" data-html="true"></i>
     {{/if}}
     {{> Template.contentBlock}}
