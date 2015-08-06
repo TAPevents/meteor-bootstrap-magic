@@ -76,6 +76,7 @@ mapVariableOverrides = (obj) ->
   if obj.value?.indexOf('@') > -1
     # console.log "#{obj._id} comes from: #{obj.value}"
     obj.isReference = true
+    obj.hasParent = true
 
     obj.reference = mapVariableOverrides {_id: obj.value}
     obj.reference.value?= '?'
