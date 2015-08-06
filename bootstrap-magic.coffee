@@ -159,25 +159,24 @@ Template.bootstrap_magic_input_color.onDestroyed ->
 # Bootstrap Popovers, Tooltips & EZ-Modal
 ###
 
-# Informed variables opover
+# Informed variables popover
 
 Template.bootstrap_magic_input.onRendered ->
-  $('.magic-child-list').each ->
-     $elem = $(this)
-     $elem.popover
-       placement: 'auto right'
-       trigger: 'hover'
-       html: true
-       container: $elem
-       animation: true
-       template: """
-        <div class="popover popover-list" role="tooltip">
-          <div class="arrow"></div>
-          <h3 class="popover-title"></h3>
-          <ul class="popover-content list-group"></ul>
-        </div>
+  @$('.magic-child-list').each ->
+    $elem = $(@)
+    $elem.popover
+      placement: 'auto right'
+      trigger: 'hover'
+      html: true
+      container: $elem
+      animation: true
+      template: """
+      <div class="popover popover-list" role="tooltip">
+        <div class="arrow"></div>
+        <h3 class="popover-title"></h3>
+        <ul class="popover-content list-group"></ul>
+      </div>
       """
-
 
 Template.bootstrap_magic_input.onDestroyed ->
   @$('[data-toggle="popover"]').popover('destroy')
