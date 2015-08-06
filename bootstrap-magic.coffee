@@ -75,7 +75,6 @@ mapVariableOverrides = (obj) ->
   # get the refernece recursively
   if obj.value?.indexOf('@') > -1
     obj.isReference = true
-    obj.hasParent = true
     obj.parentVar = obj.value 
 
     obj.reference = mapVariableOverrides {_id: obj.value}
@@ -115,18 +114,7 @@ Template._bootstrap_magic.events
   'click .sub-menu a' : ->
     BootstrapMagic.dictionary.currentSubCategory.set @_id
 
-# for type in ['text','color','font']
-#   Template["bootstrap_magic_input_#{type}"].helpers
-#     "override" : getOverride
-
-Template.bootstrap_magic_input.onRendered ->
-  @$('[data-toggle="popover"]').popover()
-
-Template.bootstrap_magic_input.onDestroyed ->
-  @$('[data-toggle="tooltip"]').tooltip().remove()
-
 Template.bootstrap_magic_input.helpers
-  'JSONify' : (obj) -> JSON.stringify obj
   "myChildren" : -> 
     items = _.map flattenMagic, mapVariableOverrides
     return _.filter items, (obj) => obj.value?.indexOf(@._id) >- 1
@@ -154,7 +142,6 @@ Template.bootstrap_magic_input_color.onRendered ->
     $input = $('input',@)
     @endVal = $input.val()
     if @startVal isnt @endVal
-      console.log 'triggering'
       @startVal = @endVal
       $input.trigger 'change'
 
@@ -171,6 +158,26 @@ Template.bootstrap_magic_input_color.onDestroyed ->
 ###
 # Bootstrap Popovers, Tooltips & EZ-Modal
 ###
+
+# Informed variables opover
+
+Template.bootstrap_magic_input.onRendered ->
+  @$('[data-toggle="popover"]').popover
+    placement: 'auto right'
+    trigger: 'hover'
+    template: """
+      <div class="popover popover-list" role="tooltip">
+        <div class="arrow"></div>
+        <h3 class="popover-title"></h3>
+        <ul class="popover-content list-group"></ul>
+      </div>
+    """
+
+Template.bootstrap_magic_input.onDestroyed ->
+  @$('[data-toggle="popover"]').popover('destroy')
+
+
+# Tempalte examples
 
 Template.bootstrap_magic_preview_popovers.onRendered ->
   @$('[data-toggle="popover"]').popover()
