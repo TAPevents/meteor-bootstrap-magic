@@ -181,7 +181,6 @@ Template.bootstrap_magic_input.onRendered ->
   @$('.popover-label').hover (->
     $(@).popover 'show'
     $(@).addClass 'popover-active'
-    console.log "started", $(@).attr('class')
 
     $('.popover-pin').click (e) ->
       e.preventDefault()
