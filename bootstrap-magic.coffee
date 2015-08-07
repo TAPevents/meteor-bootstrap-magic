@@ -156,7 +156,6 @@ Template.bootstrap_magic_input_color.onDestroyed ->
 
 # Informed variables popover
 
-
 Template.bootstrap_magic_input.helpers
   'myChildren' : -> 
     items = _.map flattenMagic, mapVariableOverrides
@@ -170,7 +169,7 @@ Template.bootstrap_magic_input.onRendered ->
       trigger: 'manual'
       html: true
       container: $elem
-      animation: true
+      animation: false
       template: """
         <div class="popover popover-list" role="tooltip">
           <div class="arrow"></div>
@@ -178,39 +177,26 @@ Template.bootstrap_magic_input.onRendered ->
           <ul class="popover-content list-group"></ul>
         </div>
         """
+
   @$('.popover-label').hover (->
     $(@).popover 'show'
     $(@).addClass 'popover-active'
     console.log "started", $(@).attr('class')
 
-    $('.popover-pin').click ->
+    $('.popover-pin').click (e) ->
+      e.preventDefault()
       $(@).parents('.popover-active').toggleClass 'pinned'
-  
+      console.log "hover is off", $(@).parents('.popover-label').attr('class')
+
+    if $(@).hasClass 'pinned'
+      $(@).parents('.popover-active').off 'mouseenter mouseleave'
+    else 
+      $(@).parents('.popover-active').on 'mouseenter mouseleave'
+
   ), -> 
-    if !$(@).hasClass('pinned')
-      $(@).removeClass('popover-active')
-      $(@).popover 'hide'
-
-
-  # $elem = @$('.magic-child-list')
-  # $elem.popover
-  #   container: $elem
-  #   placement: 'auto right'
-  #   trigger: 'manual'
-  #   html: true
-  #   animation: true
-  #   template: """
-  #   <div class="popover popover-list" role="tooltip">
-  #     <div class="arrow"></div>
-  #     <h3 class="popover-title"></h3>
-  #     <ul class="popover-content list-group"></ul>
-  #   </div>
-  #   """
-  # .hover ->  
-  #   console.log "started"
-  #   console.log $(@)
-  #   $(@).popover 'show'
-  # , -> console.log "left"
+    if !$(@).hasClass 'pinned'
+      $(@).removeClass 'popover-active'
+      $(@).popover 'hide', $(@).parents('.popover-label').attr('class')
 
 
 Template.bootstrap_magic_input.onDestroyed ->
