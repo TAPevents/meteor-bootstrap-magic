@@ -162,6 +162,7 @@ Template.bootstrap_magic_input.helpers
     items = _.map flattenMagic, mapVariableOverrides
     return _.filter items, (obj) => obj.value?.indexOf(@._id) >- 1
 
+
 # Template.bootstrap_magic_input.events
 #   'click .popover-pin' : (e) -> 
 #     e.stopPropagation()
@@ -170,25 +171,49 @@ Template.bootstrap_magic_input.helpers
 #     # $('.magic-child-list').popover 'show'
   
 Template.bootstrap_magic_input.onRendered ->
-  $elem = @$('.magic-child-list')
-  $elem.popover
-    container: $elem
-    placement: 'auto right'
-    trigger: 'manual'
-    html: true
-    animation: true
-    template: """
-    <div class="popover popover-list" role="tooltip">
-      <div class="arrow"></div>
-      <h3 class="popover-title"></h3>
-      <ul class="popover-content list-group"></ul>
-    </div>
-    """
-  .hover ->  
-    console.log "started"
-    console.log $(@)
-    $(@).popover 'show'
-  , -> console.log "left"
+  @$('.popover-label').each ->
+    $elem = $(@)
+    $elem.popover
+      placement: 'auto right'
+      trigger: 'manual'
+      html: true
+      container: $elem
+      animation: true
+      template: """
+        <div class="popover popover-list" role="tooltip">
+          <div class="arrow"></div>
+          <h3 class="popover-title"></h3>
+          <ul class="popover-content list-group"></ul>
+        </div>
+        """
+    .on {
+      'mouseenter': ->
+        console.log "started"
+        $(@).popover 'show'
+      'mouseleave': ->
+        console.log "left"
+        $(@).popover 'hide'
+    }
+
+  # $elem = @$('.magic-child-list')
+  # $elem.popover
+  #   container: $elem
+  #   placement: 'auto right'
+  #   trigger: 'manual'
+  #   html: true
+  #   animation: true
+  #   template: """
+  #   <div class="popover popover-list" role="tooltip">
+  #     <div class="arrow"></div>
+  #     <h3 class="popover-title"></h3>
+  #     <ul class="popover-content list-group"></ul>
+  #   </div>
+  #   """
+  # .hover ->  
+  #   console.log "started"
+  #   console.log $(@)
+  #   $(@).popover 'show'
+  # , -> console.log "left"
 
 
 Template.bootstrap_magic_input.onDestroyed ->
