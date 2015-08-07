@@ -162,19 +162,6 @@ Template.bootstrap_magic_input.helpers
     items = _.map flattenMagic, mapVariableOverrides
     return _.filter items, (obj) => obj.value?.indexOf(@._id) >- 1
 
-
-# Template.bootstrap_magic_input.events
-#   'click .popover-pin' : -> 
-#     console.log ("I'm pinned")
-#     console.log "my parent",
-#     $(@).parent('.popover-active').addClass 'pinned'
-#     # $('.popover-active').addClass -> 
-#     #   'pinned'
-#     console.log "after pinned event: ", $(@).attr('class')
-#     console.log "after pinned parent: ", $(@).parent().attr('class')
-
-      #toggleCLass
-  
 Template.bootstrap_magic_input.onRendered ->
   @$('.popover-label').each ->
     $elem = $(@)
@@ -191,21 +178,18 @@ Template.bootstrap_magic_input.onRendered ->
           <ul class="popover-content list-group"></ul>
         </div>
         """
-  @$('.popover-label').on {
-    'mouseenter': ->
-      $(@).popover 'show'
-      $(@).addClass('popover-active')
-      console.log "started", $(@).attr('class')
-      
-      $('.popover-pin').click ->
-        $(@).parents('.popover-active').toggleClass 'pinned'
-    
-    'mouseleave': ->
-      if !$(@).hasClass('pinned')
-        $(@).removeClass('popover-active')
-        $(@).popover 'hide'
-  }
+  @$('.popover-label').hover (->
+    $(@).popover 'show'
+    $(@).addClass 'popover-active'
+    console.log "started", $(@).attr('class')
 
+    $('.popover-pin').click ->
+      $(@).parents('.popover-active').toggleClass 'pinned'
+  
+  ), -> 
+    if !$(@).hasClass('pinned')
+      $(@).removeClass('popover-active')
+      $(@).popover 'hide'
 
 
   # $elem = @$('.magic-child-list')
