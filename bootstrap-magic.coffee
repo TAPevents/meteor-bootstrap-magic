@@ -164,11 +164,16 @@ Template.bootstrap_magic_input.helpers
 
 
 # Template.bootstrap_magic_input.events
-#   'click .popover-pin' : (e) -> 
-#     e.stopPropagation()
-#     $magicparent = $(@).closest('.magic-child-list').addClass('.pinned')
-# #     $magicparent.popover ({trigger: 'manual'})
-#     # $('.magic-child-list').popover 'show'
+#   'click .popover-pin' : -> 
+#     console.log ("I'm pinned")
+#     console.log "my parent",
+#     $(@).parent('.popover-active').addClass 'pinned'
+#     # $('.popover-active').addClass -> 
+#     #   'pinned'
+#     console.log "after pinned event: ", $(@).attr('class')
+#     console.log "after pinned parent: ", $(@).parent().attr('class')
+
+      #toggleCLass
   
 Template.bootstrap_magic_input.onRendered ->
   @$('.popover-label').each ->
@@ -186,14 +191,22 @@ Template.bootstrap_magic_input.onRendered ->
           <ul class="popover-content list-group"></ul>
         </div>
         """
-    .on {
-      'mouseenter': ->
-        console.log "started"
-        $(@).popover 'show'
-      'mouseleave': ->
-        console.log "left"
+  @$('.popover-label').on {
+    'mouseenter': ->
+      $(@).popover 'show'
+      $(@).addClass('popover-active')
+      console.log "started", $(@).attr('class')
+      
+      $('.popover-pin').click ->
+        $(@).parents('.popover-active').toggleClass 'pinned'
+    
+    'mouseleave': ->
+      if !$(@).hasClass('pinned')
+        $(@).removeClass('popover-active')
         $(@).popover 'hide'
-    }
+  }
+
+
 
   # $elem = @$('.magic-child-list')
   # $elem.popover
