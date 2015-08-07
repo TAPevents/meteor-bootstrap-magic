@@ -186,17 +186,11 @@ Template.bootstrap_magic_input.onRendered ->
     $('.popover-pin').click (e) ->
       e.preventDefault()
       $(@).parents('.popover-active').toggleClass 'pinned'
-      console.log "hover is off", $(@).parents('.popover-label').attr('class')
-
-    if $(@).hasClass 'pinned'
-      $(@).parents('.popover-active').off 'mouseenter mouseleave'
-    else 
-      $(@).parents('.popover-active').on 'mouseenter mouseleave'
 
   ), -> 
+    $(@).removeClass 'popover-active'
     if !$(@).hasClass 'pinned'
-      $(@).removeClass 'popover-active'
-      $(@).popover 'hide', $(@).parents('.popover-label').attr('class')
+      $(@).popover 'hide'
 
 
 Template.bootstrap_magic_input.onDestroyed ->
