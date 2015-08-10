@@ -207,31 +207,7 @@ Template.bootstrap_magic_preview_tooltips.onRendered ->
   @$('[data-toggle="tooltip"]').tooltip()
 
 Template.bootstrap_magic_preview_modals.events
-  'click .ez-modal-simple': ->
-    EZModal 'Thank you for your enquiry'
-
-  'click .ez-modal-small': ->
-    EZModal
-      classes: 'text-center'
-      body: 'Loading - Please Wait'
-      size: 'sm' # or use 'lg' for large
-      hideFooter: true
-
-  'click .ez-modal-checkout': ->
-    EZModal
-      title: 'Please Confirm'
-      body: 'Are you sure you wish to empty the cart?'
-      leftButtons: [
-        color: 'danger'
-        html: 'Cancel'
-      ]
-      rightButtons: [
-        color: 'primary'
-        html: 'Yes'
-        fn: -> @EZModal.modal('hide')
-      ]
-
-  'click .ez-modal-buttons' : ->
+  'click .ez-modal-example' : ->
     EZModal
       title: 'Please confirm'
       body: 'Are you sure you want to do that?'
@@ -247,9 +223,3 @@ Template.bootstrap_magic_preview_modals.events
           @EZModal.modal 'hide' # hide parent
           EZModal 'Confirmation Received' # open new modal
       ]
-
-  'click .ez-modal-html' : ->
-    EZModal
-      bodyHtml: """
-      <h3>Arbitrary HTML or Template Keys</h3>
-      """
