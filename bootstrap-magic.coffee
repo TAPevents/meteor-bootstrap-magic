@@ -162,34 +162,37 @@ Template.bootstrap_magic_input.helpers
     return _.filter items, (obj) => obj.value?.indexOf(@._id) >- 1
 
 Template.bootstrap_magic_input.onRendered ->
-  @$('.popover-label').each ->
-    $elem = $(@)
-    $elem.popover
-      placement: 'auto right'
-      trigger: 'manual'
-      html: true
-      container: $elem
-      animation: false
-      template: """
-        <div class="popover popover-list" role="tooltip">
-          <div class="arrow"></div>
-          <h3 class="popover-title"></h3>
-          <ul class="popover-content list-group"></ul>
-        </div>
-        """
+  $popoverLabel = @$('.popover-label')
+  $popoverLabel.popover
+    placement: 'auto right'
+    trigger: 'manual'
+    html: true
+    container: $popoverLabel
+    animation: true
+    template: """
+      <div class="popover popover-list" role="tooltip">
+        <div class="arrow"></div>
+        <h3 class="popover-title"></h3>
+        <ul class="popover-content list-group"></ul>
+        <button class='btn btn-default btn-xs pull-right mar-xs popover-pin' href='#' role='button'>
+          <i class='glyphicon glyphicon-pushpin'></i>
+        </button>
+      </div>
+    """
 
-  @$('.popover-label').hover (->
-    $(@).popover 'show'
-    $(@).addClass 'popover-active'
+  .hover ->
+    unless $popoverLabel.hasClass 'pinned'
+      $popoverLabel
+      .addClass 'popover-active'
+      .popover 'show'
+      .find('.popover-pin').off('click').click ->
+        $popoverLabel.toggleClass 'pinned'
 
-    $('.popover-pin').click (e) ->
-      e.preventDefault()
-      $(@).parents('.popover-active').toggleClass 'pinned'
-
-  ), -> 
-    $(@).removeClass 'popover-active'
-    if !$(@).hasClass 'pinned'
-      $(@).popover 'hide'
+  , ->
+    unless $popoverLabel.hasClass 'pinned'
+      $popoverLabel
+      .removeClass 'popover-active'
+      .popover 'hide'
 
 
 Template.bootstrap_magic_input.onDestroyed ->

@@ -53,13 +53,11 @@
     <label class="labelTitle">{{_id}}</label>
     {{#if myChildren.length}}
       &nbsp;
-      <span class="label popover-label pull-right label-primary round-corners" data-toggle="popover" data-placement="top" data-content="
+      <span class="label popover-label pull-right label-primary" data-toggle="popover" data-placement="top" data-content="
         {{#each myChildren}}
           <li class='list-group-item list-group-item-info'>{{_id}}</li>
         {{/each}}
-        <button class='btn btn-default btn-xs pull-right mar-xs popover-pin' href='#' role='button'>
-          <i class='glyphicon glyphicon-pushpin'></i>
-        </button>">
+        ">
         {{_ "var_count" count=myChildren.length}}</span>
     {{/if}}
     {{> Template.contentBlock}}
