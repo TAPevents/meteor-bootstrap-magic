@@ -50,7 +50,6 @@ Template._bootstrap_magic.onRendered ->
   BootstrapMagic.dictionary.currentCategory.set bootstrap_magic_variables[0].category
   BootstrapMagic.dictionary.currentSubCategory.set bootstrap_magic_variables[0]._id
 
-
 # default starting script: load hard-coded defaults
 # this function can be overriden by other packages for integrations
 BootstrapMagic.on 'start', ->
@@ -103,13 +102,21 @@ Template._bootstrap_magic.helpers
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "typeIs" : (type) -> @type is type
-  "searchInactive" : -> true if searchTerms.get() is ""
+  "searchInactive" : -> true if searchTerms.get() is "" || " "
 
 Template._bootstrap_magic.events
   'keyup .magic-search' : (e) -> 
     e.preventDefault
     searchVal = $(e.currentTarget).val()
     searchTerms.set searchVal
+
+  'click .magic-filter-item' :(e) ->
+    $filter = $(e.currentTarget)
+    $filter.addClass 'filtered'
+    $filterTerms = $('.filtered').text()
+    $('.magic-filter')
+    .removeClass "glyphicon glyphicon-filter"
+    .html $filterTerms
 
   'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
