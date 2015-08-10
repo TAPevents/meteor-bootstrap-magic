@@ -50,6 +50,7 @@ Template._bootstrap_magic.onRendered ->
   BootstrapMagic.dictionary.currentCategory.set bootstrap_magic_variables[0].category
   BootstrapMagic.dictionary.currentSubCategory.set bootstrap_magic_variables[0]._id
 
+
 # default starting script: load hard-coded defaults
 # this function can be overriden by other packages for integrations
 BootstrapMagic.on 'start', ->
@@ -90,6 +91,9 @@ for group in bootstrap_magic_variables
     flattenMagic[item._id] = item
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
+searchTerms = new ReactiveVar()
+console.log searchTerms.get()
+
 
 Template._bootstrap_magic.helpers
   "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
@@ -103,6 +107,11 @@ Template._bootstrap_magic.helpers
   "typeIs" : (type) -> @type is type
 
 Template._bootstrap_magic.events
+  'keyup .magic-search' : (e) -> 
+    e.preventDefault
+    searchVal = $(e.currentTarget).val()
+    searchTerms.set searchVal
+
   'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
     BootstrapMagic.setOverride @_id, $input.val() || undefined
