@@ -206,7 +206,7 @@ Template.bootstrap_magic_preview_popovers.onRendered ->
 Template.bootstrap_magic_preview_tooltips.onRendered ->
   @$('[data-toggle="tooltip"]').tooltip()
 
-Template.bootstrap_magic_preview_ez_modal.events
+Template.bootstrap_magic_preview_modals.events
   'click .ez-modal-simple': ->
     EZModal 'Thank you for your enquiry'
 
