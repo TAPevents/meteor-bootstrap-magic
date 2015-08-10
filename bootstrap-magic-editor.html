@@ -27,6 +27,7 @@
     </div><!--/.magic-search-container-->
     
     <div class="menus container-fluid">
+      {{#if searchInactive}}
       <div class="main-menu">
         <ul class="nav nav-pills">
           {{#each categories}}
@@ -45,6 +46,7 @@
           {{/each}}
         </ul>
       </div>
+      {{/if}}
     </div>
 
     <div class="content container-fluid">

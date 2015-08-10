@@ -91,9 +91,7 @@ for group in bootstrap_magic_variables
     flattenMagic[item._id] = item
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
-searchTerms = new ReactiveVar()
-console.log searchTerms.get()
-
+searchTerms = new ReactiveVar("")
 
 Template._bootstrap_magic.helpers
   "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
@@ -105,6 +103,7 @@ Template._bootstrap_magic.helpers
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "typeIs" : (type) -> @type is type
+  "searchInactive" : -> true if searchTerms.get() is ""
 
 Template._bootstrap_magic.events
   'keyup .magic-search' : (e) -> 
