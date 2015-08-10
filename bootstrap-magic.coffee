@@ -112,11 +112,14 @@ Template._bootstrap_magic.events
 
   'click .magic-filter-item' :(e) ->
     $filter = $(e.currentTarget)
-    $filter.addClass 'filtered'
+    $filter.toggleClass 'filtered'
     $filterTerms = $('.filtered').text()
-    $('.magic-filter')
-    .removeClass "glyphicon glyphicon-filter"
-    .html $filterTerms
+    $('.magic-filter').html $filterTerms
+    if $('.magic-filter-item').hasClass 'filtered'
+      $('.magic-filter').removeClass "glyphicon glyphicon-filter"
+    else 
+      $('.magic-filter').addClass "glyphicon glyphicon-filter"
+
 
   'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
