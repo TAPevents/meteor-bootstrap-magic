@@ -31,5 +31,7 @@
   "textColors" : "Text Colors",
   "typography" : "Typography",
   "tooltips" : "Tooltips",
-  "validation" : "Validation"
+  "validation" : "Validation",
+  "var_count" : "Updates 1 variable",
+  "var_count_plural" : "Updates __count__ variables"
 }
