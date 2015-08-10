@@ -75,12 +75,19 @@ mapVariableOverrides = (obj) ->
   # get the refernece recursively
   if obj.value?.indexOf('@') > -1
     obj.isReference = true
+    obj.parentVar = obj.value 
+
     obj.reference = mapVariableOverrides {_id: obj.value}
     obj.reference.value?= '?'
     if obj.reference.reference
       obj.reference = obj.reference.reference
 
   return obj
+
+flattenMagic = {}
+for group in bootstrap_magic_variables
+  for item in group.data
+    flattenMagic[item._id] = item
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
@@ -107,13 +114,6 @@ Template._bootstrap_magic.events
   'click .sub-menu a' : ->
     BootstrapMagic.dictionary.currentSubCategory.set @_id
 
-# for type in ['text','color','font']
-#   Template["bootstrap_magic_input_#{type}"].helpers
-#     "override" : getOverride
-
-Template.bootstrap_magic_input.helpers
-  'JSONify' : (obj) -> JSON.stringify obj
-
 ###
 # Colorpicker Create/Destroy
 ###
@@ -137,7 +137,6 @@ Template.bootstrap_magic_input_color.onRendered ->
     $input = $('input',@)
     @endVal = $input.val()
     if @startVal isnt @endVal
-      console.log 'triggering'
       @startVal = @endVal
       $input.trigger 'change'
 
@@ -154,6 +153,52 @@ Template.bootstrap_magic_input_color.onDestroyed ->
 ###
 # Bootstrap Popovers, Tooltips & EZ-Modal
 ###
+
+# Informed variables popover
+
+Template.bootstrap_magic_input.helpers
+  'myChildren' : -> 
+    items = _.map flattenMagic, mapVariableOverrides
+    return _.filter items, (obj) => obj.value?.indexOf(@._id) >- 1
+
+Template.bootstrap_magic_input.onRendered ->
+  $popoverLabel = @$('.popover-label')
+  $popoverLabel.popover
+    placement: 'auto right'
+    trigger: 'manual'
+    html: true
+    container: $popoverLabel
+    animation: true
+    template: """
+      <div class="popover popover-list" role="tooltip">
+        <div class="arrow"></div>
+        <h3 class="popover-title"></h3>
+        <ul class="popover-content list-group"></ul>
+        <button class='btn btn-default btn-xs pull-right mar-xs popover-pin' href='#' role='button'>
+          <i class='glyphicon glyphicon-pushpin'></i>
+        </button>
+      </div>
+    """
+
+  .hover ->
+    unless $popoverLabel.hasClass 'pinned'
+      $popoverLabel
+      .addClass 'popover-active'
+      .popover 'show'
+      .find('.popover-pin').off('click').click ->
+        $popoverLabel.toggleClass 'pinned'
+
+  , ->
+    unless $popoverLabel.hasClass 'pinned'
+      $popoverLabel
+      .removeClass 'popover-active'
+      .popover 'hide'
+
+
+Template.bootstrap_magic_input.onDestroyed ->
+  @$('[data-toggle="popover"]').popover('destroy')
+
+# Tempalte examples
 
 Template.bootstrap_magic_preview_popovers.onRendered ->
   @$('[data-toggle="popover"]').popover()

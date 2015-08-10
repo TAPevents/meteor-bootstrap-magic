@@ -45,6 +45,7 @@ Tracker.autorun ->
 - Extendable default fonts
 - Search/Filter Feature
 - Custom preview templates (maybe)
+- Fix When tooltip is pinned, it doesn't flicker
 
 # Lisence
 

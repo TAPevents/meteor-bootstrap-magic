@@ -51,6 +51,15 @@
 <template name="bootstrap_magic_input">
   <div class="form-group{{#if isOverride}} overridden{{/if}}">
     <label class="labelTitle">{{_id}}</label>
+    {{#if myChildren.length}}
+      &nbsp;
+      <span class="label popover-label pull-right label-primary" data-toggle="popover" data-placement="top" data-content="
+        {{#each myChildren}}
+          <li class='list-group-item list-group-item-info'>{{_id}}</li>
+        {{/each}}
+        ">
+        {{_ "var_count" count=myChildren.length}}</span>
+    {{/if}}
     {{> Template.contentBlock}}
   </div>
 </template>
