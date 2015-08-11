@@ -145,7 +145,10 @@ Template.bootstrap_magic_input_color.onRendered ->
   @autorun ->
     mappedVar = mapVariableOverrides({_id: self.data._id})
     thisColor = mappedVar.reference?.value || mappedVar.value
+    # don't update the value of the input box
+    oldInputVal = $('input', $thisColorPicker).val()
     $thisColorPicker.colorpicker('setValue', thisColor).colorpicker('update', true)
+    $('input', $thisColorPicker).val oldInputVal
 
 Template.bootstrap_magic_input_color.onDestroyed ->
   @picker.remove()
