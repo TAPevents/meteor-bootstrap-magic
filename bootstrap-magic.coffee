@@ -88,18 +88,10 @@ getCurrentVariables = ->
     return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
 
   else 
-    searchTerms.set("@brand-success")
-  # searchData = _.find bootstrap_magic_variables, (group) -> 
-  #   console.log "group data: ", group.data
-  #   console.log "group data's id: ", group.data._id
-  #   group.data is staticSearchWords  
-  # console.log "search data: ", searchData
-
     words = searchTerms.get()
     items = _.map flattenedMagic, mapVariableOverrides
     searchResults = _.filter items, (obj) => obj._id?.indexOf(words) >- 1
     console.log "search results: ", searchResults
-    console.log "search results mapped: ", _.map @data, searchResults
     return searchResults
 
 
@@ -123,6 +115,7 @@ Template._bootstrap_magic.helpers
       _.map @data, mapVariableOverrides
     else 
       getCurrentVariables()
+      
   "isSelectedCat" : -> @category is BootstrapMagic.dictionary.currentCategory.get()
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
