@@ -44,30 +44,14 @@ for group in bootstrap_magic_variables
     # override with user defaults
     @setMany 'defaults', obj
 
-
-###
-# UI
-###
-
-getCurrentCategory = ->
-  myCat = BootstrapMagic.dictionary.currentCategory.get()
-  return _.where(bootstrap_magic_variables, { category: myCat })
-
-getCurrentSubCategory = ->
-  subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
-  return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
-
-Template._bootstrap_magic.onCreated ->
-  BootstrapMagic.start() if BootstrapMagic.start
-
-Template._bootstrap_magic.onRendered ->
-  BootstrapMagic.dictionary.currentCategory.set bootstrap_magic_variables[0].category
-  BootstrapMagic.dictionary.currentSubCategory.set bootstrap_magic_variables[0]._id
-
 # default starting script: load hard-coded defaults
 # this function can be overriden by other packages for integrations
 BootstrapMagic.on 'start', -> @setDefaults {}
 
+
+###
+# UI
+###
 mapVariableOverrides = (obj) ->
   obj.isOverride = false
   obj.isReference = false
@@ -92,6 +76,21 @@ mapVariableOverrides = (obj) ->
       obj.reference = obj.reference.reference
 
   return obj
+
+getCurrentCategory = ->
+  myCat = BootstrapMagic.dictionary.currentCategory.get()
+  return _.where(bootstrap_magic_variables, { category: myCat })
+
+getCurrentSubCategory = ->
+  subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
+  return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
+
+Template._bootstrap_magic.onCreated ->
+  BootstrapMagic.start() if BootstrapMagic.start
+
+Template._bootstrap_magic.onRendered ->
+  BootstrapMagic.dictionary.currentCategory.set bootstrap_magic_variables[0].category
+  BootstrapMagic.dictionary.currentSubCategory.set bootstrap_magic_variables[0]._id
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
