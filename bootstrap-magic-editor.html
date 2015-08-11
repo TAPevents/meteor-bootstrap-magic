@@ -50,7 +50,11 @@
     <div class="content container-fluid">
       {{#with currentVars}}
         <section class="sub-cat-item">
-          {{#if searchInactive}}<h3>{{_ _id}}</h3>{{/if}}
+          <h3>{{#if searchInactive}}
+            {{_ _id}}
+          {{else}}
+            {{searchHeader}}
+          {{/if}}</h3>
           <div class="row">
             <div class="col-sm-4">
               {{#each mappedVariables}}

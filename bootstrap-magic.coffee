@@ -81,19 +81,24 @@ getCurrentCategory = ->
   return _.where(bootstrap_magic_variables, { category: myCat })
 
 getCurrentVariables = ->
-  if !searchTerms.get()
+  if noSearchWords
     subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
-    console.log "sub cat: ", subCatId
     console.log "original: ",  _.find bootstrap_magic_variables, (group) -> group._id is subCatId
     return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
-
   else 
-    words = searchTerms.get()
-    items = _.map flattenedMagic, mapVariableOverrides
-    searchResults = _.filter items, (obj) => obj._id?.indexOf('@'+ words) >- 1
-    console.log "search results: ", searchResults
-    return searchResults
+    letsSearch()
 
+letsSearch = ->
+  words = searchTerms.get()
+  items = _.map flattenedMagic, mapVariableOverrides
+  searchResults = _.filter items, (obj) => obj._id?.indexOf(words) >- 1
+  return searchResults
+
+noSearchWords = ->
+  if !searchTerms.get() || searchTerms.get().length < 3
+    return true
+  else 
+    return false
 
 Template._bootstrap_magic.onCreated ->
   BootstrapMagic.start() if BootstrapMagic.start
@@ -110,23 +115,27 @@ Template._bootstrap_magic.helpers
   "subCategories" : getCurrentCategory
   "currentVars" : getCurrentVariables
   "mappedVariables" : -> 
-    if !searchTerms.get()
-      console.log "mapped variables for display: ", _.map @data, mapVariableOverrides
+    if noSearchWords()
       _.map @data, mapVariableOverrides
     else 
-      getCurrentVariables()
+      letsSearch()
 
   "isSelectedCat" : -> @category is BootstrapMagic.dictionary.currentCategory.get()
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "typeIs" : (type) -> @type is type
-  "searchInactive" : -> !searchTerms.get()
+  "searchInactive" : -> noSearchWords()
+  "searchHeader" :-> 
+    if letsSearch().length == 0
+      return "No Search Results"
+    else
+      return "Search Results: "
 
 Template._bootstrap_magic.events
   'keyup .magic-search' : (e) -> 
     searchTerms.set e.currentTarget.value
-    getCurrentVariables()
+    letsSearch()
 
   'click .magic-filter-item' :(e) ->
     $filter = $(e.currentTarget)
