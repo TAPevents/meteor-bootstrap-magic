@@ -63,9 +63,11 @@
                 {{/bootstrap_magic_input}}
               {{/each}}
             </div>
-            <div class="col-sm-8">
-              {{> previewTmpl}}
-            </div>
+            {{#if searchInactive}}
+              <div class="col-sm-8">
+                {{> previewTmpl}}
+              </div>
+            {{/if}}
           </div>
         </section>
       {{/with}}
