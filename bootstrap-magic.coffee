@@ -81,7 +81,7 @@ getCurrentCategory = ->
   myCat = BootstrapMagic.dictionary.currentCategory.get()
   return _.where(bootstrap_magic_variables, { category: myCat })
 
-getCurrentSubCategory = ->
+getCurrentVariables = ->
   subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
   return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
 
@@ -93,19 +93,35 @@ Template._bootstrap_magic.onRendered ->
   BootstrapMagic.dictionary.currentSubCategory.set bootstrap_magic_variables[0]._id
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
+searchTerms = new ReactiveVar("")
 
 Template._bootstrap_magic.helpers
   "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
   "subCategories" : getCurrentCategory
-  "currentSubCat" : getCurrentSubCategory
+  "currentVars" : getCurrentVariables
   "mappedVariables" : -> _.map @data, mapVariableOverrides
   "isSelectedCat" : -> @category is BootstrapMagic.dictionary.currentCategory.get()
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "typeIs" : (type) -> @type is type
+  "searchInactive" : -> !searchTerms.get() 
 
 Template._bootstrap_magic.events
+  'keyup .magic-search' : (e) -> searchTerms.set e.currentTarget.value
+
+  'click .magic-filter-item' :(e) ->
+    $filter = $(e.currentTarget)
+    $filter.toggleClass 'filtered'
+    $filterTerms = $('.filtered').text()
+    $('.magic-filter').html $filterTerms
+    if $('.magic-filter-item').hasClass 'filtered'
+      $('.magic-filter').removeClass "glyphicon glyphicon-filter"
+      # $filter.append $('<span class="glyphicon glyphicon-ok"></span>')
+    else 
+      $('.magic-filter').addClass "glyphicon glyphicon-filter"
+      # $filter.removeClass
+
   'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
     BootstrapMagic.setOverride @_id, $input.val() || undefined
