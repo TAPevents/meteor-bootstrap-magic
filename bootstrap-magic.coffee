@@ -1,7 +1,14 @@
+flattenedMagic = {}
+flattenedMagicValues = {}
+for group in bootstrap_magic_variables
+  for item in group.data
+    flattenedMagic[item._id] = item
+    flattenedMagicValues[item._id] = item.value
+
+
 ###
 # EXPORTS
 ###
-
 @BootstrapMagic =
   dictionary :
     overrides : new ReactiveDict()
@@ -28,7 +35,14 @@
   setOverride : (key, val) -> @setOne 'overrides', key, val
   setOverrides : (obj) -> @setMany 'overrides', obj
   setDefault : (key, val) -> @setOne 'defaults', key, val
-  setDefaults : (obj) -> @setMany 'defaults', obj
+  setDefaults : (obj) ->
+    # clear the previous defaults
+    for key,val of @dictionary['defaults'].keys
+      @dictionary['defaults'].set key, null
+    # set the botostrap defautls
+    @setMany 'defaults', flattenedMagicValues
+    # override with user defaults
+    @setMany 'defaults', obj
 
 
 ###
@@ -52,12 +66,7 @@ Template._bootstrap_magic.onRendered ->
 
 # default starting script: load hard-coded defaults
 # this function can be overriden by other packages for integrations
-BootstrapMagic.on 'start', ->
-  defaultDefaults = {}
-  for category in bootstrap_magic_variables
-    for variable in category.data
-      defaultDefaults[variable._id] = variable.value
-  @setDefaults defaultDefaults
+BootstrapMagic.on 'start', -> @setDefaults {}
 
 mapVariableOverrides = (obj) ->
   obj.isOverride = false
@@ -84,11 +93,6 @@ mapVariableOverrides = (obj) ->
 
   return obj
 
-flattenMagic = {}
-for group in bootstrap_magic_variables
-  for item in group.data
-    flattenMagic[item._id] = item
-
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
 Template._bootstrap_magic.helpers
@@ -113,6 +117,7 @@ Template._bootstrap_magic.events
  
   'click .sub-menu a' : ->
     BootstrapMagic.dictionary.currentSubCategory.set @_id
+
 
 ###
 # Colorpicker Create/Destroy
@@ -158,7 +163,7 @@ Template.bootstrap_magic_input_color.onDestroyed ->
 
 Template.bootstrap_magic_input.helpers
   'myChildren' : -> 
-    items = _.map flattenMagic, mapVariableOverrides
+    items = _.map flattenedMagic, mapVariableOverrides
     return _.filter items, (obj) => obj.value?.indexOf(@._id) >- 1
 
 Template.bootstrap_magic_input.onRendered ->
