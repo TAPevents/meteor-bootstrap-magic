@@ -102,7 +102,7 @@ Template._bootstrap_magic.helpers
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "typeIs" : (type) -> @type is type
-  "searchInactive" : -> true if searchTerms.get() is "" || " "
+  "searchInactive" : -> true if searchTerms.get() is ""
 
 Template._bootstrap_magic.events
   'keyup .magic-search' : (e) -> 
