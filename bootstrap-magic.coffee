@@ -141,12 +141,6 @@ Template._bootstrap_magic.events
 Template.bootstrap_magic_input_color.onRendered ->
   self = @
   $thisColorPicker = $(@firstNode)
-  colorPickerStartColor = self.data.reference?.value || self.data.value
-
-  # THIS IS A HACK colorpicker library fail: `color` parameter doesn't work
-  $thisInput = $('input', $thisColorPicker)
-  originalInputValue = $thisInput.val()
-  $thisInput.val colorPickerStartColor
 
   # init colorpicker
   $thisColorPicker.colorpicker
@@ -160,10 +154,14 @@ Template.bootstrap_magic_input_color.onRendered ->
       @startVal = @endVal
       $input.trigger 'change'
 
-  # THIS IS A HACK colorpicker library fail: `color` parameter doesn't work
-  $('input', $thisColorPicker).val originalInputValue
-
   @picker = $thisColorPicker.data('colorpicker').picker
+
+  # auto update color if value changes
+  @autorun ->
+    mappedVar = mapVariableOverrides({_id: self.data._id})
+    thisColor = mappedVar.reference?.value || mappedVar.value
+    $thisColorPicker.colorpicker('setValue', thisColor).colorpicker('update', true)
+
 
 Template.bootstrap_magic_input_color.onDestroyed ->
   @picker.remove()
