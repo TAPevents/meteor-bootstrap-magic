@@ -83,11 +83,8 @@ getCurrentCategory = ->
   return _.where(bootstrap_magic_variables, { category: myCat })
 
 getCurrentVariables = ->
-  if noSearchInput
-    subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
-    return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
-  else 
-    letsSearch()
+  subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
+  return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
 
 letsSearch = ->
   words = searchTerms.get()
