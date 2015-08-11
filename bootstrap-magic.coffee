@@ -90,7 +90,7 @@ getCurrentVariables = ->
   else 
     words = searchTerms.get()
     items = _.map flattenedMagic, mapVariableOverrides
-    searchResults = _.filter items, (obj) => obj._id?.indexOf(words) >- 1
+    searchResults = _.filter items, (obj) => obj._id?.indexOf('@'+ words) >- 1
     console.log "search results: ", searchResults
     return searchResults
 
@@ -115,7 +115,7 @@ Template._bootstrap_magic.helpers
       _.map @data, mapVariableOverrides
     else 
       getCurrentVariables()
-      
+
   "isSelectedCat" : -> @category is BootstrapMagic.dictionary.currentCategory.get()
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
