@@ -33,7 +33,13 @@ for group in bootstrap_magic_variables
       @dictionary[dictionaryName].set key, val
 
   setOverride : (key, val) -> @setOne 'overrides', key, val
-  setOverrides : (obj) -> @setMany 'overrides', obj
+  setOverrides : (obj) ->
+    # clear the previous overrides
+    for key,val of @dictionary['overrides'].keys
+      @dictionary['overrides'].set key, null
+    # override wth passed obj
+    @setMany 'overrides', obj
+
   setDefault : (key, val) -> @setOne 'defaults', key, val
   setDefaults : (obj) ->
     # clear the previous defaults
