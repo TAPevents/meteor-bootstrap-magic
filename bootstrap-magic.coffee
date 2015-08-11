@@ -39,9 +39,13 @@ getCurrentCategory = ->
   myCat = BootstrapMagic.dictionary.currentCategory.get()
   return _.where(bootstrap_magic_variables, { category: myCat })
 
-getCurrentSubCategory = ->
+getCurrentVariables = ->
   subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
+  console.log "Index Of ", bootstrap_magic_variables.indexOf('@brand-primary')
+  console.log "Filter: ", _.filter bootstrap_magic_variables.data, (d) -> d._id
+  console.log _.find bootstrap_magic_variables, (group) -> group._id is subCatId
   return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
+
 
 Template._bootstrap_magic.onCreated ->
   BootstrapMagic.start() if BootstrapMagic.start
@@ -95,7 +99,7 @@ searchTerms = new ReactiveVar("")
 Template._bootstrap_magic.helpers
   "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
   "subCategories" : getCurrentCategory
-  "currentSubCat" : getCurrentSubCategory
+  "currentVars" : getCurrentVariables
   "mappedVariables" : -> _.map @data, mapVariableOverrides
   "isSelectedCat" : -> @category is BootstrapMagic.dictionary.currentCategory.get()
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
