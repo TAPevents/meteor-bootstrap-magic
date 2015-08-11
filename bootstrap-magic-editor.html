@@ -9,7 +9,7 @@
       <div class="col-xs-5 col-xs-offset-7">
         <div class="input-group has-feedback">
           <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
-          <input type="search" class="form-control magic-search" placeholder="Search">
+          <input type="search" class="form-control magic-search" placeholder="Search without @">
           <div class="input-group-btn">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span class="glyphicon glyphicon-filter magic-filter"></span>
@@ -50,7 +50,7 @@
     <div class="content container-fluid">
       {{#with currentVars}}
         <section class="sub-cat-item">
-          <!--<h3>{{_ _id}}</h3>-->
+          {{#if searchInactive}}<h3>{{_ _id}}</h3>{{/if}}
           <div class="row">
             <div class="col-sm-4">
               {{#each mappedVariables}}
