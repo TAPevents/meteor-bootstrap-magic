@@ -1,7 +1,14 @@
+flattenedMagic = {}
+flattenedMagicValues = {}
+for group in bootstrap_magic_variables
+  for item in group.data
+    flattenedMagic[item._id] = item
+    flattenedMagicValues[item._id] = item.value
+
+
 ###
 # EXPORTS
 ###
-
 @BootstrapMagic =
   dictionary :
     overrides : new ReactiveDict()
@@ -28,45 +35,23 @@
   setOverride : (key, val) -> @setOne 'overrides', key, val
   setOverrides : (obj) -> @setMany 'overrides', obj
   setDefault : (key, val) -> @setOne 'defaults', key, val
-  setDefaults : (obj) -> @setMany 'defaults', obj
+  setDefaults : (obj) ->
+    # clear the previous defaults
+    for key,val of @dictionary['defaults'].keys
+      @dictionary['defaults'].set key, null
+    # set the botostrap defautls
+    @setMany 'defaults', flattenedMagicValues
+    # override with user defaults
+    @setMany 'defaults', obj
+
+# default starting script: load hard-coded defaults
+# this function can be overriden by other packages for integrations
+BootstrapMagic.on 'start', -> @setDefaults {}
 
 
 ###
 # UI
 ###
-
-getCurrentCategory = ->
-  myCat = BootstrapMagic.dictionary.currentCategory.get()
-  return _.where(bootstrap_magic_variables, { category: myCat })
-
-getCurrentVariables = ->
-  subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
-  return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
-
-getSearched = ->
-  console.log getCurrentVariables()
-  console.log  _.findWhere(bootstrap_magic_variables.data, { category: myCat })
-  console.log "Filter: ", _.filter bootstrap_magic_variables.data, (d) -> d._id
-  console.log _.find bootstrap_magic_variables, (group) -> group._id is subCatId
-
-getSearched()
-
-Template._bootstrap_magic.onCreated ->
-  BootstrapMagic.start() if BootstrapMagic.start
-
-Template._bootstrap_magic.onRendered ->
-  BootstrapMagic.dictionary.currentCategory.set bootstrap_magic_variables[0].category
-  BootstrapMagic.dictionary.currentSubCategory.set bootstrap_magic_variables[0]._id
-
-# default starting script: load hard-coded defaults
-# this function can be overriden by other packages for integrations
-BootstrapMagic.on 'start', ->
-  defaultDefaults = {}
-  for category in bootstrap_magic_variables
-    for variable in category.data
-      defaultDefaults[variable._id] = variable.value
-  @setDefaults defaultDefaults
-
 mapVariableOverrides = (obj) ->
   obj.isOverride = false
   obj.isReference = false
@@ -92,41 +77,35 @@ mapVariableOverrides = (obj) ->
 
   return obj
 
-flattenMagic = {}
-for group in bootstrap_magic_variables
-  for item in group.data
-    flattenMagic[item._id] = item
+getCurrentCategory = ->
+  myCat = BootstrapMagic.dictionary.currentCategory.get()
+  return _.where(bootstrap_magic_variables, { category: myCat })
+
+getCurrentSubCategory = ->
+  subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
+  return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
+
+Template._bootstrap_magic.onCreated ->
+  BootstrapMagic.start() if BootstrapMagic.start
+
+Template._bootstrap_magic.onRendered ->
+  BootstrapMagic.dictionary.currentCategory.set bootstrap_magic_variables[0].category
+  BootstrapMagic.dictionary.currentSubCategory.set bootstrap_magic_variables[0]._id
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
-searchTerms = new ReactiveVar("")
 
 Template._bootstrap_magic.helpers
   "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
   "subCategories" : getCurrentCategory
-  "currentVars" : getCurrentVariables
+  "currentSubCat" : getCurrentSubCategory
   "mappedVariables" : -> _.map @data, mapVariableOverrides
   "isSelectedCat" : -> @category is BootstrapMagic.dictionary.currentCategory.get()
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "typeIs" : (type) -> @type is type
-  "searchInactive" : -> !searchTerms.get() 
 
 Template._bootstrap_magic.events
-  'keyup .magic-search' : (e) -> searchTerms.set e.currentTarget.value
-
-  'click .magic-filter-item' :(e) ->
-    $filter = $(e.currentTarget)
-    $filter.toggleClass 'filtered'
-    $filterTerms = $('.filtered').text()
-    $('.magic-filter').html $filterTerms
-    if $('.magic-filter-item').hasClass 'filtered'
-      $('.magic-filter').removeClass "glyphicon glyphicon-filter"
-      # $filter.append $('<span class="glyphicon glyphicon-ok"></span>')
-    else 
-      $('.magic-filter').addClass "glyphicon glyphicon-filter"
-      # $filter.removeClass
-
   'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
     BootstrapMagic.setOverride @_id, $input.val() || undefined
@@ -137,6 +116,7 @@ Template._bootstrap_magic.events
  
   'click .sub-menu a' : ->
     BootstrapMagic.dictionary.currentSubCategory.set @_id
+
 
 ###
 # Colorpicker Create/Destroy
@@ -164,8 +144,10 @@ Template.bootstrap_magic_input_color.onRendered ->
   @autorun ->
     mappedVar = mapVariableOverrides({_id: self.data._id})
     thisColor = mappedVar.reference?.value || mappedVar.value
+    # don't update the value of the input box
+    oldInputVal = $('input', $thisColorPicker).val()
     $thisColorPicker.colorpicker('setValue', thisColor).colorpicker('update', true)
-
+    $('input', $thisColorPicker).val oldInputVal
 
 Template.bootstrap_magic_input_color.onDestroyed ->
   @picker.remove()
@@ -180,7 +162,7 @@ Template.bootstrap_magic_input_color.onDestroyed ->
 
 Template.bootstrap_magic_input.helpers
   'myChildren' : -> 
-    items = _.map flattenMagic, mapVariableOverrides
+    items = _.map flattenedMagic, mapVariableOverrides
     return _.filter items, (obj) => obj.value?.indexOf(@._id) >- 1
 
 Template.bootstrap_magic_input.onRendered ->
