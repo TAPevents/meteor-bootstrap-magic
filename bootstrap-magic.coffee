@@ -41,11 +41,15 @@ getCurrentCategory = ->
 
 getCurrentVariables = ->
   subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
-  console.log "Index Of ", bootstrap_magic_variables.indexOf('@brand-primary')
-  console.log "Filter: ", _.filter bootstrap_magic_variables.data, (d) -> d._id
-  console.log _.find bootstrap_magic_variables, (group) -> group._id is subCatId
   return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
 
+getSearched = ->
+  console.log getCurrentVariables()
+  console.log  _.findWhere(bootstrap_magic_variables.data, { category: myCat })
+  console.log "Filter: ", _.filter bootstrap_magic_variables.data, (d) -> d._id
+  console.log _.find bootstrap_magic_variables, (group) -> group._id is subCatId
+
+getSearched()
 
 Template._bootstrap_magic.onCreated ->
   BootstrapMagic.start() if BootstrapMagic.start
