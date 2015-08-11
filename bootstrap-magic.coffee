@@ -5,7 +5,6 @@ for group in bootstrap_magic_variables
     flattenedMagic[item._id] = item
     flattenedMagicValues[item._id] = item.value
 
-
 ###
 # EXPORTS
 ###
@@ -85,6 +84,14 @@ getCurrentVariables = ->
   subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
   return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
 
+getSearched = ->
+  console.log "fm: ", flattenedMagic[item]
+  console.log "fmv: ", flattenedMagicValues
+
+  items = _.map flattenedMagic, mapVariableOverrides
+  searchFilter = _.filter items, (obj) => obj._id == searchTerms.get()
+  console.log "searched: ", searchFilter
+
 Template._bootstrap_magic.onCreated ->
   BootstrapMagic.start() if BootstrapMagic.start
 
@@ -108,7 +115,9 @@ Template._bootstrap_magic.helpers
   "searchInactive" : -> !searchTerms.get() 
 
 Template._bootstrap_magic.events
-  'keyup .magic-search' : (e) -> searchTerms.set e.currentTarget.value
+  'keyup .magic-search' : (e) -> 
+    searchTerms.set e.currentTarget.value
+    getSearched()
 
   'click .magic-filter-item' :(e) ->
     $filter = $(e.currentTarget)
