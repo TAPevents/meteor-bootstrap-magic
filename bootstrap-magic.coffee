@@ -81,16 +81,16 @@ getCurrentCategory = ->
   return _.where(bootstrap_magic_variables, { category: myCat })
 
 getCurrentVariables = ->
-  subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
-  return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
+  if !searchTerms.get()
+    subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
+    return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
+  else 
+    words = searchTerms.get()
+    items = _.map flattenedMagic, mapVariableOverrides
+    searchFilter = _.filter items, (obj) => obj._id?.indexOf(words) >- 1
+    console.log "searched: ", searchFilter
+    return searchFilter
 
-getSearched = ->
-  console.log "fm: ", flattenedMagic[item]
-  console.log "fmv: ", flattenedMagicValues
-
-  items = _.map flattenedMagic, mapVariableOverrides
-  searchFilter = _.filter items, (obj) => obj._id == searchTerms.get()
-  console.log "searched: ", searchFilter
 
 Template._bootstrap_magic.onCreated ->
   BootstrapMagic.start() if BootstrapMagic.start
@@ -112,12 +112,12 @@ Template._bootstrap_magic.helpers
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "typeIs" : (type) -> @type is type
-  "searchInactive" : -> !searchTerms.get() 
+  "searchInactive" : -> !searchTerms.get()
 
 Template._bootstrap_magic.events
   'keyup .magic-search' : (e) -> 
     searchTerms.set e.currentTarget.value
-    getSearched()
+    getCurrentVariables()
 
   'click .magic-filter-item' :(e) ->
     $filter = $(e.currentTarget)
