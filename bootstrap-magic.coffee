@@ -76,14 +76,15 @@ mapVariableOverrides = (obj) ->
 
   return obj
 
+searchTerms = new ReactiveVar("")
+
 getCurrentCategory = ->
   myCat = BootstrapMagic.dictionary.currentCategory.get()
   return _.where(bootstrap_magic_variables, { category: myCat })
 
 getCurrentVariables = ->
-  if noSearchWords
+  if noSearchInput
     subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
-    console.log "original: ",  _.find bootstrap_magic_variables, (group) -> group._id is subCatId
     return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
   else 
     letsSearch()
@@ -94,11 +95,9 @@ letsSearch = ->
   searchResults = _.filter items, (obj) => obj._id?.indexOf(words) >- 1
   return searchResults
 
-noSearchWords = ->
-  if !searchTerms.get() || searchTerms.get().length < 3
-    return true
-  else 
-    return false
+noSearchInput = -> 
+  mySearchTerms = searchTerms.get()
+  if !mySearchTerms or mySearchTerms.length < 3 then true else false
 
 Template._bootstrap_magic.onCreated ->
   BootstrapMagic.start() if BootstrapMagic.start
@@ -108,29 +107,19 @@ Template._bootstrap_magic.onRendered ->
   BootstrapMagic.dictionary.currentSubCategory.set bootstrap_magic_variables[0]._id
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
-searchTerms = new ReactiveVar("")
 
 Template._bootstrap_magic.helpers
   "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
   "subCategories" : getCurrentCategory
   "currentVars" : getCurrentVariables
-  "mappedVariables" : -> 
-    if noSearchWords()
-      _.map @data, mapVariableOverrides
-    else 
-      letsSearch()
-
+  "mappedVariables" : -> if noSearchInput() then _.map @data, mapVariableOverrides else letsSearch()
   "isSelectedCat" : -> @category is BootstrapMagic.dictionary.currentCategory.get()
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "typeIs" : (type) -> @type is type
-  "searchInactive" : -> noSearchWords()
-  "searchHeader" :-> 
-    if letsSearch().length == 0
-      return "No Search Results"
-    else
-      return "Search Results: "
+  "searchInactive" : -> noSearchInput()
+  "searchHeader" :->  if letsSearch().length is 0 then "No Search Results" else "Search Results: "
 
 Template._bootstrap_magic.events
   'keyup .magic-search' : (e) -> 
