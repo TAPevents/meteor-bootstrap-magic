@@ -121,7 +121,6 @@ Template._bootstrap_magic.helpers
 Template._bootstrap_magic.events
   'keyup .magic-search' : (e) -> 
     searchTerms.set e.currentTarget.value
-    letsSearch()
 
   'click .magic-filter-item' :(e) ->
     $filter = $(e.currentTarget)
