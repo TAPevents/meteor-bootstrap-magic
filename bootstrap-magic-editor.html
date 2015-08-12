@@ -87,6 +87,15 @@
   </div>
 </template>
 
+<template name="bootstrap_magic_input_slider">
+  <div class="input">
+    <input type="range" class="bootstrap-magic-input magic-slider monospace-font" name="{{key}}">
+    <!--  
+    placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{/if}}"
+    -->
+  </div>
+</template>
+
 <template name="bootstrap_magic_input_color">
   <div class="input-group color-picker-group">
     <input type="text" class="form-control bootstrap-magic-input monospace-font" name="{{key}}" placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{/if}}">
