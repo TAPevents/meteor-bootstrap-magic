@@ -8,7 +8,7 @@
     <div class="search-container container-fluid">
       <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
-        <input type="search" class="form-control search-input" placeholder="Search...">
+        <input type="search" class="form-control search-input" placeholder="Search">
       </div>
     </div>
     
@@ -39,7 +39,8 @@
       {{#with currentVars}}
         <section class="sub-cat-item">
             {{#if search}}
-              <h3>Search <small class='text-muted'>{{mappedVariables.length}} results</small></h3>
+              <h3>Search <small class='text-muted'>{{_ "search_count" count=mappedVariables.length}}</small></h3>
+              <hr/>
             {{else}}
               <h3>{{_ _id}}</h3>
             {{/if}}

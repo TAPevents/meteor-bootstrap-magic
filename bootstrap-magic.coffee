@@ -123,7 +123,7 @@ Template._bootstrap_magic.helpers
   "typeIs" : (type) -> @type is type
 
 Template._bootstrap_magic.events
-  'keyup .search-container input.search-input' : (e) ->
+  'keyup .search-input' : (e) ->
     BootstrapMagic.dictionary.searchTerms.set e.currentTarget.value
 
   'change .bootstrap-magic-input' : (e) ->
