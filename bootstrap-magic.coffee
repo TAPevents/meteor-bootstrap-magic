@@ -14,7 +14,7 @@ for group in bootstrap_magic_variables
     defaults : new ReactiveDict()
     currentCategory : new ReactiveVar()
     currentSubCategory : new ReactiveVar()
-    searchTerms : new ReactiveVar()
+    searchTerms : new ReactiveVar('')
 
   on : (eventName, callback) ->
     @[eventName] = callback
