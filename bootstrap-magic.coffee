@@ -14,6 +14,7 @@ for group in bootstrap_magic_variables
     defaults : new ReactiveDict()
     currentCategory : new ReactiveVar()
     currentSubCategory : new ReactiveVar()
+    searchTerms : new ReactiveVar()
 
   on : (eventName, callback) ->
     @[eventName] = callback
@@ -43,14 +44,23 @@ for group in bootstrap_magic_variables
     # override with user defaults
     @setMany 'defaults', obj
 
-# default starting script: load hard-coded defaults
-# this function can be overriden by other packages for integrations
-BootstrapMagic.on 'start', -> @setDefaults {}
-
 
 ###
 # UI
 ###
+# default starting script: load hard-coded defaults
+# this function can be overriden by other packages for integrations
+BootstrapMagic.on 'start', -> @setDefaults {}
+
+Template._bootstrap_magic.onCreated ->
+  BootstrapMagic.start() if BootstrapMagic.start
+
+Template._bootstrap_magic.onRendered ->
+  BootstrapMagic.dictionary.currentCategory.set bootstrap_magic_variables[0].category
+  BootstrapMagic.dictionary.currentSubCategory.set bootstrap_magic_variables[0]._id
+
+# this recursive function takes an object with {_id: bootstrapKey} format
+# it will return all 'computed' values, if it's value relates to another bootstrap variable
 mapVariableOverrides = (obj) ->
   obj.isOverride = false
   obj.isReference = false
@@ -76,8 +86,6 @@ mapVariableOverrides = (obj) ->
 
   return obj
 
-searchTerms = new ReactiveVar("")
-
 getCurrentCategory = ->
   myCat = BootstrapMagic.dictionary.currentCategory.get()
   return _.where(bootstrap_magic_variables, { category: myCat })
@@ -86,53 +94,31 @@ getCurrentVariables = ->
   subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
   return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
 
-letsSearch = ->
-  words = searchTerms.get()
-  items = _.map flattenedMagic, mapVariableOverrides
-  searchResults = _.filter items, (obj) => obj._id?.indexOf(words) >- 1
+showSearchResults = ->  # only show the search results if there are 3 characters or more
+  BootstrapMagic.dictionary.searchTerms.get().length >= 3
+
+getSearchResults = ->
+  query = BootstrapMagic.dictionary.searchTerms.get()
+  searchResults = {search: true}
+  searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1
   return searchResults
-
-noSearchInput = -> 
-  mySearchTerms = searchTerms.get()
-  if !mySearchTerms or mySearchTerms.length < 3 then true else false
-
-Template._bootstrap_magic.onCreated ->
-  BootstrapMagic.start() if BootstrapMagic.start
-
-Template._bootstrap_magic.onRendered ->
-  BootstrapMagic.dictionary.currentCategory.set bootstrap_magic_variables[0].category
-  BootstrapMagic.dictionary.currentSubCategory.set bootstrap_magic_variables[0]._id
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
 Template._bootstrap_magic.helpers
   "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
   "subCategories" : getCurrentCategory
-  "currentVars" : getCurrentVariables
-  "mappedVariables" : -> if noSearchInput() then _.map @data, mapVariableOverrides else letsSearch()
   "isSelectedCat" : -> @category is BootstrapMagic.dictionary.currentCategory.get()
+  "currentVars" : -> if showSearchResults() then getSearchResults() else getCurrentVariables()
+  "mappedVariables" : -> _.map @data, mapVariableOverrides
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "typeIs" : (type) -> @type is type
-  "searchInactive" : -> noSearchInput()
-  "searchHeader" :->  if letsSearch().length is 0 then "No Search Results" else "Search Results: "
 
 Template._bootstrap_magic.events
-  'keyup .magic-search' : (e) -> 
-    searchTerms.set e.currentTarget.value
-
-  'click .magic-filter-item' :(e) ->
-    $filter = $(e.currentTarget)
-    $filter.toggleClass 'filtered'
-    $filterTerms = $('.filtered').text()
-    $('.magic-filter').html $filterTerms
-    if $('.magic-filter-item').hasClass 'filtered'
-      $('.magic-filter').removeClass "glyphicon glyphicon-filter"
-      # $filter.append $('<span class="glyphicon glyphicon-ok"></span>')
-    else 
-      $('.magic-filter').addClass "glyphicon glyphicon-filter"
-      # $filter.removeClass
+  'keyup .search-container input.search-input' : (e) ->
+    BootstrapMagic.dictionary.searchTerms.set e.currentTarget.value
 
   'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
