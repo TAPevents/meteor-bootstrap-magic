@@ -40,12 +40,10 @@ Tracker.autorun ->
 
 # TODO
 
-- Better UI / examples
-- Smart variable inheretance: changing `@brand-primary` should change `@link-color` unless `@link-color` is override
-- Extendable default fonts
-- Search/Filter Feature
+- Extendable font selection
+- Better UI / examples / organization
+- Filter feature
 - Custom preview templates (maybe)
-- Fix When tooltip is pinned, it doesn't flicker
 
 # Lisence
 

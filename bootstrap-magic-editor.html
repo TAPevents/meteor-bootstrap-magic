@@ -5,31 +5,46 @@
 <template name="_bootstrap_magic">
   <div class='bootstrap-magic-container'>
 
+    <div class="search-container container-fluid">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+        <input type="search" class="form-control search-input" placeholder="Search">
+      </div>
+    </div>
+    
     <div class="menus container-fluid">
-      <div class="main-menu">
-        <ul class="nav nav-pills">
-          {{#each categories}}
-            <li class="{{#if isSelectedCat}}active{{/if}}">
-              <a href="#"><i class="glyphicon glyphicon-{{icon}}"></i>&nbsp;<span>{{_ category}}</span></a>
-            </li>
-          {{/each}}
-        </ul>
-      </div>
-      <div class="sub-menu menu-compact">
-        <ul class="nav nav-pills">
-          {{#each subCategories}}
-            <li class="{{#if isSelectedSubCat}}active{{/if}}">
-              <a href="#"><i class="glyphicon glyphicon-{{icon}}"></i>&nbsp;<span class="hidden-xs">{{_ _id}}</span></a>
-            </li>
-          {{/each}}
-        </ul>
-      </div>
+      {{#unless currentVars.search}}
+        <div class="main-menu">
+          <ul class="nav nav-pills">
+            {{#each categories}}
+              <li class="{{#if isSelectedCat}}active{{/if}}">
+                <a href="#"><i class="glyphicon glyphicon-{{icon}}"></i>&nbsp;<span>{{_ category}}</span></a>
+              </li>
+            {{/each}}
+          </ul>
+        </div>
+        <div class="sub-menu menu-compact">
+          <ul class="nav nav-pills">
+            {{#each subCategories}}
+              <li class="{{#if isSelectedSubCat}}active{{/if}}">
+                <a href="#"><i class="glyphicon glyphicon-{{icon}}"></i>&nbsp;<span class="hidden-xs">{{_ _id}}</span></a>
+              </li>
+            {{/each}}
+          </ul>
+        </div>
+      {{/unless}}
     </div>
 
     <div class="content container-fluid">
-      {{#with currentSubCat}}
+      {{#with currentVars}}
         <section class="sub-cat-item">
-          <h3>{{_ _id}}</h3>
+            {{#if search}}
+              <h3>Search <small class='text-muted'>{{_ "search_count" count=mappedVariables.length}}</small></h3>
+              <hr/>
+            {{else}}
+              <h3>{{_ _id}}</h3>
+            {{/if}}
+
           <div class="row">
             <div class="col-sm-4">
               {{#each mappedVariables}}
@@ -38,9 +53,11 @@
                 {{/bootstrap_magic_input}}
               {{/each}}
             </div>
-            <div class="col-sm-8">
-              {{> previewTmpl}}
-            </div>
+            {{#unless search}}
+              <div class="col-sm-8">
+                {{> previewTmpl}}
+              </div>
+            {{/unless}}
           </div>
         </section>
       {{/with}}

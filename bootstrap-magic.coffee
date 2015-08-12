@@ -5,7 +5,6 @@ for group in bootstrap_magic_variables
     flattenedMagic[item._id] = item
     flattenedMagicValues[item._id] = item.value
 
-
 ###
 # EXPORTS
 ###
@@ -15,6 +14,7 @@ for group in bootstrap_magic_variables
     defaults : new ReactiveDict()
     currentCategory : new ReactiveVar()
     currentSubCategory : new ReactiveVar()
+    searchTerms : new ReactiveVar('')
 
   on : (eventName, callback) ->
     @[eventName] = callback
@@ -33,7 +33,13 @@ for group in bootstrap_magic_variables
       @dictionary[dictionaryName].set key, val
 
   setOverride : (key, val) -> @setOne 'overrides', key, val
-  setOverrides : (obj) -> @setMany 'overrides', obj
+  setOverrides : (obj) ->
+    # clear the previous overrides
+    for key,val of @dictionary['overrides'].keys
+      @dictionary['overrides'].set key, null
+    # override wth passed obj
+    @setMany 'overrides', obj
+
   setDefault : (key, val) -> @setOne 'defaults', key, val
   setDefaults : (obj) ->
     # clear the previous defaults
@@ -44,14 +50,23 @@ for group in bootstrap_magic_variables
     # override with user defaults
     @setMany 'defaults', obj
 
-# default starting script: load hard-coded defaults
-# this function can be overriden by other packages for integrations
-BootstrapMagic.on 'start', -> @setDefaults {}
-
 
 ###
 # UI
 ###
+# default starting script: load hard-coded defaults
+# this function can be overriden by other packages for integrations
+BootstrapMagic.on 'start', -> @setDefaults {}
+
+Template._bootstrap_magic.onCreated ->
+  BootstrapMagic.start() if BootstrapMagic.start
+
+Template._bootstrap_magic.onRendered ->
+  BootstrapMagic.dictionary.currentCategory.set bootstrap_magic_variables[0].category
+  BootstrapMagic.dictionary.currentSubCategory.set bootstrap_magic_variables[0]._id
+
+# this recursive function takes an object with {_id: bootstrapKey} format
+# it will return all 'computed' values, if it's value relates to another bootstrap variable
 mapVariableOverrides = (obj) ->
   obj.isOverride = false
   obj.isReference = false
@@ -81,31 +96,36 @@ getCurrentCategory = ->
   myCat = BootstrapMagic.dictionary.currentCategory.get()
   return _.where(bootstrap_magic_variables, { category: myCat })
 
-getCurrentSubCategory = ->
+getCurrentVariables = ->
   subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
   return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
 
-Template._bootstrap_magic.onCreated ->
-  BootstrapMagic.start() if BootstrapMagic.start
+showSearchResults = ->  # only show the search results if there are 3 characters or more
+  BootstrapMagic.dictionary.searchTerms.get().length >= 3
 
-Template._bootstrap_magic.onRendered ->
-  BootstrapMagic.dictionary.currentCategory.set bootstrap_magic_variables[0].category
-  BootstrapMagic.dictionary.currentSubCategory.set bootstrap_magic_variables[0]._id
+getSearchResults = ->
+  query = BootstrapMagic.dictionary.searchTerms.get()
+  searchResults = {search: true}
+  searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1
+  return searchResults
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
 Template._bootstrap_magic.helpers
   "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
   "subCategories" : getCurrentCategory
-  "currentSubCat" : getCurrentSubCategory
-  "mappedVariables" : -> _.map @data, mapVariableOverrides
   "isSelectedCat" : -> @category is BootstrapMagic.dictionary.currentCategory.get()
+  "currentVars" : -> if showSearchResults() then getSearchResults() else getCurrentVariables()
+  "mappedVariables" : -> _.map @data, mapVariableOverrides
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
   "typeIs" : (type) -> @type is type
 
 Template._bootstrap_magic.events
+  'keyup .search-input' : (e) ->
+    BootstrapMagic.dictionary.searchTerms.set e.currentTarget.value
+
   'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
     BootstrapMagic.setOverride @_id, $input.val() || undefined
