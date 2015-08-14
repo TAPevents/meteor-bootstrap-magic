@@ -95,7 +95,9 @@ mapVariableOverrides = (obj) ->
 
 getCurrentCategory = ->
   myCat = BootstrapMagic.dictionary.currentCategory.get()
-  return _.where bootstrap_magic_variables, { category: myCat }
+  subCats = _.where bootstrap_magic_variables, category: myCat
+  # https://github.com/TAPevents/tap-i18n/issues/100
+  return _.sortBy subCats, (cat) -> TAPi18n.__ cat._id
 
 getCurrentVariables = ->
   subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
@@ -158,13 +160,18 @@ getSearchResults = ->
 
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
-
+spaceToHyphen = (str) -> str.replace(/\s/g, '-')
+  
 Template._bootstrap_magic.helpers
-  'categories' : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
-  'subCategories' : getCurrentCategory
-  'isSelectedCat' : -> @category is BootstrapMagic.dictionary.currentCategory.get()
-  'currentVars' : -> if showSearchResults() then getSearchResults() else getCurrentVariables()
-  'mappedVariables' : -> 
+  "categories" : _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) -> _id: obj[0].category
+  "subCategories" : getCurrentCategory
+  "isSelectedCat" : -> @_id is BootstrapMagic.dictionary.currentCategory.get()
+  "currentVars" : -> if showSearchResults() then getSearchResults() else getCurrentVariables()
+  "mappedVariables" : -> _.map @data, mapVariableOverrides
+  "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
+  "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
+  "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
+  "mappedVariables" : ->
     myMap = _.map @data, mapVariableOverrides
     console.log myMap
 
@@ -214,24 +221,18 @@ Template._bootstrap_magic.helpers
     console.log "filtered it: ", allPx
 
     return myMap
-  
 
-  'isSelectedSubCat' : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
-  'previewTmpl' : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
-  'inputTmpl' : -> Template["bootstrap_magic_input_#{@type}"] || null
 
 Template._bootstrap_magic.events
   'keyup .search-input' : (e) ->
-    BootstrapMagic.dictionary.searchTerms.set e.currentTarget.value
-    # BootstrapMagic.dictionary.searchTerms.set 'padd' #setting search so I don't have to click page
-
+    BootstrapMagic.dictionary.searchTerms.set spaceToHyphen e.currentTarget.value
 
   'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
     BootstrapMagic.setOverride @_id, $input.val() || undefined
 
   'click .main-menu a' : ->
-    BootstrapMagic.dictionary.currentCategory.set @category
+    BootstrapMagic.dictionary.currentCategory.set @_id
     BootstrapMagic.dictionary.currentSubCategory.set getCurrentCategory()[0]._id # set subcategory to the first child
  
   'click .sub-menu a' : ->
@@ -288,11 +289,11 @@ Template.bootstrap_magic_input.helpers
 Template.bootstrap_magic_input.onRendered ->
   $popoverLabel = @$('.popover-label')
   $popoverLabel.popover
-    placement: 'auto right'
+    placement: 'right'
     trigger: 'manual'
     html: true
-    container: $popoverLabel
     animation: true
+    container: $popoverLabel
     template: """
       <div class="popover popover-list" role="tooltip">
         <div class="arrow"></div>
@@ -321,31 +322,6 @@ Template.bootstrap_magic_input.onRendered ->
 
 Template.bootstrap_magic_input.onDestroyed ->
   @$('[data-toggle="popover"]').popover('destroy')
-
-pxRange = -> 
-  pixelTypes = {}
-  pixelTypes.data = _.filter flattenedMagic, (obj) -> obj.value.indexOf('px') > -1
-
-
-  # console.log "flat magic: ", flattenedMagic
-  # console.log "flat value only: ", _.filter flattenedMagic, (obj) -> obj.value
-  # console.log "mapped Var: ", _.map @data, mapVariableOverrides
-
-  # pixelTypes.data = _.filter flattenedMagic, (obj) -> obj.value.indexOf('px') > -1
-  # console.log "where: ", _.contains flattenedMagic.value, 'px'
-  return pixelTypes
-
-pxRange()
-
-# "typeIs" : (type) -> 
-#   console.log "type: ", @type
-#   @type is type
-
-Template.bootstrap_magic_input_number.helpers
-  # 'isPx': -> 
-  # 'min': -> return 0
-  # 'max': -> 100
-  # 'step': -> 1
 
 Template.bootstrap_magic_input_number.onRendered ->
   @$('[data-toggle="tooltip"]').tooltip()
