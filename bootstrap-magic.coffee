@@ -109,6 +109,46 @@ getSearchResults = ->
   searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1
   return searchResults
 
+# PSUEDO CODE
+# if type is numebr 
+#    if value is in pixels
+#    
+#       if _id contains font-size
+#          then the min should be 6, max should be 96, the step should be 1
+#          return value in px
+#           
+#       if _id contains 'scaffolding' or  'padding'
+#           then the min should be 0, max should be 120, the step should be 1
+#           
+#       if _id contains 'radius'
+#           then the min should be 0, max should be 100, the step should be 1 (so vanilla!)
+#       
+#       if _id is 'table' or contains 'arrow width'
+#           then the min should be 0, max should be 50, the step should be 1
+#       
+#       if _id contains 'max width' or 'max-height'
+#           then the min should be 0, max should be 500, the step should be 1
+#       
+#       if _id contains modal
+#           then the min should be 0, max should be 200, the step should be 1
+#       
+#       if value contains 2 'px' value
+#           then add class multiple to range
+#       
+#    for values not pixels      
+#       if _id is line-height
+#           then the min should be 0.2, max should be 8, the step should be 0.1
+#
+#       if _id is font-weight
+#            then the min should be 100, max should be 900, the step should be 100
+#            
+#       if _id contains opacity
+#             then the min should be 0, max should be 1, the step should be 0.5  
+#
+#     if value is percent
+#       then min should be 0, max should be 100, the step should be 1
+
+
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
 Template._bootstrap_magic.helpers
@@ -120,11 +160,12 @@ Template._bootstrap_magic.helpers
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
-  "typeIs" : (type) -> @type is type
 
 Template._bootstrap_magic.events
   'keyup .search-input' : (e) ->
-    BootstrapMagic.dictionary.searchTerms.set e.currentTarget.value
+    # BootstrapMagic.dictionary.searchTerms.set e.currentTarget.value
+    BootstrapMagic.dictionary.searchTerms.set 'padd' #setting search so I don't have to click page
+
 
   'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
@@ -222,7 +263,23 @@ Template.bootstrap_magic_input.onRendered ->
 Template.bootstrap_magic_input.onDestroyed ->
   @$('[data-toggle="popover"]').popover('destroy')
 
-# Tempalte examples
+pixelsRange = -> 
+  searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1
+  console.log searchResults
+  return searchResults
+
+
+Template.bootstrap_magic_input_number.helpers
+  'min': -> return 0
+  'max': -> 100
+
+Template.bootstrap_magic_input_number.onRendered ->
+  @$('[data-toggle="tooltip"]').tooltip()
+
+Template.bootstrap_magic_input_number.onDestroyed ->
+  @$('[data-toggle="tooltip"]').tooltip('destroy')
+
+# Template examples
 
 Template.bootstrap_magic_preview_popovers.onRendered ->
   @$('[data-toggle="popover"]').popover()
