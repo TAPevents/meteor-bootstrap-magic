@@ -204,6 +204,8 @@ Template._bootstrap_magic.helpers
           data.min = 0
           data.max = 100
 
+        #get values for obj.reference.value 
+
     console.log "filtered it: ", allPx
 
     return myMap
