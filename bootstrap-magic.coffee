@@ -94,7 +94,9 @@ mapVariableOverrides = (obj) ->
 
 getCurrentCategory = ->
   myCat = BootstrapMagic.dictionary.currentCategory.get()
-  return _.where(bootstrap_magic_variables, { category: myCat })
+  subCats = _.where bootstrap_magic_variables, category: myCat
+  # https://github.com/TAPevents/tap-i18n/issues/100
+  return _.sortBy subCats, (cat) -> TAPi18n.__ cat._id
 
 getCurrentVariables = ->
   subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
@@ -113,9 +115,9 @@ camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$
 spaceToHyphen = (str) -> str.replace(/\s/g, '-')
   
 Template._bootstrap_magic.helpers
-  "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
+  "categories" : _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) -> _id: obj[0].category
   "subCategories" : getCurrentCategory
-  "isSelectedCat" : -> @category is BootstrapMagic.dictionary.currentCategory.get()
+  "isSelectedCat" : -> @_id is BootstrapMagic.dictionary.currentCategory.get()
   "currentVars" : -> if showSearchResults() then getSearchResults() else getCurrentVariables()
   "mappedVariables" : -> _.map @data, mapVariableOverrides
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
@@ -132,7 +134,7 @@ Template._bootstrap_magic.events
     BootstrapMagic.setOverride @_id, $input.val() || undefined
 
   'click .main-menu a' : ->
-    BootstrapMagic.dictionary.currentCategory.set @category
+    BootstrapMagic.dictionary.currentCategory.set @_id
     BootstrapMagic.dictionary.currentSubCategory.set getCurrentCategory()[0]._id # set subcategory to the first child
  
   'click .sub-menu a' : ->
@@ -189,11 +191,11 @@ Template.bootstrap_magic_input.helpers
 Template.bootstrap_magic_input.onRendered ->
   $popoverLabel = @$('.popover-label')
   $popoverLabel.popover
-    placement: 'auto right'
+    placement: 'right'
     trigger: 'manual'
     html: true
-    container: $popoverLabel
     animation: true
+    container: $popoverLabel
     template: """
       <div class="popover popover-list" role="tooltip">
         <div class="arrow"></div>

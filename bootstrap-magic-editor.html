@@ -6,7 +6,7 @@
   <div class='bootstrap-magic-container'>
 
     <div class="search-container container-fluid">
-      <div class="input-group">
+      <div class="input-group input-group-lg">
         <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
         <input type="search" class="form-control search-input" placeholder="Search">
       </div>
@@ -15,10 +15,10 @@
     <div class="menus container-fluid">
       {{#unless currentVars.search}}
         <div class="main-menu">
-          <ul class="nav nav-pills">
+          <ul class="nav nav-tabs">
             {{#each categories}}
               <li class="{{#if isSelectedCat}}active{{/if}}">
-                <a href="#"><i class="glyphicon glyphicon-{{icon}}"></i>&nbsp;<span>{{_ category}}</span></a>
+                <a href="#"><i class="glyphicon glyphicon-{{icon}}"></i>&nbsp;<span>{{_ _id}}</span></a>
               </li>
             {{/each}}
           </ul>
@@ -84,6 +84,15 @@
 <template name="bootstrap_magic_input_text">
   <div class="input">
     <input type="text" class="form-control bootstrap-magic-input monospace-font" name="{{key}}" placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{/if}}">
+  </div>
+</template>
+
+<template name="bootstrap_magic_input_slider">
+  <div class="input">
+    <input type="range" class="bootstrap-magic-input magic-slider monospace-font" name="{{key}}">
+    <!--  
+    placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{/if}}"
+    -->
   </div>
 </template>
 

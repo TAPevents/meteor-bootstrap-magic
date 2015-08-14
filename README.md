@@ -40,10 +40,16 @@ Tracker.autorun ->
 
 # TODO
 
-- Extendable font selection
-- Better UI / examples / organization
-- Filter feature
-- Custom preview templates (maybe)
+```
+1.0
+- Examples for every group
+- Docs
+
+1.1
+- Sticky examples
+- Multiple Layers of child varriables, Better UI for navigating them
+- Font selection type (Google Fonts Integration)
+```
 
 # Lisence
 
