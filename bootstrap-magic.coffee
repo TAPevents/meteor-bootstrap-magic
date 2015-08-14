@@ -170,17 +170,17 @@ Template._bootstrap_magic.helpers
     # console.log "found exactly: ", _.where myMap, {value: '14px'}
     allPx = _.filter myMap, (data) -> 
       if data.value?.indexOf('px') > -1
-        data.min = 20
-        data.max = 80
         data.step = 1
+        console.log "the value: ", data.value
+#this should be a calculation. so now i should get the value from the data
+        pxNum = (data.value).match /\d+/g
+        if pxNum > 1
+          data.min = 20
+          data.max = 80
 
     console.log "filtered it: ", allPx
-    
-
-    console.log "found it: ", _.contains myMap, 'px'
 
 
-    
     return _.map @data, mapVariableOverrides
   
 
