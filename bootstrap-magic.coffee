@@ -188,7 +188,7 @@ Template.bootstrap_magic_input.helpers
 Template.bootstrap_magic_input.onRendered ->
   $popoverLabel = @$('.popover-label')
   $popoverLabel.popover
-    placement: 'auto right'
+    placement: 'right'
     trigger: 'manual'
     html: true
     container: $popoverLabel
