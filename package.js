@@ -15,7 +15,7 @@ Package.on_use(function(api) {
     'templating',
     'underscore',
     'less',
-    'tap:i18n@1.5.0',
+    'tap:i18n@1.5.1',
     'hitchcott:ez-modal@0.3.1'
   ], ['client', 'server']);
 
