@@ -184,7 +184,7 @@ Template._bootstrap_magic.helpers
           data.min = 0
           data.max = 1
 
-        else if data_id?.indexOf('headings-font-weight') > -1
+        else if data._id?.indexOf('headings-font-weight') > -1
           data.step = 100
           data.min = 100
           data.max = 900
@@ -198,7 +198,7 @@ Template._bootstrap_magic.helpers
           console.log "the first value: ", 
           # data.max = 7.00*num[1]
 
-        else if data_value?.indexOf('%') > -1
+        else if data.value?.indexOf('%') > -1
           data.unit = unit
           data.step = 1
           data.min = 0
