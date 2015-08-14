@@ -166,14 +166,19 @@ Template._bootstrap_magic.helpers
   'currentVars' : -> if showSearchResults() then getSearchResults() else getCurrentVariables()
   'mappedVariables' : -> 
     myMap = _.map @data, mapVariableOverrides
+    console.log myMap
 
     allPx = _.filter myMap, (data) -> 
 
       if data.type is 'number'
         num = (data.value).match /\d+/g #regex to parse numbers from string
         unit = (data.value).match /\D+/g #regex to parse unit from string
+        console.log "the data before: ", data.value
+    
 
         if data.value?.indexOf('px') > -1
+          console.log "the data after: ", data.value
+          data.num = num.toString()
           data.unit = unit
           data.step = 1
           data.min = 0
