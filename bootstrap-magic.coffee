@@ -110,7 +110,8 @@ getSearchResults = ->
   return searchResults
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
-
+spaceToHyphen = (str) -> str.replace(/\s/g, '-')
+  
 Template._bootstrap_magic.helpers
   "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
   "subCategories" : getCurrentCategory
@@ -124,7 +125,7 @@ Template._bootstrap_magic.helpers
 
 Template._bootstrap_magic.events
   'keyup .search-input' : (e) ->
-    BootstrapMagic.dictionary.searchTerms.set e.currentTarget.value
+    BootstrapMagic.dictionary.searchTerms.set spaceToHyphen(e.currentTarget.value)
 
   'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
