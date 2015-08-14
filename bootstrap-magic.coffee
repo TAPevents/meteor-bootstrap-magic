@@ -94,10 +94,17 @@ mapVariableOverrides = (obj) ->
 
 getCurrentCategory = ->
   myCat = BootstrapMagic.dictionary.currentCategory.get()
-  return _.where(bootstrap_magic_variables, { category: myCat })
+  return _.where bootstrap_magic_variables, { category: myCat }
 
 getCurrentVariables = ->
   subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
+
+  # allVars =  _.find bootstrap_magic_variables, (group) -> group._id is subCatId
+  # console.log "all Vars: ", allVars
+  # console.log "allVars value: ", allVars.data
+  # pixResult = _.contains allVars.value, 'px'
+  # console.log "pixVars: ", pixResult
+
   return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
 
 showSearchResults = ->  # only show the search results if there are 3 characters or more
@@ -152,14 +159,34 @@ getSearchResults = ->
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 
 Template._bootstrap_magic.helpers
-  "categories" : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
-  "subCategories" : getCurrentCategory
-  "isSelectedCat" : -> @category is BootstrapMagic.dictionary.currentCategory.get()
-  "currentVars" : -> if showSearchResults() then getSearchResults() else getCurrentVariables()
-  "mappedVariables" : -> _.map @data, mapVariableOverrides
-  "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
-  "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
-  "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
+  'categories' : ->  _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) ->  obj[0]
+  'subCategories' : getCurrentCategory
+  'isSelectedCat' : -> @category is BootstrapMagic.dictionary.currentCategory.get()
+  'currentVars' : -> if showSearchResults() then getSearchResults() else getCurrentVariables()
+  'mappedVariables' : -> 
+    myMap = _.map @data, mapVariableOverrides
+    console.log "data value: ", myMap
+
+    # console.log "found exactly: ", _.where myMap, {value: '14px'}
+    allPx = _.filter myMap, (data) -> 
+      if data.value?.indexOf('px') > -1
+        data.min = 20
+        data.max = 80
+        data.step = 1
+
+    console.log "filtered it: ", allPx
+    
+
+    console.log "found it: ", _.contains myMap, 'px'
+
+
+    
+    return _.map @data, mapVariableOverrides
+  
+
+  'isSelectedSubCat' : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
+  'previewTmpl' : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
+  'inputTmpl' : -> Template["bootstrap_magic_input_#{@type}"] || null
 
 Template._bootstrap_magic.events
   'keyup .search-input' : (e) ->
@@ -263,15 +290,30 @@ Template.bootstrap_magic_input.onRendered ->
 Template.bootstrap_magic_input.onDestroyed ->
   @$('[data-toggle="popover"]').popover('destroy')
 
-pixelsRange = -> 
-  searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1
-  console.log searchResults
-  return searchResults
+pxRange = -> 
+  pixelTypes = {}
+  pixelTypes.data = _.filter flattenedMagic, (obj) -> obj.value.indexOf('px') > -1
 
+
+  # console.log "flat magic: ", flattenedMagic
+  # console.log "flat value only: ", _.filter flattenedMagic, (obj) -> obj.value
+  # console.log "mapped Var: ", _.map @data, mapVariableOverrides
+
+  # pixelTypes.data = _.filter flattenedMagic, (obj) -> obj.value.indexOf('px') > -1
+  # console.log "where: ", _.contains flattenedMagic.value, 'px'
+  return pixelTypes
+
+pxRange()
+
+# "typeIs" : (type) -> 
+#   console.log "type: ", @type
+#   @type is type
 
 Template.bootstrap_magic_input_number.helpers
-  'min': -> return 0
-  'max': -> 100
+  # 'isPx': -> 
+  # 'min': -> return 0
+  # 'max': -> 100
+  # 'step': -> 1
 
 Template.bootstrap_magic_input_number.onRendered ->
   @$('[data-toggle="tooltip"]').tooltip()

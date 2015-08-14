@@ -92,7 +92,7 @@
     <input type="text" class="form-control bootstrap-magic-input monospace-font" name="{{key}}" placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{/if}}"/>
     <br/>
     <div class="form-inline">
-        <label class="range-min">0</label><input type="range" class="bootstrap-magic-input magic-slider monospace-font" name="{{key}}" value="{{value}}" min="0" max="50" step="1" /><label class="range-max">100</label>{{test}}
+        <label class="range-min">{{min}}</label><input type="range" class="bootstrap-magic-input magic-slider monospace-font" name="{{key}}" value="{{value}}" min="{{min}}" max="{{max}}" step="{{step}}" /><label class="range-max">{{max}}</label>
 
         <!--  
         placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{/if}}"-->
