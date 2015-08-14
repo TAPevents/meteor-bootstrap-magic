@@ -101,13 +101,6 @@ getCurrentCategory = ->
 
 getCurrentVariables = ->
   subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
-
-  # allVars =  _.find bootstrap_magic_variables, (group) -> group._id is subCatId
-  # console.log "all Vars: ", allVars
-  # console.log "allVars value: ", allVars.data
-  # pixResult = _.contains allVars.value, 'px'
-  # console.log "pixVars: ", pixResult
-
   return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
 
 showSearchResults = ->  # only show the search results if there are 3 characters or more
@@ -118,46 +111,6 @@ getSearchResults = ->
   searchResults = {search: true}
   searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1
   return searchResults
-
-# PSUEDO CODE
-# if type is numebr 
-#    if value is in pixels
-#    
-#       if _id contains font-size
-#          then the min should be 6, max should be 96, the step should be 1
-#          return value in px
-#           
-#       if _id contains 'scaffolding' or  'padding'
-#           then the min should be 0, max should be 120, the step should be 1
-#           
-#       if _id contains 'radius'
-#           then the min should be 0, max should be 100, the step should be 1 (so vanilla!)
-#       
-#       if _id is 'table' or contains 'arrow width'
-#           then the min should be 0, max should be 50, the step should be 1
-#       
-#       if _id contains 'max width' or 'max-height'
-#           then the min should be 0, max should be 500, the step should be 1
-#       
-#       if _id contains modal
-#           then the min should be 0, max should be 200, the step should be 1
-#       
-#       if value contains 2 'px' value
-#           then add class multiple to range
-#       
-#    for values not pixels      
-#       if _id is line-height
-#           then the min should be 0.2, max should be 8, the step should be 0.1
-#
-#       if _id is font-weight
-#            then the min should be 100, max should be 900, the step should be 100
-#            
-#       if _id contains opacity
-#             then the min should be 0, max should be 1, the step should be 0.5  
-#
-#     if value is percent
-#       then min should be 0, max should be 100, the step should be 1
-
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 spaceToHyphen = (str) -> str.replace(/\s/g, '-')
@@ -171,56 +124,6 @@ Template._bootstrap_magic.helpers
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
-  "mappedVariables" : ->
-    myMap = _.map @data, mapVariableOverrides
-    console.log myMap
-
-    allPx = _.filter myMap, (data) -> 
-
-      if data.type is 'number'
-        num = (data.value).match /\d+/g #regex to parse numbers from string
-        unit = (data.value).match /\D+/g #regex to parse unit from string
-        console.log "the data before: ", data.value
-    
-
-        if data.value?.indexOf('px') > -1
-          console.log "the data after: ", data.value
-          data.num = num.toString()
-          data.unit = unit
-          data.step = 1
-          data.min = 0
-          data.max = num*7
-        
-        else if data._id?.indexOf('opacity') > -1
-          data.step = 0.05
-          data.min = 0
-          data.max = 1
-
-        else if data._id?.indexOf('headings-font-weight') > -1
-          data.step = 100
-          data.min = 100
-          data.max = 900
-
-        else if data._id?.indexOf('line-height') > -1
-          data.step = 0.1
-          data.min = 0.2
-          console.log "this max: ", num
-          console.log "num is type: ", Object.prototype.toString.call num
-          console.log "num is type: ", Array.isArray num
-          console.log "the first value: ", 
-          # data.max = 7.00*num[1]
-
-        else if data.value?.indexOf('%') > -1
-          data.unit = unit
-          data.step = 1
-          data.min = 0
-          data.max = 100
-
-        #get values for obj.reference.value 
-
-    console.log "filtered it: ", allPx
-
-    return myMap
 
 
 Template._bootstrap_magic.events
@@ -323,11 +226,40 @@ Template.bootstrap_magic_input.onRendered ->
 Template.bootstrap_magic_input.onDestroyed ->
   @$('[data-toggle="popover"]').popover('destroy')
 
-Template.bootstrap_magic_input_number.onRendered ->
-  @$('[data-toggle="tooltip"]').tooltip()
 
-Template.bootstrap_magic_input_number.onDestroyed ->
-  @$('[data-toggle="tooltip"]').tooltip('destroy')
+unitRanges =
+  'px' :
+    min: 0
+    max: 40
+    step: 1
+  '%' :
+    min: 0
+    max: 100
+    step: 5
+
+getUnitFromContext = ->
+  matchVal = @reference?.value || @value
+  for unit, val of unitRanges
+    if matchVal.indexOf(unit) > -1
+      return unit
+
+Template.bootstrap_magic_input_number.helpers
+  'unitRange' : ->
+    myUnit = getUnitFromContext.apply @
+    ranges = _.clone(unitRanges[myUnit] || {})
+    ranges.unit = myUnit
+    ranges.current = parseInt(@reference?.value || @value)
+    if ranges.current > ranges.max
+      ranges.max = ranges.current
+    return ranges
+
+Template.bootstrap_magic_input_number.events
+  "input input[type='range']" : (e, tmpl) ->
+    $("input[type='text']", tmpl.firstNode).val "#{e.currentTarget.value}#{@unit}"
+
+  "change input[type='range']" : (e, tmpl) ->
+    $(".bootstrap-magic-input", tmpl.firstNode).trigger 'change'
+
 
 # Template examples
 

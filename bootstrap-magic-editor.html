@@ -66,7 +66,7 @@
 </template>
 
 <template name="bootstrap_magic_input">
-  <div class="form-group{{#if isOverride}} overridden{{/if}}">
+  <div class="form-group{{#if isOverride}} overridden{{/if}} variable-cell">
     <label class="labelTitle">{{_id}}</label>
     {{#if myChildren.length}}
       &nbsp;
@@ -82,21 +82,32 @@
 </template>
 
 <template name="bootstrap_magic_input_text">
-  <div class="input">
+  <div class="text-input">
     <input type="text" class="form-control bootstrap-magic-input monospace-font" name="{{key}}" placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{/if}}"/>
   </div>
 
 </template>
 
 <template name="bootstrap_magic_input_number">
-  <div class="input">
-    <input type="text" class="form-control bootstrap-magic-input monospace-font" name="{{key}}" placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{unit}}{{/if}}"/>
-    <br/>
-    <div class="form-inline">
-      <label class="range-min">{{min}}</label>
-      <input type="range" class="bootstrap-magic-input magic-slider monospace-font" name="{{key}}" value="{{num}}" min="{{min}}" max="{{max}}" step="{{step}}" />
-      <label class="range-max">{{max}}</label>      
-    </div>
+  <div class="number-input">
+    <input type="text" class="form-control bootstrap-magic-input monospace-font" name="{{key}}" placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{/if}}"/>
+
+    {{#with unitRange}}
+      {{#if unit}}
+      <div class="row-fluid slider">
+        <div class="col-sm-2 range-unit">
+          {{min}}{{unit}}
+        </div>
+        <div class="col-sm-8">
+          <input type="range" class="input-block magic-slider monospace-font" value="{{current}}" min="{{min}}" max="{{max}}" step="{{step}}" />
+        </div>
+        <div class="col-sm-2 range-unit">
+          {{max}}{{unit}}
+        </div>
+      </div>
+      {{/if}}
+    {{/with}}
+
   </div>
 </template>
 
@@ -108,7 +119,7 @@
 </template>
 
 <template name="bootstrap_magic_input_font">
-  <div class="input">
+  <div class="font-input">
     <input type="text" class="form-control bootstrap-magic-input monospace-font" name="{{key}}" placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{/if}}">
   </div>
 </template>
