@@ -85,18 +85,17 @@
   <div class="input">
     <input type="text" class="form-control bootstrap-magic-input monospace-font" name="{{key}}" placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{/if}}"/>
   </div>
+
 </template>
 
 <template name="bootstrap_magic_input_number">
   <div class="input">
-    <input type="text" class="form-control bootstrap-magic-input monospace-font" name="{{key}}" placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{/if}}"/>
+    <input type="text" class="form-control bootstrap-magic-input monospace-font" name="{{key}}" placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{unit}}{{/if}}"/>
     <br/>
     <div class="form-inline">
-        <label class="range-min">{{min}}</label><input type="range" class="bootstrap-magic-input magic-slider monospace-font" name="{{key}}" value="{{value}}" min="{{min}}" max="{{max}}" step="{{step}}" /><label class="range-max">{{max}}</label>
-
-        <!--  
-        placeholder="{{value}}{{#if isReference}} - {{reference.value}}{{/if}}" value="{{#if isOverride}}{{value}}{{/if}}"-->
-      
+      <label class="range-min">{{min}}</label>
+      <input type="range" class="bootstrap-magic-input magic-slider monospace-font" name="{{key}}" value="{{value}}{{#if isReference}}{{value}}{{/if}}" min="{{min}}" max="{{max}}" step="{{step}}" />
+      <label class="range-max">{{max}}</label>      
     </div>
   </div>
 </template>

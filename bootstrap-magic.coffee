@@ -86,6 +86,7 @@ mapVariableOverrides = (obj) ->
     obj.parentVar = obj.value 
 
     obj.reference = mapVariableOverrides {_id: obj.value}
+
     obj.reference.value?= '?'
     if obj.reference.reference
       obj.reference = obj.reference.reference
@@ -165,23 +166,47 @@ Template._bootstrap_magic.helpers
   'currentVars' : -> if showSearchResults() then getSearchResults() else getCurrentVariables()
   'mappedVariables' : -> 
     myMap = _.map @data, mapVariableOverrides
-    console.log "data value: ", myMap
 
-    # console.log "found exactly: ", _.where myMap, {value: '14px'}
     allPx = _.filter myMap, (data) -> 
-      if data.value?.indexOf('px') > -1
-        data.step = 1
-        console.log "the value: ", data.value
-#this should be a calculation. so now i should get the value from the data
-        pxNum = (data.value).match /\d+/g
-        if pxNum > 1
-          data.min = 20
-          data.max = 80
+
+      if data.type is 'number'
+        num = (data.value).match /\d+/g #regex to parse numbers from string
+        unit = (data.value).match /\D+/g #regex to parse unit from string
+
+        if data.value?.indexOf('px') > -1
+          data.unit = unit
+          data.step = 1
+          data.min = 0
+          data.max = num*7
+        
+        else if data._id?.indexOf('opacity') > -1
+          data.step = 0.05
+          data.min = 0
+          data.max = 1
+
+        else if data_id?.indexOf('headings-font-weight') > -1
+          data.step = 100
+          data.min = 100
+          data.max = 900
+
+        else if data._id?.indexOf('line-height') > -1
+          data.step = 0.1
+          data.min = 0.2
+          console.log "this max: ", num
+          console.log "num is type: ", Object.prototype.toString.call num
+          console.log "num is type: ", Array.isArray num
+          console.log "the first value: ", 
+          # data.max = 7.00*num[1]
+
+        else if data_value?.indexOf('%') > -1
+          data.unit = unit
+          data.step = 1
+          data.min = 0
+          data.max = 100
 
     console.log "filtered it: ", allPx
 
-
-    return _.map @data, mapVariableOverrides
+    return myMap
   
 
   'isSelectedSubCat' : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
@@ -190,8 +215,8 @@ Template._bootstrap_magic.helpers
 
 Template._bootstrap_magic.events
   'keyup .search-input' : (e) ->
-    # BootstrapMagic.dictionary.searchTerms.set e.currentTarget.value
-    BootstrapMagic.dictionary.searchTerms.set 'padd' #setting search so I don't have to click page
+    BootstrapMagic.dictionary.searchTerms.set e.currentTarget.value
+    # BootstrapMagic.dictionary.searchTerms.set 'padd' #setting search so I don't have to click page
 
 
   'change .bootstrap-magic-input' : (e) ->
