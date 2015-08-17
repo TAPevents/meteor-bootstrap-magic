@@ -8,6 +8,7 @@ for group in bootstrap_magic_variables
 ###
 # EXPORTS
 ###
+
 @BootstrapMagic =
   dictionary :
     overrides : new ReactiveDict()
@@ -15,6 +16,7 @@ for group in bootstrap_magic_variables
     currentCategory : new ReactiveVar()
     currentSubCategory : new ReactiveVar()
     searchTerms : new ReactiveVar('')
+    searchFilters: new ReactiveDict()
 
   on : (eventName, callback) ->
     @[eventName] = callback
@@ -103,18 +105,32 @@ getCurrentVariables = ->
   subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
   return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
 
-showSearchResults = ->  # only show the search results if there are 3 characters or more
-  BootstrapMagic.dictionary.searchTerms.get().length >= 3
+showSearchResults = ->  # only show the search results if there are 3 characters or more, or if you're filtering
+  BootstrapMagic.dictionary.searchTerms.get().length >= 3 or BootstrapMagic.dictionary.searchFilters.get('overrides')
 
 getSearchResults = ->
   query = BootstrapMagic.dictionary.searchTerms.get()
   searchResults = {search: true}
-  searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1
+  if BootstrapMagic.dictionary.searchFilters.get('overrides')
+    searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1 && obj.isOverride is true
+  else 
+    searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1   
   return searchResults
+
+Template.bootstrap_magic_input_number.helpers
+  'unitRange' : ->
+    myUnit = getUnitFromContext.apply @
+    ranges = _.clone(unitRanges[myUnit] || {})
+    ranges.unit = myUnit
+    ranges.current = parseInt(@reference?.value || @value)
+    if ranges.current > ranges.max
+      ranges.max = ranges.current
+    return ranges
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 spaceToHyphen = (str) -> str.replace(/\s/g, '-')
-  
+
+
 Template._bootstrap_magic.helpers
   "categories" : _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) -> _id: obj[0].category
   "subCategories" : getCurrentCategory
@@ -124,11 +140,14 @@ Template._bootstrap_magic.helpers
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
-
+  "filteringOverrides" : -> BootstrapMagic.dictionary.searchFilters.get('overrides')
 
 Template._bootstrap_magic.events
   'keyup .search-input' : (e) ->
     BootstrapMagic.dictionary.searchTerms.set spaceToHyphen e.currentTarget.value
+
+  'click .search-filter' :->
+    BootstrapMagic.dictionary.searchFilters.set 'overrides', !BootstrapMagic.dictionary.searchFilters.get('overrides')
 
   'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
@@ -140,7 +159,6 @@ Template._bootstrap_magic.events
  
   'click .sub-menu a' : ->
     BootstrapMagic.dictionary.currentSubCategory.set @_id
-
 
 ###
 # Colorpicker Create/Destroy
