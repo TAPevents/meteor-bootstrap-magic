@@ -141,6 +141,9 @@ Template._bootstrap_magic.events
   'click .sub-menu a' : ->
     BootstrapMagic.dictionary.currentSubCategory.set @_id
 
+  'click .search-filter' :->
+    console.log "this: ", @
+
 
 ###
 # Colorpicker Create/Destroy
