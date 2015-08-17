@@ -110,7 +110,16 @@ getSearchResults = ->
   query = BootstrapMagic.dictionary.searchTerms.get()
   searchResults = {search: true}
   searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1
+  console.log "SR: ", searchResults
+  console.log "SR data", searchResults.data
   return searchResults
+
+getFilterResults = ->
+  "I'm the filtered results"
+
+  # for line in thisTheme['variables.less'].split('\n') when line.indexOf("@") is 0
+    # doSomething(line)
+  # participants = p for p in @interview.participants when p.email isnt event.data.email
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 spaceToHyphen = (str) -> str.replace(/\s/g, '-')
@@ -120,11 +129,14 @@ Template._bootstrap_magic.helpers
   "subCategories" : getCurrentCategory
   "isSelectedCat" : -> @_id is BootstrapMagic.dictionary.currentCategory.get()
   "currentVars" : -> if showSearchResults() then getSearchResults() else getCurrentVariables()
+  "isFilter": ->  
+    if $('.search-checkbox').prop "checked" 
+      console.log true
+      console.log getFilterResults()
   "mappedVariables" : -> _.map @data, mapVariableOverrides
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
-
 
 Template._bootstrap_magic.events
   'keyup .search-input' : (e) ->
@@ -133,8 +145,6 @@ Template._bootstrap_magic.events
   'click .search-filter' :->
     $('.search-filter').toggleClass('btn-default').toggleClass('btn-primary').toggleClass('active')
     $('.search-checkbox').prop "checked", (status) -> if this.checked then status=false else status=true
-
-
 
   'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
