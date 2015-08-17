@@ -130,6 +130,12 @@ Template._bootstrap_magic.events
   'keyup .search-input' : (e) ->
     BootstrapMagic.dictionary.searchTerms.set spaceToHyphen e.currentTarget.value
 
+  'click .search-filter' :->
+    $('.search-filter').toggleClass('btn-default').toggleClass('btn-primary').toggleClass('active')
+    $('.search-checkbox').prop "checked", (status) -> if this.checked then status=false else status=true
+
+
+
   'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
     BootstrapMagic.setOverride @_id, $input.val() || undefined
@@ -141,8 +147,6 @@ Template._bootstrap_magic.events
   'click .sub-menu a' : ->
     BootstrapMagic.dictionary.currentSubCategory.set @_id
 
-  'click .search-filter' :->
-    console.log "this: ", @
 
 
 ###
