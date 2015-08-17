@@ -1,1 +1,56 @@
-<template name='bootstrap_magic_preview_pagination'>pagination</template>
+<template name='bootstrap_magic_preview_pagination'>
+  <div class="bs-example" data-example-id="simple-pagination">
+    <h4>Pagination</h4>
+    <nav>
+      <ul class="pagination">
+        <li>
+          <a href="#" aria-label="Previous">
+            <span aria-hidden="true">«</span>
+          </a>
+        </li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li>
+          <a href="#" aria-label="Next">
+            <span aria-hidden="true">»</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="bs-example" data-example-id="disabled-active-pagination">
+    <h4>Disabled and Active Pagination</h4>
+    <nav>
+      <ul class="pagination">
+        <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
+        <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li><a href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="bs-example" data-example-id="simple-pager">
+    <h4>Pager</h4>
+    <nav>
+      <ul class="pager">
+        <li><a href="#">Previous</a></li>
+        <li><a href="#">Next</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="bs-example" data-example-id="disabled-pager">
+    <h4>Disabled and Active Pagers</h4>
+    <nav>
+      <ul class="pager">
+        <li class="previous disabled"><a href="#"><span aria-hidden="true">←</span> Older</a></li>
+        <li class="next"><a href="#">Newer <span aria-hidden="true">→</span></a></li>
+      </ul>
+    </nav>
+  </div>
+</template>
