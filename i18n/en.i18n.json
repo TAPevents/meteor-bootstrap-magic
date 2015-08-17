@@ -5,6 +5,10 @@
   "search_count" : "1 Result",
   "search_count_plural" : "__count__ Results",
   "search": "Search",
+  "isOverride" : "Overidden variables",
+  "isReference" : "Reference variables",
+  "type" : "Type",
+  
   //main navbar
   "common" : "Common",
   "advanced" : "Advanced",

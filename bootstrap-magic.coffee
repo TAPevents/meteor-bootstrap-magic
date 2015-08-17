@@ -8,6 +8,8 @@ for group in bootstrap_magic_variables
 ###
 # EXPORTS
 ###
+filter = false
+
 @BootstrapMagic =
   dictionary :
     overrides : new ReactiveDict()
@@ -106,29 +108,54 @@ getCurrentVariables = ->
 showSearchResults = ->  # only show the search results if there are 3 characters or more
   BootstrapMagic.dictionary.searchTerms.get().length >= 3
 
-getSearchResults = ->
+getSearchResults = (isFilter) ->
   query = BootstrapMagic.dictionary.searchTerms.get()
   searchResults = {search: true}
-  searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1
+  if isFilter is true 
+    searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1 && obj.isOverride is true
+  else 
+    searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1   
+
   return searchResults
+
+filterItems = ->
+  items = Object.keys (_.map flattenedMagic, mapVariableOverrides)[0]
+  return items[3] #this only explicitly return 1 search filter - the isOverrides object, 
+  # of course later you can add the whole array as the search filter
+
+Template.bootstrap_magic_input_number.helpers
+  'unitRange' : ->
+    myUnit = getUnitFromContext.apply @
+    ranges = _.clone(unitRanges[myUnit] || {})
+    ranges.unit = myUnit
+    ranges.current = parseInt(@reference?.value || @value)
+    if ranges.current > ranges.max
+      ranges.max = ranges.current
+    return ranges
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 spaceToHyphen = (str) -> str.replace(/\s/g, '-')
-  
+
+
 Template._bootstrap_magic.helpers
   "categories" : _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) -> _id: obj[0].category
   "subCategories" : getCurrentCategory
   "isSelectedCat" : -> @_id is BootstrapMagic.dictionary.currentCategory.get()
-  "currentVars" : -> if showSearchResults() then getSearchResults() else getCurrentVariables()
+  "currentVars" : -> if showSearchResults() then getSearchResults(filter) else getCurrentVariables()
   "mappedVariables" : -> _.map @data, mapVariableOverrides
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
-
+  "filterOptions" : -> filterItems()
 
 Template._bootstrap_magic.events
   'keyup .search-input' : (e) ->
     BootstrapMagic.dictionary.searchTerms.set spaceToHyphen e.currentTarget.value
+
+  'click .search-filter' :->
+    $('.search-filter').toggleClass('btn-default').toggleClass('btn-primary').toggleClass('active')
+    $('.search-checkbox').prop "checked", (status) -> if this.checked then status=false else status=true
+    filter = $('.search-checkbox').prop "checked"
 
   'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
@@ -140,7 +167,6 @@ Template._bootstrap_magic.events
  
   'click .sub-menu a' : ->
     BootstrapMagic.dictionary.currentSubCategory.set @_id
-
 
 ###
 # Colorpicker Create/Destroy
