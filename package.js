@@ -66,6 +66,9 @@ Package.on_use(function(api) {
     'bootstrap-magic.coffee'
   ], ['client']);
 
-  api.add_files(["i18n/en.i18n.json"], ["client", "server"]);
+  api.add_files([
+    "i18n/en.i18n.json",
+    "i18n/zh.i18n.json"
+    ], ["client", "server"]);
 
 });
