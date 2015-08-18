@@ -118,22 +118,6 @@ getSearchResults = ->
   return searchResults
 
 
-getFilterResults = ->
-  query = BootstrapMagic.dictionary.searchTerms.get()
-  searchResults = {search: true}
-
-  searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1
-    # o.isOverride for o in searchResults.data
-  for o in searchResults.data
-   if o.isOverride is true
-    console.log "I'm overriden"
-
-  console.log "SR: ", searchResults
-  # console.log "filter on: ", searchResults.filter
-
-  return searchResults
-
-
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 spaceToHyphen = (str) -> str.replace(/\s/g, '-')
   
@@ -143,9 +127,7 @@ Template._bootstrap_magic.helpers
   "isSelectedCat" : -> @_id is BootstrapMagic.dictionary.currentCategory.get()
   "currentVars" : -> if showSearchResults() then getSearchResults() else getCurrentVariables()
   "isFilter": ->  
-    if $('.search-checkbox').prop "checked" 
-      console.log "filter on"
-      getFilterResults()
+
   "mappedVariables" : -> _.map @data, mapVariableOverrides
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
