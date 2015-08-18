@@ -1,0 +1,44 @@
+{
+  // UI
+  "var_count" : "Updates 1 variable",
+  "var_count_plural" : "Updates __count__ variables",
+  "search_count" : "1 Result",
+  "search_count_plural" : "__count__ Results",
+  "search": "Search",
+  //main navbar
+  "common" : "Common",
+  "advanced" : "Advanced",
+  "components" : "Components",
+  // common
+  "colors" : "Base Colors",
+  "typography" : "Typography",
+  "validation" : "Validation",
+  // components
+  "alerts" : "Alerts",
+  "badges" : "Badges",
+  "breadcrumbs" : "Breadcrumbs",
+  "buttons" : "Buttons",
+  "carousels" : "Carousels",
+  "dropdowns" : "Dropdowns",
+  "forms" : "Forms",
+  "jumbotron" : "Jumbotron",
+  "labels" : "Labels",
+  "labels" : "Labels",
+  "lists" : "Lists",
+  "modals" : "Modals",
+  "navbars" : "Navigation Bar",
+  "pagination" : "Pagination",
+  "panels" : "Panels",
+  "progressbars" : "Progress Bars",
+  "tables" : "Tables",
+  "thumbnails" : "Thumbnails",
+  "tooltips" : "Tooltips",
+  // advanced
+  "borders" : "Borders",
+  "close" : "Close",
+  "icons" : "Icons",
+  "layout" : "Layout",
+  "misc" : "Miscellaneous",
+  "padding" : "Padding",
+  "zindex" : "Z-Index"
+}
