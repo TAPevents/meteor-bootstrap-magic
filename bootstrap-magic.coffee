@@ -8,6 +8,8 @@ for group in bootstrap_magic_variables
 ###
 # EXPORTS
 ###
+filter = false
+
 @BootstrapMagic =
   dictionary :
     overrides : new ReactiveDict()
@@ -106,29 +108,26 @@ getCurrentVariables = ->
 showSearchResults = ->  # only show the search results if there are 3 characters or more
   BootstrapMagic.dictionary.searchTerms.get().length >= 3
 
-getSearchResults = ->
+getSearchResults = (isFilter) ->
   query = BootstrapMagic.dictionary.searchTerms.get()
   searchResults = {search: true}
-  searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1
-  filteredResults = _.where searchResults.data, isOverride: true
-  console.log "filtered Results: ", filteredResults
-  
-  # for val in searchResults.data
-  #   if val.isOverride is true
-  #     return filteredResults
-  #   else    
-      
-  return searchResults
 
+  if isFilter is true 
+    searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1 && obj.isOverride is true
+  else 
+    searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1   
+
+  return searchResults
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 spaceToHyphen = (str) -> str.replace(/\s/g, '-')
-  
+
+
 Template._bootstrap_magic.helpers
   "categories" : _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) -> _id: obj[0].category
   "subCategories" : getCurrentCategory
   "isSelectedCat" : -> @_id is BootstrapMagic.dictionary.currentCategory.get()
-  "currentVars" : -> if showSearchResults() then getSearchResults() else getCurrentVariables()
+  "currentVars" : -> if showSearchResults() then getSearchResults(filter) else getCurrentVariables()
   "mappedVariables" : -> _.map @data, mapVariableOverrides
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
@@ -141,6 +140,8 @@ Template._bootstrap_magic.events
   'click .search-filter' :->
     $('.search-filter').toggleClass('btn-default').toggleClass('btn-primary').toggleClass('active')
     $('.search-checkbox').prop "checked", (status) -> if this.checked then status=false else status=true
+    filter = $('.search-checkbox').prop "checked"
+    console.log "filter result: ", filter
 
   'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)
