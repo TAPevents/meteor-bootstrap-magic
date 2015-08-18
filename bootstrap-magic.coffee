@@ -93,7 +93,6 @@ mapVariableOverrides = (obj) ->
     if obj.reference.reference
       obj.reference = obj.reference.reference
 
-  # console.log "one object: ", obj[0]
   return obj
 
 getCurrentCategory = ->
@@ -121,7 +120,6 @@ getSearchResults = (isFilter) ->
 
 filterItems = ->
   items = Object.keys (_.map flattenedMagic, mapVariableOverrides)[0]
-  console.log items
   return items[3] #this only explicitly return 1 search filter - the isOverrides object, 
   # of course later you can add the whole array as the search filter
 
