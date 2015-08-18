@@ -93,6 +93,7 @@ mapVariableOverrides = (obj) ->
     if obj.reference.reference
       obj.reference = obj.reference.reference
 
+  # console.log "one object: ", obj[0]
   return obj
 
 getCurrentCategory = ->
@@ -111,7 +112,6 @@ showSearchResults = ->  # only show the search results if there are 3 characters
 getSearchResults = (isFilter) ->
   query = BootstrapMagic.dictionary.searchTerms.get()
   searchResults = {search: true}
-
   if isFilter is true 
     searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1 && obj.isOverride is true
   else 
@@ -119,39 +119,21 @@ getSearchResults = (isFilter) ->
 
   return searchResults
 
-# filterItems = 
-#   isOverride : "Overidden Variables"
-#   isReference : "Filtered Variables"
+filterItems = ->
+  items = Object.keys (_.map flattenedMagic, mapVariableOverrides)[0]
+  console.log items
+  return items[3] #this only explicitly return 1 search filter - the isOverrides object, 
+  # of course later you can add the whole array as the search filter
 
-# getFilterMenu = ->
-#   _.map filterItems (key, str) -> 
-#     console.log "str: ", str
-#     return str
-
-# getFilterMenu()
-
-# for group in bootstrap_magic_variables
-#   for item in group.data
-#     flattenedMagic[item._id] = item
-#     flattenedMagicValues[item._id] = item.value
-
-
-
-# getUnitFromContext = ->
-#   matchVal = @reference?.value || @value
-#   for unit, val of unitRanges
-#     if matchVal.indexOf(unit) > -1
-#       return unit
-
-# Template.bootstrap_magic_input_number.helpers
-#   'unitRange' : ->
-#     myUnit = getUnitFromContext.apply @
-#     ranges = _.clone(unitRanges[myUnit] || {})
-#     ranges.unit = myUnit
-#     ranges.current = parseInt(@reference?.value || @value)
-#     if ranges.current > ranges.max
-#       ranges.max = ranges.current
-#     return ranges
+Template.bootstrap_magic_input_number.helpers
+  'unitRange' : ->
+    myUnit = getUnitFromContext.apply @
+    ranges = _.clone(unitRanges[myUnit] || {})
+    ranges.unit = myUnit
+    ranges.current = parseInt(@reference?.value || @value)
+    if ranges.current > ranges.max
+      ranges.max = ranges.current
+    return ranges
 
 camelToSnake = (str) -> str.replace(/\W+/g, '_').replace(/([a-z\d])([A-Z])/g, '$1-$2')
 spaceToHyphen = (str) -> str.replace(/\s/g, '-')
@@ -166,7 +148,7 @@ Template._bootstrap_magic.helpers
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
-  "filterOptions" : -> filterItems
+  "filterOptions" : -> filterItems()
 
 Template._bootstrap_magic.events
   'keyup .search-input' : (e) ->
@@ -187,8 +169,6 @@ Template._bootstrap_magic.events
  
   'click .sub-menu a' : ->
     BootstrapMagic.dictionary.currentSubCategory.set @_id
-
-
 
 ###
 # Colorpicker Create/Destroy
