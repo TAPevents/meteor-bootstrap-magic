@@ -1,86 +1,21 @@
-<template name="bootstrap_magic_preview_modals">
-  <section class="row">
-    <div class="col-xs-12">
-      <h4>These Modals are created using the EZ-Modal package.</h4>
-      <button class="btn btn-default ez-modal-example"> Click for EZ Modal Example</button>
-      <hr/>  
-      <h4>Here are some other code examples:</h4>
-      <h5>Simple Alert-Style</h5>
-      <pre>
-        <code class="language-html" data-lang="js">
-        <span>'click .ez-modal-simple': -></span>
-          <span>EZModal 'Thank you for your enquiry'</span>
-        </code>
-      </pre>
-      <br/>
-      <h5>Small Size, No Footer</h5>
-      <pre>
-        <code class="language-html" data-lang="js">
-        'click .ez-modal-small': ->
-          EZModal
-            classes: 'text-center'
-            body: 'Loading - Please Wait'
-            size: 'sm' # or use 'lg' for large
-            hideFooter: true
-        </code>
-      </pre>
-      <br/>
-      <h5>Buttons &amp; Chaining</h5><small>As in the demo on this page</small>
-      <pre>
-        <code class="language-html" data-lang="js">
-        EZModal
-          title: 'Please confirm'
-          body: 'Are you sure you want to do that?'
-          leftButtons: [
-            html: 'Cancel'
-            color: 'danger'
-          ]
-          rightButtons: [
-            html: 'Confirm'
-            color: 'success'
-            fn: ->
-              # do something
-              @EZModal.modal 'hide' # hide parent
-              EZModal 'Confirmation Received' # open new modal
-          ]
-        </code>
-      </pre>
-      <br/>
-      <h5>HTML &amp; Tempalte Keys</h5>
-      <pre>
-        <code class="language-html" data-lang="js">
-          EZModal
-            bodyHtml: """
-            &lt;h3&gt;Arbitrary HTML or Template Keys&lt;/h3&gt;
-            """
-        </code>
-      </pre>
-      <br/>
-      <h5>Checkout</h5>
-      <pre>
-        <code class="language-html" data-lang="js">
-          EZModal
-            title: 'Please Confirm'
-            body: 'Are you sure you wish to empty the cart?'
-            leftButtons: [
-              color: 'danger'
-              html: 'Cancel'
-            ]
-            rightButtons: [
-              color: 'primary'
-              html: 'Yes'
-              fn: -> @EZModal.modal('hide')
-            ]
-        </code>
-      </pre>
-
-    </div>
-  </section>
+<template name='bootstrap_magic_preview_modals'>
+  <div class="bs-example bs-example-modal" data-example-id="static-modal">
+    <div class="modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Modal title</h4>
+          </div>
+          <div class="modal-body">
+            <p>One fine body…</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </div>
 </template>
-
-<!-- <code class="language-html" data-lang="html"><span class="nt">&lt;h1&gt;</span>h1. Bootstrap heading<span class="nt">&lt;/h1&gt;</span>
-<span class="nt">&lt;h2&gt;</span>h2. Bootstrap heading<span class="nt">&lt;/h2&gt;</span>
-<span class="nt">&lt;h3&gt;</span>h3. Bootstrap heading<span class="nt">&lt;/h3&gt;</span>
-<span class="nt">&lt;h4&gt;</span>h4. Bootstrap heading<span class="nt">&lt;/h4&gt;</span>
-<span class="nt">&lt;h5&gt;</span>h6. Bootstrap heading<span class="nt">&lt;/h6&gt;</span>
-<span class="nt">&lt;h6&gt;</span>h6. Bootstrap heading<span class="nt">&lt;/h6&gt;</span></code> -->

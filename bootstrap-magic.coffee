@@ -263,8 +263,8 @@ Template.bootstrap_magic_input_number.events
 
 # Template examples
 
-Template.bootstrap_magic_preview_popovers.onRendered ->
-  @$('[data-toggle="popover"]').popover()
+# Template.bootstrap_magic_preview_popovers.onRendered ->
+#   @$('[data-toggle="popover"]').popover()
 
 Template.bootstrap_magic_preview_tooltips.onRendered ->
   @$('[data-toggle="tooltip"]').tooltip()
