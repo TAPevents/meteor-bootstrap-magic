@@ -8,7 +8,6 @@ for group in bootstrap_magic_variables
 ###
 # EXPORTS
 ###
-filter = false
 
 @BootstrapMagic =
   dictionary :
@@ -17,6 +16,7 @@ filter = false
     currentCategory : new ReactiveVar()
     currentSubCategory : new ReactiveVar()
     searchTerms : new ReactiveVar('')
+    searchFilters: new ReactiveDict()
 
   on : (eventName, callback) ->
     @[eventName] = callback
@@ -105,23 +105,17 @@ getCurrentVariables = ->
   subCatId = BootstrapMagic.dictionary.currentSubCategory.get()
   return _.find bootstrap_magic_variables, (group) -> group._id is subCatId
 
-showSearchResults = ->  # only show the search results if there are 3 characters or more
-  BootstrapMagic.dictionary.searchTerms.get().length >= 3
+showSearchResults = ->  # only show the search results if there are 3 characters or more, or if you're filtering
+  BootstrapMagic.dictionary.searchTerms.get().length >= 3 or BootstrapMagic.dictionary.searchFilters.get('overrides')
 
-getSearchResults = (isFilter) ->
+getSearchResults = ->
   query = BootstrapMagic.dictionary.searchTerms.get()
   searchResults = {search: true}
-  if isFilter is true 
+  if BootstrapMagic.dictionary.searchFilters.get('overrides')
     searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1 && obj.isOverride is true
   else 
     searchResults.data = _.filter flattenedMagic, (obj) -> obj._id.indexOf(query) > -1   
-
   return searchResults
-
-filterItems = ->
-  items = Object.keys (_.map flattenedMagic, mapVariableOverrides)[0]
-  return items[3] #this only explicitly return 1 search filter - the isOverrides object, 
-  # of course later you can add the whole array as the search filter
 
 Template.bootstrap_magic_input_number.helpers
   'unitRange' : ->
@@ -141,21 +135,19 @@ Template._bootstrap_magic.helpers
   "categories" : _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) -> _id: obj[0].category
   "subCategories" : getCurrentCategory
   "isSelectedCat" : -> @_id is BootstrapMagic.dictionary.currentCategory.get()
-  "currentVars" : -> if showSearchResults() then getSearchResults(filter) else getCurrentVariables()
+  "currentVars" : -> if showSearchResults() then getSearchResults() else getCurrentVariables()
   "mappedVariables" : -> _.map @data, mapVariableOverrides
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null
   "inputTmpl" : -> Template["bootstrap_magic_input_#{@type}"] || null
-  "filterOptions" : -> filterItems()
+  "filteringOverrides" : -> BootstrapMagic.dictionary.searchFilters.get('overrides')
 
 Template._bootstrap_magic.events
   'keyup .search-input' : (e) ->
     BootstrapMagic.dictionary.searchTerms.set spaceToHyphen e.currentTarget.value
 
   'click .search-filter' :->
-    $('.search-filter').toggleClass('btn-default').toggleClass('btn-primary').toggleClass('active')
-    $('.search-checkbox').prop "checked", (status) -> if this.checked then status=false else status=true
-    filter = $('.search-checkbox').prop "checked"
+    BootstrapMagic.dictionary.searchFilters.set 'overrides', !BootstrapMagic.dictionary.searchFilters.get('overrides')
 
   'change .bootstrap-magic-input' : (e) ->
     $input = $(e.currentTarget)

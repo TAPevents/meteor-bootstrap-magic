@@ -9,7 +9,9 @@
       <div class="input-group input-group-lg">
         <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
         <input type="search" class="form-control search-input" placeholder="Search">
-        <span class="input-group-addon btn btn-default search-filter"><input type="checkbox" class="search-checkbox">&nbsp;{{_ filterOptions}}</span>
+        <span class="input-group-addon btn btn-{{#if filteringOverrides}}primary{{else}}default{{/if}} search-filter">
+          <input type="checkbox" class="search-checkbox" checked="{{filteringOverrides}}">&nbsp;{{_ 'filter_overrides'}}
+        </span>
       </div>
     </div>
     

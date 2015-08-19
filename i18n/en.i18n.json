@@ -5,8 +5,7 @@
   "search_count" : "1 Result",
   "search_count_plural" : "__count__ Results",
   "search": "Search",
-  "isOverride" : "Overidden variables",
-  "isReference" : "Reference variables",
+  "filter_overrides" : "Overrides Only",
   "type" : "Type",
   
   //main navbar
