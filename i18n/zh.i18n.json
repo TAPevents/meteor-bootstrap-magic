@@ -1,0 +1,44 @@
+{
+  // UI
+  "var_count" : "更新__count__个variable",
+  "var_count_plural" : "更新 __count__个variables",
+  "search_count" : "__count__个搜寻结果",
+  "search_count_plural" : "__count__ 个搜寻结果",
+  "search": "搜寻",
+  //main navbar
+  "common" : "一般",
+  "advanced" : "更多",
+  "components" : "组件",
+  // common
+  "colors" : "颜色",
+  "typography" : "字体",
+  "validation" : "复核",
+  // components
+  "alerts" : "注意",
+  "badges" : "徽章",
+  "breadcrumbs" : "面包屑",
+  "buttons" : "按钮",
+  "carousels" : "轮播",
+  "dropdowns" : "下拉菜单",
+  "forms" : "表单",
+  "jumbotron" : "大屏幕",
+  "labels" : "标籤",
+  "labels" : "标籤",
+  "lists" : "列表",
+  "modals" : "对话框",
+  "navbars" : "导航栏",
+  "pagination" : " 分页",
+  "panels" : "板条",
+  "progressbars" : "进度栏",
+  "tables" : "表格",
+  "thumbnails" : "缩略图",
+  "tooltips" : "提示",
+  // advanced
+  "borders" : "边框",
+  "close" : "关闭图标",
+  "icons" : "图标",
+  "layout" : "板面",
+  "misc" : "其他"
+  // "padding" : "Padding",
+  // "zindex" : "Z-Index"
+}
