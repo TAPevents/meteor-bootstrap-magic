@@ -9,10 +9,10 @@
       <div class="input-group input-group-lg">
         <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
         <input type="search" class="form-control search-input" placeholder="Search">
-        <span class="input-group-addon btn btn-default search-filter"><input type="checkbox" class="search-checkbox">&nbsp;Children</span>
+        <span class="input-group-addon btn btn-{{#if filteringOverrides}}primary{{else}}default{{/if}} search-filter">
+          <input type="checkbox" class="search-checkbox" checked="{{filteringOverrides}}">&nbsp;{{_ 'filter_overrides'}}
+        </span>
       </div>
-      Test: <span class="glyphicon glyphicon-circle"></span>
-      
     </div>
     
     <div class="menus container-fluid">
@@ -47,9 +47,8 @@
             {{else}}
               <h3>{{_ _id}}</h3>
             {{/if}}
-
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-5">
               {{#each mappedVariables}}
                 {{#bootstrap_magic_input}}
                   {{> inputTmpl}}
@@ -57,7 +56,7 @@
               {{/each}}
             </div>
             {{#unless search}}
-              <div class="col-sm-6 preview-template">
+              <div class="col-sm-7 preview-template">
                 {{> previewTmpl}}
               </div>
             {{/unless}}
