@@ -1,20 +1,29 @@
-# Meteor Bootstrap Magic
+# BootstrapMagic+
 
-### A Bootstrap Theme Editor *ported from [Bootstrap Magic](https://github.com/pikock/bootstrap-magic)*
+###A GUI for editing Bootstrap varaibles
 
-This package is just for client-side UI. It allows you to edit and generate a list of less variables for use with bootstrap. It simply creates a reactive dictionary with key/val pairs for less variable defaults and overrides.
+Welcome to Bootstrap Magic+, a __Bootstrap Theme Editor *ported from [Bootstrap Magic](https://github.com/pikock/bootstrap-magic)*__. It has been adapted and updated from the original, and now it's even better! It includes some cool new features:
 
-# Installation
+* Search Function
+* Sliders for numerical values
+* User-friendly Organization
+* More Examples
+* Internationalization
+* Updated variables for [Bootstrap v3.3.5](http://getbootstrap.com/)
 
-```
-meteor add hitchcott:bootstrap-magic
-```
+BootstrapMagic+ is a [Meteor](https://github.com/meteor/meteor) Package, and is relied on by [tap:meteorstrap](http://github.com/tapevents/meteorstrap).
 
-Make sure you have bootstrap added to your project.
+##Usage
 
-Include the `{{> BootstrapMagic}}` template anywhre in your project to get the UI.
+Make sure you have a Bootstrap package added to your project. You could use [`tap:meteorstrap`](http://github.com/tapevents/meteorstrap) or [`twbs:bootstrap`](https://github.com/twbs/bootstrap), for example. The former will enable you to modify your theme in real-time.
 
-# Usage
+Then simply add this package to your project by using `meteor add tap:bootstrap-magic`.
+
+Include the `{{> BootstrapMagic}}` template anywhere in your project to access the GUI.
+
+While editing the variables, BootstrapMagic+ maintains reactive dictionary of LESS variables, which contains key-value pairs for LESS variable defaults and overrides, which you can access at any time.
+
+You can access the variables generated at any time using the following API:
 
 ```coffeescript
 BootstrapMagic.on 'start', ->
@@ -36,23 +45,23 @@ Template.myTempalte.events
 Tracker.autorun ->
   # reactive source for any given variable
   console.log BootstrapMagic.dictionary.overrides.get('@gray-darker')
-````
-
-# TODO
-
-```
-1.0
-- Examples for every group
-- Docs
-
-1.1
-- Sticky examples
-- Multiple Layers of child varriables, Better UI for navigating them
-- Font selection type (Google Fonts Integration)
 ```
 
-# Lisence
+## i18n
 
-MIT 2014
+Meteor internationalisation package [tap-i18n](https://github.com/TAPevents/TAP-i18n) has been used for i18n. We currently support:
 
-Thanks to https://github.com/pikock/bootstrap-magic for creating the original.
+* English
+* Chinese
+
+## Credits & Contributions
+
+Originally Ported by [Chris Hitchcott](https://github.com/hitchcott)
+
+Additional developmeny by [Talia Scotchbrook](https://github.com/titaniumtails)
+
+Credit to [pikock](https://github.com/pikock/bootstrap-magic) for creating the original BootstrapMagic.
+
+**TAP**events - we make [apps for events](http://tapevents.com).
+
+**MIT License**, 2014
