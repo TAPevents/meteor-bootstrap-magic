@@ -1,8 +1,8 @@
 {
   // UI
-  "var_count" : "更新1个variable",
-  "var_count_plural" : "更新 __count__个variable",
-  "search_count" : "1个搜寻结果",
+  "var_count" : "更新__count__个variable",
+  "var_count_plural" : "更新 __count__个variables",
+  "search_count" : "__count__个搜寻结果",
   "search_count_plural" : "__count__ 个搜寻结果",
   "search": "搜寻",
   //main navbar
