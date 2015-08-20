@@ -107,7 +107,7 @@ getCurrentVariables = ->
 showSearchResults = ->  # only show the search results if there are 3 characters or more, or if you're filtering
   BootstrapMagic.dictionary.searchTerms.get().length >= 3 or BootstrapMagic.dictionary.searchFilters.get('overrides')
 
-getSearchResults = (isFilter) ->
+getSearchResults = ->
   query = BootstrapMagic.dictionary.searchTerms.get()
   searchResults = {search: true}
   if BootstrapMagic.dictionary.searchFilters.get('overrides')
@@ -134,7 +134,7 @@ Template._bootstrap_magic.helpers
   "categories" : _.map _.groupBy(bootstrap_magic_variables, 'category'), (obj) -> _id: obj[0].category
   "subCategories" : getCurrentCategory
   "isSelectedCat" : -> @_id is BootstrapMagic.dictionary.currentCategory.get()
-  "currentVars" : -> if showSearchResults() then getSearchResults(filter) else getCurrentVariables()
+  "currentVars" : -> if showSearchResults() then getSearchResults() else getCurrentVariables()
   "mappedVariables" : -> _.map @data, mapVariableOverrides
   "isSelectedSubCat" : ->  @_id is BootstrapMagic.dictionary.currentSubCategory.get()
   "previewTmpl" : -> Template["bootstrap_magic_preview_#{camelToSnake @_id}"] || null

@@ -1,7 +1,7 @@
 Package.describe({
   name: "tap:bootstrap-magic",
   summary: "A Bootstrap Theme Editor ported to Meteor",
-  version: '0.1.2',
+  version: '0.1.1',
   git: 'https://github.com/TAPevents/meteor-bootstrap-magic'
 });
 
