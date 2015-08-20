@@ -5,6 +5,8 @@
   "search_count" : "__count__个搜寻结果",
   "search_count_plural" : "__count__ 个搜寻结果",
   "search": "搜寻",
+  "filter_overrides" : "只显示重写的",
+  "type" : "类型",
   //main navbar
   "common" : "一般",
   "advanced" : "更多",
