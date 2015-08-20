@@ -1,6 +1,6 @@
 # BootstrapMagic+
 
-###A GUI for editing Bootstrap varaibles
+### A GUI for editing Bootstrap varaibles
 
 Welcome to Bootstrap Magic+, a __Bootstrap Theme Editor *ported from [Bootstrap Magic](https://github.com/pikock/bootstrap-magic)*__. It has been adapted and updated from the original, and now it's even better! It includes some cool new features:
 
@@ -13,7 +13,7 @@ Welcome to Bootstrap Magic+, a __Bootstrap Theme Editor *ported from [Bootstrap 
 
 BootstrapMagic+ is a [Meteor](https://github.com/meteor/meteor) Package, and is relied on by [tap:meteorstrap](http://github.com/tapevents/meteorstrap).
 
-##Usage
+## Usage
 
 Make sure you have a Bootstrap package added to your project. You could use [`tap:meteorstrap`](http://github.com/tapevents/meteorstrap) or [`twbs:bootstrap`](https://github.com/twbs/bootstrap), for example. The former will enable you to modify your theme in real-time.
 
