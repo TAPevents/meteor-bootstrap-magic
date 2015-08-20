@@ -62,6 +62,4 @@ Additional developmeny by [Talia Scotchbrook](https://github.com/titaniumtails)
 
 Credit to [pikock](https://github.com/pikock/bootstrap-magic) for creating the original BootstrapMagic.
 
-**TAP**events - we make [apps for events](http://tapevents.com).
-
-**MIT License**, 2014
+**MIT License** 2015, **TAP**events - we make [apps for events](http://tapevents.com).
