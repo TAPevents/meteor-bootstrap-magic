@@ -282,21 +282,3 @@ Template.bootstrap_magic_input_number.events
 
 Template.bootstrap_magic_preview_tooltips.onRendered ->
   @$('[data-toggle="tooltip"]').tooltip()
-
-Template.bootstrap_magic_preview_modals.events
-  'click .ez-modal-example' : ->
-    EZModal
-      title: 'Please confirm'
-      body: 'Are you sure you want to do that?'
-      leftButtons: [
-        html: 'Cancel'
-        color: 'danger'
-      ]
-      rightButtons: [
-        html: 'Confirm'
-        color: 'success'
-        fn: ->
-          # do something
-          @EZModal.modal 'hide' # hide parent
-          EZModal 'Confirmation Received' # open new modal
-      ]
