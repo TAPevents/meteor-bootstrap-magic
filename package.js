@@ -14,20 +14,23 @@ Package.on_use(function(api) {
     'reactive-dict',
     'templating',
     'underscore',
-    'less',
+    'less@2.5.0',
     'tap:i18n@1.5.1'
   ], ['client', 'server']);
 
   api.add_files("package-tap.i18n", ["client", "server"]);
 
-  api.add_files([
-    // colorpicker lib
-    'lib/colorpicker/css/bootstrap-colorpicker.css',
+  api.addAssets([
     'lib/colorpicker/img/bootstrap-colorpicker/alpha-horizontal.png',
     'lib/colorpicker/img/bootstrap-colorpicker/alpha.png',
     'lib/colorpicker/img/bootstrap-colorpicker/hue-horizontal.png',
     'lib/colorpicker/img/bootstrap-colorpicker/hue.png',
-    'lib/colorpicker/img/bootstrap-colorpicker/saturation.png',
+    'lib/colorpicker/img/bootstrap-colorpicker/saturation.png'
+    ], "client")
+
+  api.add_files([
+    // colorpicker lib
+    'lib/colorpicker/css/bootstrap-colorpicker.css',
     'lib/colorpicker/js/bootstrap-colorpicker.js',
     'lib/templates/preview/borders.html',
     'lib/templates/preview/badges.html',
