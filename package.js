@@ -1,12 +1,12 @@
 Package.describe({
   name: "tap:bootstrap-magic",
   summary: "A Bootstrap Theme Editor ported to Meteor",
-  version: '0.1.1',
+  version: '1.0.0',
   git: 'https://github.com/TAPevents/meteor-bootstrap-magic'
 });
 
 Package.on_use(function(api) {
-  api.versionsFrom('1.1.0.2');
+  api.versionsFrom('1.2.1');
 
   api.use([
     'coffeescript',
@@ -14,11 +14,15 @@ Package.on_use(function(api) {
     'reactive-dict',
     'templating',
     'underscore',
-    'less@2.5.0',
+    'less',
     'tap:i18n@1.5.1'
   ], ['client', 'server']);
 
   api.add_files("package-tap.i18n", ["client", "server"]);
+
+  if(!api.addAssets){ // backwards compatability
+    api.addAssets = api.add_files;
+  }
 
   api.addAssets([
     'lib/colorpicker/img/bootstrap-colorpicker/alpha-horizontal.png',
